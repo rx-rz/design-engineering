@@ -1,0 +1,951 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DAY 02 — The Box Model, For Real</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #0d0d0d;
+        --surface: #141414;
+        --border: #2a2a2a;
+        --accent: #f5e642;
+        --accent2: #42f5c8;
+        --accent3: #f54242;
+        --text: #e8e8e8;
+        --muted: #666;
+        --content-color: #42f5c8;
+        --padding-color: #a8e063;
+        --border-color: #f5c842;
+        --margin-color: #f58a42;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "IBM Plex Mono", monospace;
+        line-height: 1.6;
+      }
+
+      /* ── HEADER ── */
+      header {
+        border-bottom: 1px solid var(--border);
+        padding: 2rem 3rem;
+        display: flex;
+        align-items: baseline;
+        gap: 2rem;
+      }
+      .day-label {
+        font-family: "Syne", sans-serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+      h1 {
+        font-family: "Syne", sans-serif;
+        font-size: clamp(1.4rem, 3vw, 2.2rem);
+        font-weight: 800;
+        color: var(--accent);
+        letter-spacing: -0.02em;
+      }
+
+      /* ── LAYOUT ── */
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 3rem 2rem 6rem;
+        display: grid;
+        gap: 5rem;
+      }
+
+      section {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .section-label {
+        font-size: 0.65rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--muted);
+        border-left: 2px solid var(--accent);
+        padding-left: 0.75rem;
+      }
+
+      h2 {
+        font-family: "Syne", sans-serif;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      p,
+      li {
+        font-size: 0.9rem;
+        color: #bbb;
+        max-width: 65ch;
+      }
+
+      code {
+        font-family: "IBM Plex Mono", monospace;
+        background: #1e1e1e;
+        color: var(--accent);
+        padding: 0.1em 0.35em;
+        border-radius: 3px;
+        font-size: 0.85em;
+      }
+
+      .highlight {
+        color: var(--text);
+      }
+
+      /* ── BOX MODEL DIAGRAM ── */
+      .diagram-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3rem;
+        align-items: flex-start;
+      }
+
+      .box-diagram {
+        position: relative;
+        flex-shrink: 0;
+      }
+
+      .layer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .margin-box {
+        background: rgba(245, 138, 66, 0.12);
+        border: 2px dashed var(--margin-color);
+        padding: 32px;
+        border-radius: 4px;
+      }
+      .border-box-layer {
+        background: rgba(245, 200, 66, 0.12);
+        border: 8px solid var(--border-color);
+        padding: 0;
+        border-radius: 2px;
+        width: 220px;
+      }
+      .padding-box {
+        background: rgba(168, 224, 99, 0.12);
+        padding: 28px;
+        width: 100%;
+      }
+      .content-box {
+        background: rgba(66, 245, 200, 0.15);
+        border: 1px solid var(--content-color);
+        padding: 1.5rem 2rem;
+        text-align: center;
+        font-size: 0.8rem;
+        color: var(--content-color);
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      /* Labels on the side */
+      .diagram-legend {
+        display: grid;
+        gap: 0.75rem;
+        align-content: center;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.8rem;
+      }
+      .legend-swatch {
+        width: 14px;
+        height: 14px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      /* ── CODE BLOCK ── */
+      pre {
+        background: #111;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 1.5rem;
+        overflow-x: auto;
+        font-size: 0.82rem;
+        line-height: 1.8;
+        color: #ccc;
+      }
+      .c-prop {
+        color: #7ec8e3;
+      }
+      .c-val {
+        color: var(--accent2);
+      }
+      .c-sel {
+        color: var(--accent);
+      }
+      .c-com {
+        color: #555;
+        font-style: italic;
+      }
+
+      /* ── BORDER-BOX DEMO ── */
+      .bb-compare {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      }
+      @media (max-width: 600px) {
+        .bb-compare {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .bb-card {
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .bb-card-header {
+        padding: 0.6rem 1rem;
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+      .bb-card-header.bad {
+        background: #2a1414;
+        color: var(--accent3);
+        border-bottom: 1px solid #3a1a1a;
+      }
+      .bb-card-header.good {
+        background: #0f2a1a;
+        color: var(--accent2);
+        border-bottom: 1px solid #1a3a2a;
+      }
+      .bb-card-body {
+        padding: 1.25rem;
+      }
+
+      /* The actual visual boxes */
+      .demo-container {
+        background: #1a1a1a;
+        border: 1px dashed #333;
+        width: 200px;
+        height: 80px;
+        position: relative;
+        overflow: visible;
+        margin-bottom: 1rem;
+      }
+
+      /* content-box: width 200 + padding 20*2 + border 5*2 = 250 total */
+      .demo-content-box {
+        box-sizing: content-box;
+        width: 200px;
+        padding: 20px;
+        border: 5px solid var(--accent3);
+        background: rgba(245, 66, 66, 0.1);
+        font-size: 0.65rem;
+        color: var(--accent3);
+        position: absolute;
+        top: 0;
+        left: 0;
+        line-height: 1.4;
+      }
+
+      /* border-box: width 200 total */
+      .demo-border-box {
+        box-sizing: border-box;
+        width: 200px;
+        padding: 20px;
+        border: 5px solid var(--accent2);
+        background: rgba(66, 245, 200, 0.1);
+        font-size: 0.65rem;
+        color: var(--accent2);
+        line-height: 1.4;
+      }
+
+      .size-note {
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin-top: 0.4rem;
+      }
+      .size-note strong {
+        color: var(--text);
+      }
+
+      /* ── MARGIN COLLAPSE ── */
+      .collapse-demo {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+      @media (max-width: 600px) {
+        .collapse-demo {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .collapse-scene {
+        background: #111;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 1.25rem;
+      }
+      .collapse-title {
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 1rem;
+      }
+
+      /* blocks for margin demo */
+      .m-block {
+        background: #1e1e1e;
+        border: 1px solid #333;
+        padding: 0.6rem 1rem;
+        font-size: 0.75rem;
+        color: var(--text);
+        position: relative;
+      }
+      .m-gap {
+        position: relative;
+        font-size: 0.65rem;
+        color: var(--muted);
+        text-align: center;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .m-gap::before,
+      .m-gap::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #333;
+      }
+      .m-gap span {
+        padding: 0 0.5rem;
+      }
+
+      .gap-collapsed {
+        height: 32px;
+      }
+      .gap-collapsed .m-gap {
+        height: 32px;
+      }
+
+      .gap-expected {
+        height: 64px;
+      }
+
+      .gap-block {
+        /* visual margin indicator */
+        height: 32px;
+        background: repeating-linear-gradient(
+          45deg,
+          rgba(245, 138, 66, 0.08),
+          rgba(245, 138, 66, 0.08) 4px,
+          transparent 4px,
+          transparent 8px
+        );
+        border-top: 1px dashed rgba(245, 138, 66, 0.4);
+        border-bottom: 1px dashed rgba(245, 138, 66, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.65rem;
+        color: var(--margin-color);
+      }
+
+      .rule-list {
+        list-style: none;
+        display: grid;
+        gap: 0.6rem;
+      }
+      .rule-list li {
+        padding: 0.75rem 1rem;
+        background: #111;
+        border-left: 3px solid var(--accent);
+        border-radius: 0 4px 4px 0;
+        font-size: 0.82rem;
+        max-width: none;
+      }
+      .rule-list li .tag {
+        display: inline-block;
+        font-size: 0.65rem;
+        padding: 0.1em 0.4em;
+        border-radius: 3px;
+        background: var(--accent);
+        color: #000;
+        font-weight: 600;
+        margin-right: 0.4rem;
+        vertical-align: middle;
+      }
+
+      /* ── KEY POINTS ── */
+      .kp-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+      }
+      .kp-card {
+        background: #111;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 1.25rem;
+      }
+      .kp-card h3 {
+        font-family: "Syne", sans-serif;
+        font-size: 0.95rem;
+        color: var(--accent);
+        margin-bottom: 0.5rem;
+      }
+      .kp-card p {
+        font-size: 0.8rem;
+        max-width: none;
+      }
+
+      /* ── INTERACTIVE SLIDER ── */
+      .interactive {
+        background: #0f0f0f;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 2rem;
+      }
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .control-group label {
+        display: block;
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 0.4rem;
+      }
+      .control-group input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+      }
+      .control-group .val {
+        font-size: 0.75rem;
+        color: var(--accent);
+      }
+      .sandbox-wrap {
+        background: #1a1a1a;
+        border: 1px dashed #333;
+        padding: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+        position: relative;
+      }
+      .sandbox-box {
+        background: rgba(66, 245, 200, 0.1);
+        border-style: solid;
+        border-color: var(--border-color);
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        color: var(--content-color);
+        position: relative;
+      }
+      .sandbox-margin-indicator {
+        position: absolute;
+        inset: 0;
+        border: 2px dashed var(--margin-color);
+        pointer-events: none;
+        transition: all 0.2s;
+      }
+      #sandbox-info {
+        margin-top: 1rem;
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+      #sandbox-info span {
+        color: var(--accent2);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <div class="day-label">CSS Fundamentals · Day 02 · Feb 26</div>
+        <h1>The Box Model — For Real</h1>
+      </div>
+    </header>
+
+    <main>
+      <!-- ① WHAT IS THE BOX MODEL -->
+      <section>
+        <div class="section-label">01 / The Concept</div>
+        <h2>Every element is a box.</h2>
+        <p>
+          The browser wraps every HTML element in four nested regions. From
+          inside out:
+          <span class="highlight">content → padding → border → margin</span>.
+          Understanding these four zones is the foundation of all CSS layout.
+        </p>
+
+        <div class="diagram-wrap">
+          <div class="box-diagram">
+            <div class="layer margin-box">
+              <div
+                style="
+                  position: absolute;
+                  top: 6px;
+                  left: 8px;
+                  font-size: 0.6rem;
+                  color: var(--margin-color);
+                  letter-spacing: 0.05em;
+                "
+              >
+                MARGIN
+              </div>
+              <div class="layer border-box-layer">
+                <div
+                  style="
+                    position: absolute;
+                    top: -22px;
+                    left: 0;
+                    font-size: 0.6rem;
+                    color: var(--border-color);
+                    letter-spacing: 0.05em;
+                  "
+                >
+                  BORDER (8px)
+                </div>
+                <div class="layer padding-box">
+                  <div
+                    style="
+                      position: absolute;
+                      top: 4px;
+                      left: 6px;
+                      font-size: 0.6rem;
+                      color: var(--padding-color);
+                      letter-spacing: 0.05em;
+                    "
+                  >
+                    PADDING
+                  </div>
+                  <div class="content-box">content</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="diagram-legend">
+            <div class="legend-item">
+              <div
+                class="legend-swatch"
+                style="background: var(--content-color); opacity: 0.7"
+              ></div>
+              <span><code>content</code> — text, images, children</span>
+            </div>
+            <div class="legend-item">
+              <div
+                class="legend-swatch"
+                style="background: var(--padding-color); opacity: 0.7"
+              ></div>
+              <span><code>padding</code> — inner space (inside border)</span>
+            </div>
+            <div class="legend-item">
+              <div
+                class="legend-swatch"
+                style="background: var(--border-color); opacity: 0.7"
+              ></div>
+              <span><code>border</code> — the edge itself</span>
+            </div>
+            <div class="legend-item">
+              <div
+                class="legend-swatch"
+                style="background: var(--margin-color); opacity: 0.7"
+              ></div>
+              <span><code>margin</code> — outer space (outside border)</span>
+            </div>
+          </div>
+        </div>
+
+        <pre><code><span class="c-com">/* shorthand: top right bottom left (clockwise) */</span>
+<span class="c-sel">.box</span> {
+  <span class="c-prop">padding</span>: <span class="c-val">16px 24px</span>;        <span class="c-com">/* top+bottom: 16, left+right: 24 */</span>
+  <span class="c-prop">border</span>: <span class="c-val">2px solid #fff</span>;
+  <span class="c-prop">margin</span>: <span class="c-val">32px auto</span>;         <span class="c-com">/* top+bottom: 32, auto centers horizontally */</span>
+}</code></pre>
+      </section>
+
+      <!-- ② BORDER-BOX -->
+      <section>
+        <div class="section-label">02 / box-sizing: border-box</div>
+        <h2>The fix that should be the default.</h2>
+        <p>
+          By default, <code>box-sizing: content-box</code> means
+          <code>width</code> only sets the <em>content</em> area. Padding and
+          border get added <strong>on top</strong>. That's unintuitive and
+          breaks layouts. <code>border-box</code> makes
+          <code>width</code> include padding and border — what you set is what
+          you get.
+        </p>
+
+        <div class="bb-compare">
+          <div class="bb-card">
+            <div class="bb-card-header bad">❌ content-box (default)</div>
+            <div class="bb-card-body">
+              <p style="font-size: 0.78rem; margin-bottom: 0.8rem">
+                Set <code>width: 200px</code>, but actual rendered width is
+                <strong style="color: var(--accent3)">250px</strong> because
+                padding and border add to it.
+              </p>
+              <div
+                style="
+                  background: #1a1a1a;
+                  border: 1px dashed #333;
+                  width: 260px;
+                  height: 100px;
+                  position: relative;
+                  overflow: visible;
+                  margin-bottom: 0.6rem;
+                "
+              >
+                <div class="demo-content-box">
+                  width: 200px<br />+ padding: 20px × 2<br />+ border: 5px ×
+                  2<br />= <strong>250px total</strong> 💥
+                </div>
+              </div>
+              <pre
+                style="font-size: 0.75rem; padding: 0.8rem"
+              ><code><span class="c-sel">.el</span> {
+  <span class="c-com">/* box-sizing: content-box (default) */</span>
+  <span class="c-prop">width</span>: <span class="c-val">200px</span>;
+  <span class="c-prop">padding</span>: <span class="c-val">20px</span>;
+  <span class="c-prop">border</span>: <span class="c-val">5px solid red</span>;
+  <span class="c-com">/* actual width: 250px 😬 */</span>
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="bb-card">
+            <div class="bb-card-header good">
+              ✓ border-box (use this always)
+            </div>
+            <div class="bb-card-body">
+              <p style="font-size: 0.78rem; margin-bottom: 0.8rem">
+                Set <code>width: 200px</code>, rendered width is exactly
+                <strong style="color: var(--accent2)">200px</strong>. Padding
+                and border live <em>inside</em> the width.
+              </p>
+              <div
+                style="
+                  background: #1a1a1a;
+                  border: 1px dashed #333;
+                  width: 200px;
+                  height: 100px;
+                  position: relative;
+                  overflow: hidden;
+                  margin-bottom: 0.6rem;
+                "
+              >
+                <div class="demo-border-box">
+                  width: 200px<br />padding inside ✓<br />border inside ✓<br />=
+                  <strong>200px total</strong> ✅
+                </div>
+              </div>
+              <pre
+                style="font-size: 0.75rem; padding: 0.8rem"
+              ><code><span class="c-sel">.el</span> {
+  <span class="c-prop">box-sizing</span>: <span class="c-val">border-box</span>;
+  <span class="c-prop">width</span>: <span class="c-val">200px</span>;
+  <span class="c-prop">padding</span>: <span class="c-val">20px</span>;
+  <span class="c-prop">border</span>: <span class="c-val">5px solid teal</span>;
+  <span class="c-com">/* actual width: 200px 🎉 */</span>
+}</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <p style="margin-top: 0.5rem">
+          The universal reset —
+          <strong class="highlight"
+            >put this at the top of every stylesheet, forever:</strong
+          >
+        </p>
+        <pre><code><span class="c-sel">*, *::before, *::after</span> {
+  <span class="c-prop">box-sizing</span>: <span class="c-val">border-box</span>;
+}</code></pre>
+      </section>
+
+      <!-- ③ MARGIN COLLAPSE -->
+      <section>
+        <div class="section-label">03 / The Weird Part</div>
+        <h2>Margin Collapsing</h2>
+        <p>
+          When two <strong>vertical margins</strong> of block elements meet,
+          they don't add — they <em>collapse</em> into the larger of the two.
+          This only happens vertically (top/bottom), never horizontally
+          (left/right).
+        </p>
+
+        <div class="collapse-demo">
+          <!-- What you expect -->
+          <div class="collapse-scene">
+            <div class="collapse-title">What you might expect</div>
+            <div class="m-block">
+              Block A
+              <span style="color: var(--margin-color); font-size: 0.7rem"
+                >(margin-bottom: 32px)</span
+              >
+            </div>
+            <div class="gap-block" style="height: 32px">↓ 32px</div>
+            <div class="gap-block" style="height: 32px; border-top: none">
+              ↑ 32px
+            </div>
+            <div class="m-block">
+              Block B
+              <span style="color: var(--margin-color); font-size: 0.7rem"
+                >(margin-top: 32px)</span
+              >
+            </div>
+            <p
+              style="
+                font-size: 0.72rem;
+                margin-top: 0.8rem;
+                color: var(--accent3);
+              "
+            >
+              ❌ You'd think: 32 + 32 = 64px gap
+            </p>
+          </div>
+
+          <!-- What actually happens -->
+          <div class="collapse-scene">
+            <div class="collapse-title">What actually happens</div>
+            <div class="m-block">
+              Block A
+              <span style="color: var(--margin-color); font-size: 0.7rem"
+                >(margin-bottom: 32px)</span
+              >
+            </div>
+            <div class="gap-block" style="height: 32px">
+              ← collapsed to 32px (the larger value)
+            </div>
+            <div class="m-block">
+              Block B
+              <span style="color: var(--margin-color); font-size: 0.7rem"
+                >(margin-top: 32px)</span
+              >
+            </div>
+            <p
+              style="
+                font-size: 0.72rem;
+                margin-top: 0.8rem;
+                color: var(--accent2);
+              "
+            >
+              ✓ Reality: max(32, 32) = 32px gap
+            </p>
+          </div>
+        </div>
+
+        <p style="margin-top: 0.5rem">
+          <strong class="highlight">The rules:</strong>
+        </p>
+        <ul class="rule-list">
+          <li>
+            <span class="tag">WHEN</span> Adjacent siblings —
+            <code>margin-bottom</code> of one + <code>margin-top</code> of next
+            → collapses to the <strong>larger</strong> value.
+          </li>
+          <li>
+            <span class="tag">WHEN</span> Parent + first/last child — if no
+            border/padding/BFC separates them, the child's margin merges with
+            the parent's.
+          </li>
+          <li>
+            <span class="tag">NEVER</span> Horizontal margins never collapse.
+            Flexbox/grid children never collapse. Elements with
+            <code>overflow</code> ≠ <code>visible</code>,
+            <code>display: flex</code>, or <code>position: absolute</code> don't
+            collapse.
+          </li>
+          <li>
+            <span class="tag">FIX</span> Add <code>padding: 1px</code>,
+            <code>border</code>, <code>overflow: hidden</code>, or make the
+            parent a flex/grid container to prevent unwanted collapse.
+          </li>
+        </ul>
+
+        <pre><code><span class="c-com">/* Classic parent-child collapse trap */</span>
+<span class="c-sel">.parent</span> {
+  background: <span class="c-val">blue</span>;
+  <span class="c-com">/* No padding, no border → child's margin-top "escapes" */</span>
+}
+<span class="c-sel">.child</span> {
+  <span class="c-prop">margin-top</span>: <span class="c-val">40px</span>; <span class="c-com">/* this pushes the PARENT down, not the child inside it */</span>
+}
+
+<span class="c-com">/* Fix: give parent a border or padding-top */</span>
+<span class="c-sel">.parent</span> {
+  <span class="c-prop">padding-top</span>: <span class="c-val">1px</span>; <span class="c-com">/* creates a barrier, stops collapse */</span>
+}</code></pre>
+      </section>
+
+      <!-- ④ INTERACTIVE SANDBOX -->
+      <section>
+        <div class="section-label">04 / Play With It</div>
+        <h2>Live Box Model Sandbox</h2>
+        <div class="interactive">
+          <div class="controls">
+            <div class="control-group">
+              <label style="color: var(--content-color)"
+                >Content width <span class="val" id="lbl-w">140px</span></label
+              >
+              <input type="range" min="60" max="240" value="140" id="ctrl-w" />
+            </div>
+            <div class="control-group">
+              <label style="color: var(--padding-color)"
+                >Padding <span class="val" id="lbl-p">20px</span></label
+              >
+              <input type="range" min="0" max="60" value="20" id="ctrl-p" />
+            </div>
+            <div class="control-group">
+              <label style="color: var(--border-color)"
+                >Border <span class="val" id="lbl-b">4px</span></label
+              >
+              <input type="range" min="0" max="20" value="4" id="ctrl-b" />
+            </div>
+            <div class="control-group">
+              <label style="color: var(--margin-color)"
+                >Margin <span class="val" id="lbl-m">24px</span></label
+              >
+              <input type="range" min="0" max="60" value="24" id="ctrl-m" />
+            </div>
+          </div>
+          <div class="sandbox-wrap">
+            <div
+              id="sandbox-margin"
+              style="position: relative; display: inline-block"
+            >
+              <div id="sandbox-box" class="sandbox-box">content</div>
+              <div
+                id="sandbox-margin-vis"
+                class="sandbox-margin-indicator"
+              ></div>
+            </div>
+          </div>
+          <div id="sandbox-info">
+            Total rendered width: <span id="info-total">—</span> &nbsp;|&nbsp;
+            content: <span id="info-content">—</span> &nbsp; padding:
+            <span id="info-padding">—</span> &nbsp; border:
+            <span id="info-border">—</span> &nbsp; margin:
+            <span id="info-margin">—</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ⑤ KEY POINTS -->
+      <section>
+        <div class="section-label">05 / Key Points</div>
+        <h2>Remember These</h2>
+        <div class="kp-grid">
+          <div class="kp-card">
+            <h3>Box Model</h3>
+            <p>
+              Content → padding → border → margin. Every element. Every time.
+              The browser calculates layout from these four values.
+            </p>
+          </div>
+          <div class="kp-card">
+            <h3>border-box</h3>
+            <p>
+              Always use
+              <code>*, *::before, *::after { box-sizing: border-box }</code>.
+              Width and height include padding and border. No surprises.
+            </p>
+          </div>
+          <div class="kp-card">
+            <h3>Margin Collapsing</h3>
+            <p>
+              Vertical margins between block siblings collapse to the
+              <em>max</em>, not the sum. Only vertical. Not in flex/grid. Parent
+              + child can merge too.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const box = document.getElementById("sandbox-box");
+      const marginVis = document.getElementById("sandbox-margin-vis");
+
+      const ctrls = {
+        w: document.getElementById("ctrl-w"),
+        p: document.getElementById("ctrl-p"),
+        b: document.getElementById("ctrl-b"),
+        m: document.getElementById("ctrl-m"),
+      };
+      const lbls = {
+        w: document.getElementById("lbl-w"),
+        p: document.getElementById("lbl-p"),
+        b: document.getElementById("lbl-b"),
+        m: document.getElementById("lbl-m"),
+      };
+
+      function update() {
+        const w = +ctrls.w.value;
+        const p = +ctrls.p.value;
+        const b = +ctrls.b.value;
+        const m = +ctrls.m.value;
+
+        lbls.w.textContent = w + "px";
+        lbls.p.textContent = p + "px";
+        lbls.b.textContent = b + "px";
+        lbls.m.textContent = m + "px";
+
+        box.style.width = w + "px";
+        box.style.padding = p + "px";
+        box.style.borderWidth = b + "px";
+        box.style.minHeight = 60 + p * 2 + "px";
+
+        // margin visualization: dashed box outside border
+        const total = w; // border-box, so width is total
+        marginVis.style.inset = `-${m}px`;
+
+        document.getElementById("info-total").textContent = w + "px";
+        document.getElementById("info-content").textContent =
+          w - p * 2 - b * 2 + "px";
+        document.getElementById("info-padding").textContent =
+          p + "px each side";
+        document.getElementById("info-border").textContent = b + "px";
+        document.getElementById("info-margin").textContent = m + "px";
+      }
+
+      Object.values(ctrls).forEach((c) => c.addEventListener("input", update));
+      update();
+    </script>
+  </body>
+</html>

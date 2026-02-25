@@ -1,0 +1,4050 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>6-Month Fullstack Design Engineer Roadmap</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500&family=Geist:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #fff;
+        --surface: #eee;
+        --surface2: #eee;
+        --border: #252525;
+        --border2: #1e1e1e;
+        --text: #000;
+        --muted: #666;
+        --muted2: #444;
+        --m1: #c8ff00; /* CSS - electric lime */
+        --m2: #ff6b2b; /* Taste - warm orange */
+        --m3: #7b61ff; /* Framer Motion - purple */
+        --m4: #00c896; /* GSAP - green */
+        --m5: #ff3366; /* React + Perf - red */
+        --m6: #ffc107; /* Synthesis - gold */
+      }
+
+      _,
+      _::before,
+      \*::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Geist", sans-serif;
+        font-weight: 300;
+        line-height: 1.6;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .hero {
+        min-height: 100vh;
+        display: grid;
+        grid-template-rows: 1fr auto;
+        padding: 80px 64px 64px;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "180";
+        position: absolute;
+        bottom: -40px;
+        right: -20px;
+        font-family: "Instrument Serif", serif;
+        font-size: 35vw;
+        color: transparent;
+        -webkit-text-stroke: 1px #1a1a1a;
+        line-height: 1;
+        pointer-events: none;
+        user-select: none;
+      }
+
+      .hero-content {
+        max-width: 900px;
+      }
+
+      .hero-meta {
+        font-family: "Geist Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 3px;
+        color: var(--muted);
+        text-transform: uppercase;
+        margin-bottom: 48px;
+        display: flex;
+        gap: 32px;
+      }
+
+      .hero-meta span::before {
+        content: "— ";
+        color: var(--border);
+      }
+
+      h1 {
+        font-family: "Instrument Serif", serif;
+        font-size: clamp(56px, 8vw, 110px);
+        font-weight: 400;
+        line-height: 0.95;
+        letter-spacing: -2px;
+        margin-bottom: 48px;
+      }
+
+      h1 .italic {
+        font-style: italic;
+      }
+      h1 .dim {
+        color: #333;
+      }
+
+      .hero-desc {
+        font-size: 16px;
+        color: var(--muted);
+        max-width: 560px;
+        line-height: 1.8;
+        border-left: 1px solid var(--border);
+        padding-left: 24px;
+        margin-bottom: 56px;
+      }
+
+      .hero-desc strong {
+        color: var(--text);
+        font-weight: 400;
+      }
+
+      .rules {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        max-width: 700px;
+      }
+
+      .rule {
+        background: var(--bg);
+        padding: 16px 20px;
+      }
+
+      .rule-label {
+        font-family: "Geist Mono", monospace;
+        font-size: 9px;
+        letter-spacing: 2px;
+        color: var(--muted2);
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
+
+      .rule-value {
+        font-family: "Geist Mono", monospace;
+        font-size: 13px;
+        color: var(--text);
+      }
+
+      .hero-foot {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .month-pill {
+        font-family: "Geist Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 1px;
+        padding: 6px 14px;
+        border-radius: 2px;
+        color: #000;
+        font-weight: 500;
+      }
+
+      .month {
+        border-bottom: 1px solid var(--border);
+      }
+
+      .month-header {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        min-height: 200px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .month-id {
+        padding: 48px 48px 48px 64px;
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .month-num {
+        font-family: "Geist Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 3px;
+        color: var(--muted2);
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+
+      .month-title {
+        font-family: "Instrument Serif", serif;
+        font-size: 36px;
+        font-weight: 400;
+        line-height: 1.1;
+      }
+
+      .month-title em {
+        font-style: italic;
+      }
+
+      .month-stripe {
+        height: 3px;
+        margin-top: 24px;
+        width: 48px;
+      }
+
+      .month-meta {
+        padding: 48px 64px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .month-summary {
+        font-size: 15px;
+        color: var(--muted);
+        line-height: 1.8;
+        max-width: 560px;
+      }
+
+      .month-summary strong {
+        color: var(--text);
+        font-weight: 400;
+      }
+
+      .month-stats {
+        display: flex;
+        gap: 40px;
+        flex-wrap: wrap;
+      }
+
+      .stat-num {
+        font-family: "Instrument Serif", serif;
+        font-size: 28px;
+        line-height: 1;
+        margin-bottom: 4px;
+      }
+      .stat-label {
+        font-family: "Geist Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 1px;
+        color: var(--muted2);
+        text-transform: uppercase;
+      }
+
+      .weeks {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1px;
+        background: var(--border2);
+      }
+
+      .week-col {
+        background: var(--bg);
+      }
+
+      .week-head {
+        padding: 24px 28px 20px;
+        border-bottom: 1px solid var(--border2);
+        position: sticky;
+        top: 0;
+        background: var(--bg);
+        z-index: 1;
+      }
+
+      .week-num {
+        font-family: "Geist Mono", monospace;
+        font-size: 9px;
+        letter-spacing: 2px;
+        color: var(--muted2);
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
+
+      .week-theme {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text);
+        line-height: 1.3;
+      }
+
+      .day {
+        padding: 20px 28px;
+        border-bottom: 1px solid var(--border2);
+        transition: background 0.15s;
+      }
+
+      .day:hover {
+        background: var(--surface);
+      }
+
+      .day-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+
+      .day-num {
+        font-family: "Geist Mono", monospace;
+        font-size: 9px;
+        letter-spacing: 2px;
+        color: var(--muted2);
+      }
+
+      .day-date {
+        font-family: "Geist Mono", monospace;
+        font-size: 9px;
+        color: var(--muted2);
+      }
+
+      .day-title {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text);
+        margin-bottom: 10px;
+        line-height: 1.3;
+      }
+
+      .day-items {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        margin-bottom: 10px;
+      }
+
+      .day-items li {
+        font-family: "Geist Mono", monospace;
+        font-size: 10px;
+        color: var(--muted);
+        line-height: 1.5;
+        padding-left: 12px;
+        position: relative;
+      }
+
+      .day-items li::before {
+        content: "·";
+        position: absolute;
+        left: 0;
+        color: var(--muted2);
+      }
+
+      .day-build {
+        font-family: "Geist Mono", monospace;
+        font-size: 10px;
+        color: #333;
+        padding: 8px 10px;
+        background: var(--surface2);
+        border-left: 2px solid var(--border);
+        line-height: 1.5;
+        margin-top: 8px;
+      }
+
+      .day-build .build-tag {
+        font-size: 9px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--muted2);
+        display: block;
+        margin-bottom: 3px;
+      }
+
+      .day-build.accent {
+        border-left-color: currentColor;
+      }
+
+      .c1 {
+        color: var(--m1);
+      }
+      .c2 {
+        color: var(--m2);
+      }
+      .c3 {
+        color: var(--m3);
+      }
+      .c4 {
+        color: var(--m4);
+      }
+      .c5 {
+        color: var(--m5);
+      }
+      .c6 {
+        color: var(--m6);
+      }
+
+      .resources {
+        padding: 32px 64px;
+        border-top: 1px solid var(--border2);
+        display: flex;
+        gap: 48px;
+        flex-wrap: wrap;
+      }
+
+      .res-group {
+      }
+      .res-label {
+        font-family: "Geist Mono", monospace;
+        font-size: 9px;
+        letter-spacing: 2px;
+        color: var(--muted2);
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+      .res-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .res-link {
+        font-family: "Geist Mono", monospace;
+        font-size: 10px;
+        color: var(--muted);
+        padding: 3px 8px;
+        border: 1px solid var(--border2);
+        transition:
+          border-color 0.15s,
+          color 0.15s;
+      }
+      .res-link:hover {
+        color: var(--text);
+        border-color: var(--border);
+      }
+
+      footer {
+        padding: 48px 64px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      footer p {
+        font-family: "Geist Mono", monospace;
+        font-size: 11px;
+        color: var(--muted2);
+      }
+
+      @media (max-width: 1100px) {
+        .weeks {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .month-header {
+          grid-template-columns: 1fr;
+        }
+        .month-id {
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .hero {
+          padding: 48px 24px;
+        }
+        .weeks {
+          grid-template-columns: 1fr;
+        }
+        .month-id {
+          padding: 32px 24px;
+        }
+        .month-meta,
+        .resources {
+          padding: 32px 24px;
+        }
+        footer {
+          padding: 32px 24px;
+        }
+      }
+
+      ::-webkit-scrollbar {
+        width: 3px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--border);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ═══════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════ -->
+    <div class="hero">
+      <div class="hero-content">
+        <div class="hero-meta">
+          <span>Starts Feb 25, 2025</span>
+          <span>Ends Aug 24, 2025</span>
+          <span>2 hrs/day</span>
+        </div>
+
+        <h1>
+          Fullstack<br />
+          <span class="italic">Design</span><br />
+          <span class="dim">Engineer</span>
+        </h1>
+
+        <p class="hero-desc">
+          <strong>No Figma until month 7.</strong> Build the eye, the taste, the
+          code, and the motion instinct first — so when you finally open Figma
+          it's not a crutch, it's just another output for a mind that already
+          knows what good is. <br /><br />
+          <strong
+            >CSS → Taste → Framer Motion → GSAP → React internals & Lighthouse →
+            Synthesis.</strong
+          >
+          Six months. One direction.
+        </p>
+
+        <div class="rules">
+          <div class="rule">
+            <div class="rule-label">Duration</div>
+            <div class="rule-value">6 months</div>
+          </div>
+          <div class="rule">
+            <div class="rule-label">Daily commitment</div>
+            <div class="rule-value">2 hours</div>
+          </div>
+          <div class="rule">
+            <div class="rule-label">Total days</div>
+            <div class="rule-value">~180 days</div>
+          </div>
+          <div class="rule">
+            <div class="rule-label">Animation stack</div>
+            <div class="rule-value">GSAP + FM + CSS</div>
+          </div>
+          <div class="rule">
+            <div class="rule-label">Figma?</div>
+            <div class="rule-value">Month 7+</div>
+          </div>
+          <div class="rule">
+            <div class="rule-label">Goal</div>
+            <div class="rule-value">Undeniable position</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-foot">
+        <div class="month-pill" style="background: var(--m1)">M1 CSS</div>
+        <div class="month-pill" style="background: var(--m2)">M2 Taste</div>
+        <div class="month-pill" style="background: var(--m3)">
+          M3 Framer Motion
+        </div>
+        <div class="month-pill" style="background: var(--m4)">M4 GSAP</div>
+        <div class="month-pill" style="background: var(--m5)">
+          M5 React+Perf
+        </div>
+        <div class="month-pill" style="background: var(--m6)">M6 Synthesis</div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+     MONTH 1 — CSS GOD
+     Feb 25 – Mar 26
+════════════════════════════════════════════════ -->
+    <div class="month">
+      <div class="month-header">
+        <div class="month-id">
+          <div>
+            <div class="month-num">Month 01 · Feb 25 – Mar 26</div>
+            <div class="month-title">CSS <em>God</em><br />Mode</div>
+          </div>
+          <div class="month-stripe" style="background: var(--m1)"></div>
+        </div>
+        <div class="month-meta">
+          <p class="month-summary">
+            Don't skip the fundamentals — do them <strong>properly</strong>. The
+            cascade, box model, units, every selector, typography, layout (flex
+            + grid), transforms, 3D, animations, and then the modern stuff:
+            container queries, <code>@layer</code>, native nesting,
+            scroll-driven animations, View Transitions, <code>:has()</code>,
+            <code>@property</code>, anchor positioning. 3 Kevin Powell videos a
+            day.
+          </p>
+          <div class="month-stats">
+            <div class="stat">
+              <div class="stat-num c1">30</div>
+              <div class="stat-label">Days</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num c1">90</div>
+              <div class="stat-label">KP videos</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num c1">60h</div>
+              <div class="stat-label">Study time</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="weeks">
+        <!-- WEEK 1 -->
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 1</div>
+            <div class="week-theme" style="color: var(--m1)">Foundations</div>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 01</span
+              ><span class="day-date">Feb 25</span>
+            </div>
+            <div class="day-title">Cascade, Specificity & Inheritance</div>
+            <ul class="day-items">
+              <li>How the browser resolves conflicting styles</li>
+              <li>Specificity: inline › ID › class › element</li>
+              <li>inherit, initial, unset, revert</li>
+              <li>KP: Specificity · Inheritance · !important is Bad</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 02</span
+              ><span class="day-date">Feb 26</span>
+            </div>
+            <div class="day-title">The Box Model — For Real</div>
+            <ul class="day-items">
+              <li>content / padding / border / margin</li>
+              <li>box-sizing: border-box — always, everywhere</li>
+              <li>Margin collapsing (the weird part)</li>
+              <li>KP: Box Model · Margin Collapsing · border-box</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 03</span
+              ><span class="day-date">Feb 27</span>
+            </div>
+            <div class="day-title">Display, Block & Inline</div>
+            <ul class="day-items">
+              <li>block vs inline vs inline-block — actual differences</li>
+              <li>Normal flow. Anonymous boxes</li>
+              <li>KP: Block vs Inline · Display deep dive · 5 CSS things</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 04</span
+              ><span class="day-date">Feb 28</span>
+            </div>
+            <div class="day-title">Units — px, em, rem, %, vw, dvh, ch</div>
+            <ul class="day-items">
+              <li>em vs rem — the difference that matters</li>
+              <li>svh, lvh, dvh — new viewport units</li>
+              <li>KP: em & rem · Viewport Units · Units which to use</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 05</span
+              ><span class="day-date">Mar 1</span>
+            </div>
+            <div class="day-title">All Selectors + :has()</div>
+            <ul class="day-items">
+              <li>Combinators, attribute selectors, pseudo-classes</li>
+              <li>:is(), :where(), :not() — modern selector trio</li>
+              <li>:has() — the parent selector. Game-changer</li>
+              <li>KP: Selectors · :is() & :where() · :has()</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 06</span
+              ><span class="day-date">Mar 2</span>
+            </div>
+            <div class="day-title">Typography & Text</div>
+            <ul class="day-items">
+              <li>
+                font shorthand, line-height (unitless!), text-wrap: balance
+              </li>
+              <li>Variable fonts, @font-face</li>
+              <li>KP: Typography · line-height px · Google Fonts</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 07</span
+              ><span class="day-date">Mar 3</span>
+            </div>
+            <div class="day-title">Colors, oklch() & Custom Properties</div>
+            <ul class="day-items">
+              <li>hsl vs oklch — perceptual uniformity wins</li>
+              <li>color-mix(), CSS variables deep</li>
+              <li>KP: Custom Properties · OKLCH · Gradients</li>
+            </ul>
+            <div class="day-build accent c1">
+              <span class="build-tag">Week 1 Build</span>
+              Rebuild a page you've built before. Box model + rem system + oklch
+              palette. No shortcuts.
+            </div>
+          </div>
+        </div>
+
+        <!-- WEEK 2 -->
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 2</div>
+            <div class="week-theme" style="color: var(--m1)">
+              Layout Mastery
+            </div>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 08</span
+              ><span class="day-date">Mar 4</span>
+            </div>
+            <div class="day-title">Flexbox — Full Picture</div>
+            <ul class="day-items">
+              <li>flex-grow, flex-shrink, flex-basis trinity</li>
+              <li>flex: 1 and what it actually means</li>
+              <li>KP: Flexbox Tutorial · flex-grow/shrink/basis · Alignment</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 09</span
+              ><span class="day-date">Mar 5</span>
+            </div>
+            <div class="day-title">Flexbox — Advanced Patterns</div>
+            <ul class="day-items">
+              <li>Auto margins as spacers. Holy grail layout</li>
+              <li>Common gotchas: image stretch, min-width</li>
+              <li>KP: Flexbox Patterns · Auto Margins · Real World</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 10</span
+              ><span class="day-date">Mar 6</span>
+            </div>
+            <div class="day-title">CSS Grid — Foundations</div>
+            <ul class="day-items">
+              <li>grid-template-columns/rows. fr unit</li>
+              <li>repeat(), auto-fill, auto-fit</li>
+              <li>KP: Grid Crash Course · fr unit · auto-fill vs auto-fit</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 11</span
+              ><span class="day-date">Mar 7</span>
+            </div>
+            <div class="day-title">Grid — Placement & Areas</div>
+            <ul class="day-items">
+              <li>grid-column/row, span. grid-template-areas</li>
+              <li>grid-auto-flow: dense. Overlapping items</li>
+              <li>KP: grid-template-areas · Grid Placement · Overlapping</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 12</span
+              ><span class="day-date">Mar 8</span>
+            </div>
+            <div class="day-title">minmax(), clamp() & Fluid Design</div>
+            <ul class="day-items">
+              <li>minmax(min, max) — the grid superpower</li>
+              <li>clamp(min, preferred, max) for fluid type</li>
+              <li>min() and max() functions</li>
+              <li>KP: minmax() · clamp() fluid type · Intrinsic layouts</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 13</span
+              ><span class="day-date">Mar 9</span>
+            </div>
+            <div class="day-title">Subgrid & Complex Grid Patterns</div>
+            <ul class="day-items">
+              <li>subgrid — inherit parent tracks. Card alignment</li>
+              <li>Magazine layouts with grid</li>
+              <li>KP: CSS Subgrid · Advanced Grid · Card layout</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 14</span
+              ><span class="day-date">Mar 10</span>
+            </div>
+            <div class="day-title">Positioning & Stacking Context</div>
+            <ul class="day-items">
+              <li>static/relative/absolute/fixed/sticky</li>
+              <li>How z-index actually works. Stacking context</li>
+              <li>KP: Position · sticky · z-index & Stacking Context</li>
+            </ul>
+            <div class="day-build accent c1">
+              <span class="build-tag">Week 2 Build</span>
+              A responsive grid layout using only grid + clamp(). Zero media
+              queries. Magazine-quality.
+            </div>
+          </div>
+        </div>
+
+        <!-- WEEK 3 -->
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 3</div>
+            <div class="week-theme" style="color: var(--m1)">Visual Power</div>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 15</span
+              ><span class="day-date">Mar 11</span>
+            </div>
+            <div class="day-title">Transitions & Easing</div>
+            <ul class="day-items">
+              <li>transition shorthand. cubic-bezier()</li>
+              <li>linear() — the new spring easing in CSS</li>
+              <li>Only animate transform + opacity for perf</li>
+              <li>KP: Transitions · Easing Functions · Perf Tips</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 16</span
+              ><span class="day-date">Mar 12</span>
+            </div>
+            <div class="day-title">2D Transforms</div>
+            <ul class="day-items">
+              <li>translate(), rotate(), scale(), skew()</li>
+              <li>transform-origin. Combining transforms</li>
+              <li>KP: CSS Transforms · transform-origin · GPU compositing</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 17</span
+              ><span class="day-date">Mar 13</span>
+            </div>
+            <div class="day-title">3D Transforms & Perspective</div>
+            <ul class="day-items">
+              <li>perspective: the depth property. rotateX/Y/Z</li>
+              <li>transform-style: preserve-3d. backface-visibility</li>
+              <li>Card flip effect — the classic</li>
+              <li>KP: CSS 3D · perspective · 3D card flip</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 18</span
+              ><span class="day-date">Mar 14</span>
+            </div>
+            <div class="day-title">@keyframes & CSS Animations</div>
+            <ul class="day-items">
+              <li>animation shorthand — all 8 properties</li>
+              <li>animation-fill-mode: forwards. animation-play-state</li>
+              <li>Staggered animations with animation-delay</li>
+              <li>KP: @keyframes · fill-mode · Staggered</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 19</span
+              ><span class="day-date">Mar 15</span>
+            </div>
+            <div class="day-title">Filters, Backdrop & Blend Modes</div>
+            <ul class="day-items">
+              <li>filter: blur, brightness, drop-shadow</li>
+              <li>backdrop-filter: blur() — frosted glass</li>
+              <li>mix-blend-mode, isolation: isolate</li>
+              <li>KP: filter · frosted glass · mix-blend-mode</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 20</span
+              ><span class="day-date">Mar 16</span>
+            </div>
+            <div class="day-title">Clip-path, Masks & Shapes</div>
+            <ul class="day-items">
+              <li>clip-path: polygon(), circle(), path()</li>
+              <li>mask-image. shape-outside for text wrap</li>
+              <li>Animating clip-path</li>
+              <li>KP: clip-path · Animating clip-path · mask-image</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 21</span
+              ><span class="day-date">Mar 17</span>
+            </div>
+            <div class="day-title">Responsive Without Media Queries</div>
+            <ul class="day-items">
+              <li>min-content, max-content, fit-content</li>
+              <li>auto-fill + minmax = zero queries</li>
+              <li>Logical properties: inline-size, block-size</li>
+              <li>
+                KP: No media queries · min/max-content · Logical Properties
+              </li>
+            </ul>
+            <div class="day-build accent c1">
+              <span class="build-tag">Week 3 Build</span>
+              A 3D card flip + an animated hero using only CSS keyframes. No
+              libraries.
+            </div>
+          </div>
+        </div>
+
+        <!-- WEEK 4 -->
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 4</div>
+            <div class="week-theme" style="color: var(--m1)">
+              Modern God Tier
+            </div>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 22</span
+              ><span class="day-date">Mar 18</span>
+            </div>
+            <div class="day-title">Container Queries & Units</div>
+            <ul class="day-items">
+              <li>container-type: inline-size. @container</li>
+              <li>Container query units: cqi, cqw, cqb</li>
+              <li>Style queries — query CSS variable values</li>
+              <li>KP: Container Queries · cq units · Style queries</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 23</span
+              ><span class="day-date">Mar 19</span>
+            </div>
+            <div class="day-title">@layer, @scope & Cascade Layers</div>
+            <ul class="day-items">
+              <li>@layer reset, base, components, utilities</li>
+              <li>Unlayered beats layered. Declare order first</li>
+              <li>@scope for component-scoped styles</li>
+              <li>KP: @layer · @scope · Real world @layer</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 24</span
+              ><span class="day-date">Mar 20</span>
+            </div>
+            <div class="day-title">Native CSS Nesting</div>
+            <ul class="day-items">
+              <li>No Sass needed — native now</li>
+              <li>The & — when required</li>
+              <li>Nesting media queries inside selectors</li>
+              <li>KP: Native Nesting · & ampersand · Nesting media queries</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 25</span
+              ><span class="day-date">Mar 21</span>
+            </div>
+            <div class="day-title">Scroll-Driven Animations</div>
+            <ul class="day-items">
+              <li>animation-timeline: scroll() and view()</li>
+              <li>animation-range: entry / exit</li>
+              <li>Parallax, progress bars, reveals — zero JS</li>
+              <li>KP: Scroll-Driven Animations · view() · progress bar</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 26</span
+              ><span class="day-date">Mar 22</span>
+            </div>
+            <div class="day-title">View Transitions API</div>
+            <ul class="day-items">
+              <li>::view-transition-old/new. view-transition-name</li>
+              <li>Cross-document (same-origin) transitions</li>
+              <li>@starting-style for enter animations</li>
+              <li>KP: View Transitions · @starting-style · cross-doc</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 27</span
+              ><span class="day-date">Mar 23</span>
+            </div>
+            <div class="day-title">@property & Anchor Positioning</div>
+            <ul class="day-items">
+              <li>@property — animate custom properties now</li>
+              <li>Animating gradients via @property</li>
+              <li>anchor-name, position-anchor — CSS tooltips</li>
+              <li>KP: @property · gradient animation · anchor positioning</li>
+            </ul>
+          </div>
+
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 28–30</span
+              ><span class="day-date">Mar 24–26</span>
+            </div>
+            <div class="day-title">
+              Architecture, Performance & Lighthouse Baseline
+            </div>
+            <ul class="day-items">
+              <li>will-change, contain, content-visibility</li>
+              <li>prefers-reduced-motion: wrap every animation</li>
+              <li>light-dark() for auto theming</li>
+              <li>Run Lighthouse on everything you've built. Score 90+</li>
+            </ul>
+            <div class="day-build accent c1">
+              <span class="build-tag">Month 1 Final Build</span>
+              A single-page CSS showcase — scroll-driven hero, grid layout, 3D
+              card, container queries. Pure CSS. No libraries. Ship it.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="resources">
+        <div class="res-group">
+          <div class="res-label">Primary</div>
+          <div class="res-links">
+            <a
+              class="res-link"
+              href="https://www.youtube.com/@KevinPowell"
+              target="_blank"
+              >Kevin Powell YouTube</a
+            >
+            <a class="res-link" href="https://web.dev" target="_blank"
+              >web.dev</a
+            >
+            <a
+              class="res-link"
+              href="https://developer.mozilla.org"
+              target="_blank"
+              >MDN</a
+            >
+          </div>
+        </div>
+        <div class="res-group">
+          <div class="res-label">Tools</div>
+          <div class="res-links">
+            <a class="res-link" href="https://oklch.com" target="_blank"
+              >oklch.com</a
+            >
+            <a class="res-link" href="https://typescale.com" target="_blank"
+              >typescale.com</a
+            >
+            <a class="res-link" href="https://cubic-bezier.com" target="_blank"
+              >cubic-bezier.com</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+     MONTH 2 — TASTE & DESIGN EYE
+     Mar 27 – Apr 26
+════════════════════════════════════════════════ -->
+    <div class="month">
+      <div class="month-header">
+        <div class="month-id">
+          <div>
+            <div class="month-num">Month 02 · Mar 27 – Apr 26</div>
+            <div class="month-title">The<br /><em>Design Eye</em></div>
+          </div>
+          <div class="month-stripe" style="background: var(--m2)"></div>
+        </div>
+        <div class="month-meta">
+          <p class="month-summary">
+            Before you can make great things, you must
+            <strong>see</strong> great things. This month is about building
+            taste deliberately — studying Rauno, Raphael, Shu Ding, Ayush Soni,
+            Basement Studio. Moodboarding, color theory, typography as craft,
+            spatial reasoning, interaction patterns. The PDF you shared lives
+            here. <strong>Figma is still off-limits</strong> — you feel design
+            in code only.
+          </p>
+          <div class="month-stats">
+            <div class="stat">
+              <div class="stat-num c2">30</div>
+              <div class="stat-label">Days</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num c2">∞</div>
+              <div class="stat-label">Reference sites studied</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num c2">60h</div>
+              <div class="stat-label">Study + build</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="weeks">
+        <!-- W1 -->
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 1</div>
+            <div class="week-theme" style="color: var(--m2)">
+              Study the Masters
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 01</span
+              ><span class="day-date">Mar 27</span>
+            </div>
+            <div class="day-title">What Design Engineers Actually Do</div>
+            <ul class="day-items">
+              <li>Audit rauno.me/craft — every piece, take written notes</li>
+              <li>
+                Audit raphaelsalaja.com — what detail is he obsessing over?
+              </li>
+              <li>
+                Read maggieappleton.com/design-engineers — the defining essay
+              </li>
+              <li>Audit emilkowal.ski — how code and motion thinking merge</li>
+            </ul>
+            <div class="day-build accent c2">
+              <span class="build-tag">Exercise</span>
+              Write 500 words: "What is a design engineer?" in your own words.
+              No looking back after you start.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 02</span
+              ><span class="day-date">Mar 28</span>
+            </div>
+            <div class="day-title">Building Your Inspiration System</div>
+            <ul class="day-items">
+              <li>Set up cosmos.so — your visual second brain</li>
+              <li>Set up savee.it — for UI/interaction references</li>
+              <li>Habit: 10 min on awwwards.com + lapa.ninja every morning</li>
+              <li>siteinspire.com — curated. Study why each was selected</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 03</span
+              ><span class="day-date">Mar 29</span>
+            </div>
+            <div class="day-title">Steal Like an Artist — The Method</div>
+            <ul class="day-items">
+              <li>Read Austin Kleon's "Steal Like an Artist" (it's short)</li>
+              <li>Collect 20 references this week on cosmos.so</li>
+              <li>
+                Study Linear.app — hover everything. Every interaction is
+                intentional
+              </li>
+              <li>
+                Study Vercel.com homepage — read the motion, not the words
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 04</span
+              ><span class="day-date">Mar 30</span>
+            </div>
+            <div class="day-title">Typography as Craft — Not Just Fonts</div>
+            <ul class="day-items">
+              <li>
+                Type scale systems: modular scale ratios (1.25, 1.333, 1.5)
+              </li>
+              <li>Variable fonts — axes: weight, width, optical size, slant</li>
+              <li>
+                Typographic rhythm: baseline grids, leading, measure (45–75
+                chars)
+              </li>
+              <li>
+                fonts.google.com/knowledge — the full type curriculum, free
+              </li>
+            </ul>
+            <div class="day-build accent c2">
+              <span class="build-tag">Build</span>
+              A variable font specimen page in HTML/CSS. Show full axis range.
+              Beautiful not informational.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 05</span
+              ><span class="day-date">Mar 31</span>
+            </div>
+            <div class="day-title">Color — The Real Stuff</div>
+            <ul class="day-items">
+              <li>Contrast, vibration, temperature — emotional color use</li>
+              <li>One-color systems: how Linear, Vercel, Raycast work</li>
+              <li>Dark mode as craft — not inversion, a new palette</li>
+              <li>Refactoring UI color chapters — required reading</li>
+            </ul>
+            <div class="day-build accent c2">
+              <span class="build-tag">Build</span>
+              A 9-stop oklch palette for a fictional brand. Light + dark. All
+              CSS custom properties.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 06</span
+              ><span class="day-date">Apr 1</span>
+            </div>
+            <div class="day-title">Spacing, Rhythm & the 8pt Grid</div>
+            <ul class="day-items">
+              <li>Spatial systems: 4pt, 8pt — why they work with screens</li>
+              <li>White space as design element, not absence</li>
+              <li>Spacing tokens in CSS: --space-1 through --space-12</li>
+              <li>spec.fm/specifics/8-pt-grid — canonical read</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 07</span
+              ><span class="day-date">Apr 2</span>
+            </div>
+            <div class="day-title">Composition — Layout as Storytelling</div>
+            <ul class="day-items">
+              <li>Visual hierarchy: what the eye reads 1st, 2nd, 3rd</li>
+              <li>Tension + balance: asymmetry done with intention</li>
+              <li>
+                Basement Studio — audit 3 case studies. Note every unexpected
+                choice
+              </li>
+              <li>designspiration.com — 15 min daily browsing starts now</li>
+            </ul>
+            <div class="day-build accent c2">
+              <span class="build-tag">Week 1 Build</span>
+              A "design diary" page — document 5 biggest insights from this
+              week. The page itself must be proof of what you learned.
+            </div>
+          </div>
+        </div>
+
+        <!-- W2 -->
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 2</div>
+            <div class="week-theme" style="color: var(--m2)">
+              Motion Principles
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 08</span
+              ><span class="day-date">Apr 3</span>
+            </div>
+            <div class="day-title">Disney's 12 Principles Applied to UI</div>
+            <ul class="day-items">
+              <li>
+                Squash & stretch, anticipation, follow-through — in UI terms
+              </li>
+              <li>Easing is emotion. Overshoot = alive. Linear = dead</li>
+              <li>The 100ms rule: snappy / responsive / story</li>
+              <li>emilkowal.ski animation essays — required reading</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 09</span
+              ><span class="day-date">Apr 4</span>
+            </div>
+            <div class="day-title">
+              Microinteractions — Dan Saffer's 4 Parts
+            </div>
+            <ul class="day-items">
+              <li>Trigger, rules, feedback, loops/modes</li>
+              <li>Hover states as first-class design — never afterthought</li>
+              <li>Focus states: accessible AND beautiful</li>
+              <li>useAnimations.com — icon animations study</li>
+            </ul>
+            <div class="day-build accent c2">
+              <span class="build-tag">Build</span>
+              5 button press animations in pure CSS. Each must feel different:
+              snappy, bouncy, elegant, playful, weighty.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 10</span
+              ><span class="day-date">Apr 5</span>
+            </div>
+            <div class="day-title">
+              Interaction Patterns — Rauno & Raphael Style
+            </div>
+            <ul class="day-items">
+              <li>
+                Study every item on rauno.me/craft — how does he describe each?
+              </li>
+              <li>Spatial Tooltip — understand the scroll + mouse combo</li>
+              <li>
+                Testimonials drag component — the feel, not the code (yet)
+              </li>
+              <li>
+                raphaelsalaja.com — what 3 interactions stop you scrolling?
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 11</span
+              ><span class="day-date">Apr 6</span>
+            </div>
+            <div class="day-title">Loading States as Design Moments</div>
+            <ul class="day-items">
+              <li>Skeleton screens — when and why</li>
+              <li>Spinners, progress bars, indeterminate states</li>
+              <li>Empty states — design moments, not errors</li>
+              <li>goodui.org — 100 patterns, study 20 today</li>
+            </ul>
+            <div class="day-build accent c2">
+              <span class="build-tag">Build</span>
+              A loading skeleton in pure CSS with shimmer animation. Then a
+              beautiful empty state component.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 12</span
+              ><span class="day-date">Apr 7</span>
+            </div>
+            <div class="day-title">Ayush Soni & Shu Ding — Study Day</div>
+            <ul class="day-items">
+              <li>
+                Study x.com/ayushsoni_io — his interaction demos on Twitter
+              </li>
+              <li>Study x.com/shuding — Nextra, his OSS UI work</li>
+              <li>
+                Re-create one of their interactions in pure CSS + vanilla JS
+              </li>
+              <li>Note: what makes each feel intentional vs accidental?</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 13</span
+              ><span class="day-date">Apr 8</span>
+            </div>
+            <div class="day-title">Moodboarding & Reference Collection</div>
+            <ul class="day-items">
+              <li>milanote.com/product/moodboarding — the method</li>
+              <li>Build a moodboard for a fictional product on cosmos.so</li>
+              <li>creativeboom.com + itsnicethat.com — 20 min reading each</li>
+              <li>
+                Unsplash — study photography composition (it transfers to UI)
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 14</span
+              ><span class="day-date">Apr 9</span>
+            </div>
+            <div class="day-title">Design System Tokens in CSS</div>
+            <ul class="day-items">
+              <li>Token tiers: global → semantic → component</li>
+              <li>
+                Your master token file: color, space, radius, shadow, type
+              </li>
+              <li>Theme switching without flash — the right technique</li>
+              <li>This file ships with every future project from now on</li>
+            </ul>
+            <div class="day-build accent c2">
+              <span class="build-tag">Week 2 Build</span>
+              Your permanent design token file in CSS. Then a card component
+              built using only those tokens. No magic numbers ever again.
+            </div>
+          </div>
+        </div>
+
+        <!-- W3 -->
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 3</div>
+            <div class="week-theme" style="color: var(--m2)">
+              Build with Taste
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 15</span
+              ><span class="day-date">Apr 10</span>
+            </div>
+            <div class="day-title">Recreate 1 — Rauno's Staggered Text</div>
+            <ul class="day-items">
+              <li>Study rauno.me/craft — Staggered Text piece</li>
+              <li>Reverse-engineer: how is text split? What triggers it?</li>
+              <li>Build it from scratch in vanilla JS + CSS</li>
+              <li>Make it your own after matching the original</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 16</span
+              ><span class="day-date">Apr 11</span>
+            </div>
+            <div class="day-title">Recreate 2 — Spatial Tooltip</div>
+            <ul class="day-items">
+              <li>Study rauno.me/craft — Spatial Tooltip</li>
+              <li>Mouse tracking + CSS transform combo</li>
+              <li>The spring feel — done in CSS transitions for now</li>
+              <li>Add it to your token-based card component</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 17</span
+              ><span class="day-date">Apr 12</span>
+            </div>
+            <div class="day-title">
+              Recreate 3 — A Raphael Salaja Interaction
+            </div>
+            <ul class="day-items">
+              <li>Pick one interaction from raphaelsalaja.com</li>
+              <li>
+                Study it for 30 min. Write out the mechanic before touching code
+              </li>
+              <li>Build it. Then improve on it — make it yours</li>
+              <li>
+                Post a 30-second screen record. Your first build-in-public
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 18</span
+              ><span class="day-date">Apr 13</span>
+            </div>
+            <div class="day-title">Accessibility as Craft</div>
+            <ul class="day-items">
+              <li>
+                WCAG 2.2 — contrast, focus, motion: the 3 that matter daily
+              </li>
+              <li>
+                Screen reader test with VoiceOver on everything you've built
+              </li>
+              <li>prefers-reduced-motion: wrap every animation from now on</li>
+              <li>a11yproject.com checklist — bookmark it permanently</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 19</span
+              ><span class="day-date">Apr 14</span>
+            </div>
+            <div class="day-title">Google Lighthouse — The Full Picture</div>
+            <ul class="day-items">
+              <li>Performance: LCP, INP, CLS — what design causes each</li>
+              <li>Font loading without FOUT: font-display, preload</li>
+              <li>Run Lighthouse on everything from Month 1. Fix every red</li>
+              <li>web.dev/vitals — source of truth. Read it fully</li>
+            </ul>
+            <div class="day-build accent c2">
+              <span class="build-tag">Build</span>
+              Take your Month 1 CSS showcase. Score every Lighthouse metric to
+              90+. Document what you changed.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 20</span
+              ><span class="day-date">Apr 15</span>
+            </div>
+            <div class="day-title">Taste Audit — What's Your Aesthetic?</div>
+            <ul class="day-items">
+              <li>Look at everything you've collected on cosmos.so</li>
+              <li>
+                Find 3 patterns: what do you keep saving? What's the common
+                thread?
+              </li>
+              <li>
+                Name your aesthetic. "Editorial dark" / "Warm brutalist" / etc.
+              </li>
+              <li>
+                This is your design identity. Everything you build should feel
+                like you
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 21</span
+              ><span class="day-date">Apr 16</span>
+            </div>
+            <div class="day-title">Build in Public — Your First Week</div>
+            <ul class="day-items">
+              <li>Post 3 things you built this month on Twitter/X</li>
+              <li>Screen record + one sentence. Show don't explain</li>
+              <li>
+                Study how Raphael posts: he shows the thing, not the process
+              </li>
+              <li>Tag the people who inspired you. Community is compounding</li>
+            </ul>
+            <div class="day-build accent c2">
+              <span class="build-tag">Week 3 Build</span>
+              Your three recreations + your own aesthetic twist on one. Post all
+              three publicly.
+            </div>
+          </div>
+        </div>
+
+        <!-- W4 -->
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 4</div>
+            <div class="week-theme" style="color: var(--m2)">
+              Synthesis & Eye
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 22</span
+              ><span class="day-date">Apr 17</span>
+            </div>
+            <div class="day-title">
+              CSS Animation Mastery — Complex Sequences
+            </div>
+            <ul class="day-items">
+              <li>Multi-step keyframes. Composing animation sequences</li>
+              <li>CSS custom properties + @property for animated variables</li>
+              <li>Animating gradients with @property. SVG stroke-dashoffset</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 23</span
+              ><span class="day-date">Apr 18</span>
+            </div>
+            <div class="day-title">Advanced Scroll Effects — Pure CSS</div>
+            <ul class="day-items">
+              <li>animation-timeline: scroll() for page-wide effects</li>
+              <li>animation-timeline: view() for element-in-viewport</li>
+              <li>
+                Parallax section, sticky reveal, progress indicator — all CSS
+              </li>
+            </ul>
+            <div class="day-build accent c2">
+              <span class="build-tag">Build</span>
+              A scroll-driven "features" section. Each feature reveals as you
+              scroll. Zero JS.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 24</span
+              ><span class="day-date">Apr 19</span>
+            </div>
+            <div class="day-title">The Glassmorphism + Noise Texture Era</div>
+            <ul class="day-items">
+              <li>backdrop-filter mastery. Layered translucency</li>
+              <li>SVG noise filter for grain texture on backgrounds</li>
+              <li>Conic gradients for angular design elements</li>
+              <li>When to use these — taste means knowing when NOT to</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 25</span
+              ><span class="day-date">Apr 20</span>
+            </div>
+            <div class="day-title">
+              Dark Patterns vs Delight — Ethics in Interaction
+            </div>
+            <ul class="day-items">
+              <li>What dark patterns are. Why you'll never use them</li>
+              <li>Delight vs novelty — the difference matters enormously</li>
+              <li>
+                Respect user attention: every animation must earn its place
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 26</span
+              ><span class="day-date">Apr 21</span>
+            </div>
+            <div class="day-title">Your /craft Page — Conception</div>
+            <ul class="day-items">
+              <li>Plan your own /craft page (like rauno.me/craft)</li>
+              <li>List 5 experiments from these 2 months to feature</li>
+              <li>Sketch the layout in code. Not wireframes — code</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 27</span
+              ><span class="day-date">Apr 22</span>
+            </div>
+            <div class="day-title">creativeboom & itsnicethat Deep Dive</div>
+            <ul class="day-items">
+              <li>Read 5 full articles on each. What are the trends?</li>
+              <li>Save 10 references from each to cosmos.so</li>
+              <li>
+                How does editorial design translate to UI? Write 3 observations
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 28–30</span
+              ><span class="day-date">Apr 23–26</span>
+            </div>
+            <div class="day-title">Month 2 Final Build</div>
+            <ul class="day-items">
+              <li>Build a single-page interactive experience</li>
+              <li>
+                Your design tokens. Your aesthetic. Your palette. Your type
+                system
+              </li>
+              <li>
+                At least 3 CSS-only interactions. Scroll-driven hero. Beautiful
+                empty state
+              </li>
+              <li>Lighthouse 90+ on all metrics before you call it done</li>
+            </ul>
+            <div class="day-build accent c2">
+              <span class="build-tag">Month 2 Final</span>
+              Rewrite your Month 1 manifesto. It should be unrecognizable. The
+              gap = what you became.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="resources">
+        <div class="res-group">
+          <div class="res-label">Design Inspiration</div>
+          <div class="res-links">
+            <a class="res-link" href="https://www.cosmos.so/" target="_blank"
+              >cosmos.so</a
+            >
+            <a class="res-link" href="https://savee.it/" target="_blank"
+              >savee.it</a
+            >
+            <a class="res-link" href="https://www.lapa.ninja/" target="_blank"
+              >lapa.ninja</a
+            >
+            <a
+              class="res-link"
+              href="https://www.siteinspire.com/"
+              target="_blank"
+              >siteinspire.com</a
+            >
+            <a
+              class="res-link"
+              href="https://www.designspiration.com/"
+              target="_blank"
+              >designspiration.com</a
+            >
+            <a
+              class="res-link"
+              href="https://www.itsnicethat.com/"
+              target="_blank"
+              >itsnicethat.com</a
+            >
+            <a
+              class="res-link"
+              href="https://www.creativeboom.com/"
+              target="_blank"
+              >creativeboom.com</a
+            >
+          </div>
+        </div>
+        <div class="res-group">
+          <div class="res-label">Masters to Study</div>
+          <div class="res-links">
+            <a class="res-link" href="https://rauno.me/craft" target="_blank"
+              >rauno.me/craft</a
+            >
+            <a class="res-link" href="https://raphaelsalaja.com" target="_blank"
+              >raphaelsalaja.com</a
+            >
+            <a class="res-link" href="https://x.com/shuding" target="_blank"
+              >shuding</a
+            >
+            <a
+              class="res-link"
+              href="https://x.com/ayushsoni_io"
+              target="_blank"
+              >ayushsoni_io</a
+            >
+            <a class="res-link" href="https://basement.studio" target="_blank"
+              >basement.studio</a
+            >
+          </div>
+        </div>
+        <div class="res-group">
+          <div class="res-label">Read</div>
+          <div class="res-links">
+            <a
+              class="res-link"
+              href="https://austinkleon.com/steallikeanartist/"
+              target="_blank"
+              >Steal Like an Artist</a
+            >
+            <a
+              class="res-link"
+              href="https://maggieappleton.com/design-engineers"
+              target="_blank"
+              >Design Engineers Essay</a
+            >
+            <a
+              class="res-link"
+              href="https://www.milanote.com/product/moodboarding"
+              target="_blank"
+              >Milanote Moodboarding</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+     MONTH 3 — FRAMER MOTION
+     Apr 27 – May 26
+════════════════════════════════════════════════ -->
+    <div class="month">
+      <div class="month-header">
+        <div class="month-id">
+          <div>
+            <div class="month-num">Month 03 · Apr 27 – May 26</div>
+            <div class="month-title">Framer<br /><em>Motion</em><br />Deep</div>
+          </div>
+          <div class="month-stripe" style="background: var(--m3)"></div>
+        </div>
+        <div class="month-meta">
+          <p class="month-summary">
+            One library. Mastered completely. From basic variants to
+            <strong
+              >layout animations, scroll-linked physics, gesture choreography,
+              useMotionValue + useSpring, text animation, and complex
+              orchestration</strong
+            >
+            with AnimatePresence and useAnimate sequence(). Every day ships a
+            portfolio piece. By the end you have a motion vocabulary that makes
+            people stop and screenshot.
+          </p>
+          <div class="month-stats">
+            <div class="stat">
+              <div class="stat-num c3">30</div>
+              <div class="stat-label">Days</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num c3">20+</div>
+              <div class="stat-label">Components built</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num c3">60h</div>
+              <div class="stat-label">Pure motion</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="weeks">
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 1</div>
+            <div class="week-theme" style="color: var(--m3)">Foundations</div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 01</span
+              ><span class="day-date">Apr 27</span>
+            </div>
+            <div class="day-title">motion.div — The Mental Model</div>
+            <ul class="day-items">
+              <li>animate, initial, exit. The three properties</li>
+              <li>Transition object — duration, ease, spring</li>
+              <li>whileHover, whileTap, whileFocus</li>
+              <li>
+                motion.dev/docs — read first 5 sections in full before coding
+              </li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Build</span>5 isolated hover interactions.
+              Each uses a different easing strategy.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 02</span
+              ><span class="day-date">Apr 28</span>
+            </div>
+            <div class="day-title">Variants — The Unlock</div>
+            <ul class="day-items">
+              <li>Defining variants. Propagation to children</li>
+              <li>staggerChildren and delayChildren</li>
+              <li>Custom: true for dynamic variants</li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Build</span>An animated list where items
+              stagger in on mount. Different delays, same variant system.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 03</span
+              ><span class="day-date">Apr 29</span>
+            </div>
+            <div class="day-title">AnimatePresence — Mount & Unmount</div>
+            <ul class="day-items">
+              <li>exit prop — what happens when unmounting</li>
+              <li>mode: "sync" / "wait" / "popLayout"</li>
+              <li>key prop to trigger re-animations</li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Build</span>A notification toast system.
+              Each toast animates in and out independently. Stack behavior.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 04</span
+              ><span class="day-date">Apr 30</span>
+            </div>
+            <div class="day-title">
+              Spring Physics — Stiffness, Damping, Mass
+            </div>
+            <ul class="day-items">
+              <li>type: "spring" — when and always</li>
+              <li>stiffness (tight/loose), damping (bouncy/dead), mass</li>
+              <li>Play until spring settings become instinct</li>
+              <li>motion.dev/docs/react-use-spring</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 05</span
+              ><span class="day-date">May 1</span>
+            </div>
+            <div class="day-title">Layout Animations — The FLIP Magic</div>
+            <ul class="day-items">
+              <li>layout prop — FM's automatic FLIP implementation</li>
+              <li>Animating grid reorders without manual calculation</li>
+              <li>Expand/collapse done right with layout</li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Build</span>A sortable card grid. Drag to
+              reorder, layout animates automatically. No position math.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 06</span
+              ><span class="day-date">May 2</span>
+            </div>
+            <div class="day-title">layoutId — Shared Element Transitions</div>
+            <ul class="day-items">
+              <li>layoutId links two components across renders</li>
+              <li>Tab indicator pattern — the classic layoutId demo</li>
+              <li>LayoutGroup for coordinating multiple layoutIds</li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Build</span>Animated tab bar with spring
+              indicator. Then: expandable card to detail view using layoutId.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 07</span
+              ><span class="day-date">May 3</span>
+            </div>
+            <div class="day-title">Emil Kowalski Study Day</div>
+            <ul class="day-items">
+              <li>emilkowal.ski — read every animation essay</li>
+              <li>github.com/emilkowalski/vaul — read every line of source</li>
+              <li>github.com/emilkowalski/sonner — toast with personality</li>
+              <li>Identify: what patterns does he use repeatedly?</li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Week 1 Build</span>Recreate Vaul's drawer
+              using FM. Same spring feel. Your design.
+            </div>
+          </div>
+        </div>
+
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 2</div>
+            <div class="week-theme" style="color: var(--m3)">
+              Scroll + Gestures
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 08</span
+              ><span class="day-date">May 4</span>
+            </div>
+            <div class="day-title">useScroll + useTransform</div>
+            <ul class="day-items">
+              <li>Track page scroll or element scroll</li>
+              <li>Map scroll range [0, 1] → any value (opacity, x, scale)</li>
+              <li>inputRange / outputRange — multiple breakpoints</li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Build</span>Parallax hero section.
+              Multiple layers moving at different speeds. Clean, not cheesy.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 09</span
+              ><span class="day-date">May 5</span>
+            </div>
+            <div class="day-title">useSpring on Scroll — Smoothing</div>
+            <ul class="day-items">
+              <li>Wrap useTransform values in useSpring for smoothness</li>
+              <li>Lenis smooth scroll + Framer Motion — perfect combo</li>
+              <li>The difference between abrupt and physical scroll</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 10</span
+              ><span class="day-date">May 6</span>
+            </div>
+            <div class="day-title">whileInView — Reveal Animations</div>
+            <ul class="day-items">
+              <li>viewport: { once: true, margin: "-100px" }</li>
+              <li>Staggered section reveals as you scroll down</li>
+              <li>Combining whileInView + variants for orchestrated reveals</li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Build</span>A features section that
+              reveals progressively as you scroll. Each feature staggers in.
+              Elegant.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 11</span
+              ><span class="day-date">May 7</span>
+            </div>
+            <div class="day-title">Drag — Gestures & Physics</div>
+            <ul class="day-items">
+              <li>drag, dragConstraints, dragElastic</li>
+              <li>onDragEnd: velocity detection for throw/snap</li>
+              <li>Carousel from scratch using drag + snap</li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Build</span>A draggable card stack
+              (Tinder-style). Throw to dismiss. Spring snap back. Portfolio
+              piece.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 12</span
+              ><span class="day-date">May 8</span>
+            </div>
+            <div class="day-title">useDragControls + Custom Drag Handles</div>
+            <ul class="day-items">
+              <li>Trigger drag from a different element to the dragged one</li>
+              <li>Drag handle pattern — used in every sortable UI</li>
+              <li>Combining drag with layout animation for list reorder</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 13</span
+              ><span class="day-date">May 9</span>
+            </div>
+            <div class="day-title">Text Animation — The Signature</div>
+            <ul class="day-items">
+              <li>Splitting text into chars in React — the right way</li>
+              <li>staggerChildren on char/word arrays</li>
+              <li>calligraph.raphaelsalaja.com — study + use it</li>
+              <li>Number rolling with useMotionValue + useTransform</li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Build</span>Animated heading: chars
+              stagger in, numbers roll on value change. Reusable component for
+              every future project.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 14</span
+              ><span class="day-date">May 10</span>
+            </div>
+            <div class="day-title">Mouse Tracking + Spring Cursor</div>
+            <ul class="day-items">
+              <li>useMotionValue for raw x/y cursor position</li>
+              <li>useSpring wrapping cursor values — lag = personality</li>
+              <li>Custom cursor: morphs on different element types</li>
+              <li>Spatial tooltip recreation with spring smoothing</li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Week 2 Build</span>A custom cursor +
+              spatial tooltip system. Spring physics on both. Never seen this in
+              a portfolio without it standing out.
+            </div>
+          </div>
+        </div>
+
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 3</div>
+            <div class="week-theme" style="color: var(--m3)">Orchestration</div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 15</span
+              ><span class="day-date">May 11</span>
+            </div>
+            <div class="day-title">useAnimate + sequence()</div>
+            <ul class="day-items">
+              <li>Imperative timeline — like GSAP's .to() chaining</li>
+              <li>sequence([[element, props, options], ...])</li>
+              <li>Targeting DOM elements, not just React refs</li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Build</span>A multi-step form where each
+              field animates in, validation animates errors, success state plays
+              a sequence.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 16</span
+              ><span class="day-date">May 12</span>
+            </div>
+            <div class="day-title">Page Transitions in Next.js</div>
+            <ul class="day-items">
+              <li>AnimatePresence wrapping page content</li>
+              <li>Route-matched exit/enter animations</li>
+              <li>Preventing flash: LayoutRouterContext pattern</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 17</span
+              ><span class="day-date">May 13</span>
+            </div>
+            <div class="day-title">useVelocity — React to Speed</div>
+            <ul class="day-items">
+              <li>Track how fast a motion value is changing</li>
+              <li>Velocity-based rotation (skew on scroll speed)</li>
+              <li>The "wobbly card" effect on fast hover-in</li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Build</span>A scroll-speed-reactive
+              header. Blurs/scales based on scroll velocity. Feels premium.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 18</span
+              ><span class="day-date">May 14</span>
+            </div>
+            <div class="day-title">Orchestrated Page Load</div>
+            <ul class="day-items">
+              <li>
+                Staggered hero entrance: logo → nav → headline → subtext → CTA
+              </li>
+              <li>One well-orchestrated load > scattered micro-interactions</li>
+              <li>
+                Managing initial: false to prevent re-animation on rerenders
+              </li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Build</span>A landing page with a fully
+              orchestrated entrance. Every element timed. Feels like opening a
+              film.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 19</span
+              ><span class="day-date">May 15</span>
+            </div>
+            <div class="day-title">Command Menu — The DE Signature</div>
+            <ul class="day-items">
+              <li>cmdk by Paco — read every line of source first</li>
+              <li>FM entrance: scale from 0.95, opacity 0, blur in</li>
+              <li>Item hover highlight using layoutId</li>
+              <li>Exit animation on Escape key</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 20</span
+              ><span class="day-date">May 16</span>
+            </div>
+            <div class="day-title">Animate Presence Patterns</div>
+            <ul class="day-items">
+              <li>popLayout mode — items shrink away as list reflows</li>
+              <li>Accordion with AnimatePresence + layout</li>
+              <li>Tab switching with coordinated exit/enter</li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Build</span>A beautiful accordion FAQ
+              using AnimatePresence + layout. Content height animates
+              automatically.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 21</span
+              ><span class="day-date">May 17</span>
+            </div>
+            <div class="day-title">prefers-reduced-motion in FM</div>
+            <ul class="day-items">
+              <li>useReducedMotion() hook — check the preference</li>
+              <li>Conditional animation props based on preference</li>
+              <li>Every component you've built: add this now</li>
+              <li>Motion is a privilege. Respect users who opt out</li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Week 3 Build</span>Audit every FM
+              component from this month. Add useReducedMotion to each. Run axe
+              DevTools on all of them.
+            </div>
+          </div>
+        </div>
+
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 4</div>
+            <div class="week-theme" style="color: var(--m3)">Ship</div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 22</span
+              ><span class="day-date">May 18</span>
+            </div>
+            <div class="day-title">animate() Outside React</div>
+            <ul class="day-items">
+              <li>FM's standalone animate() — no React needed</li>
+              <li>Use for: canvas elements, SVG, scroll-triggered one-shots</li>
+              <li>motion.dev/docs/animate — the vanilla API</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 23</span
+              ><span class="day-date">May 19</span>
+            </div>
+            <div class="day-title">SVG Animation with Framer Motion</div>
+            <ul class="day-items">
+              <li>pathLength, pathOffset for draw-on effects</li>
+              <li>SVG morphing with custom keyframes</li>
+              <li>Animated icons — the useAnimations.com patterns in FM</li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Build</span>An animated logo that draws
+              itself on load. Then a set of 3 animated icons for a fake product.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 24</span
+              ><span class="day-date">May 20</span>
+            </div>
+            <div class="day-title">Performance in Framer Motion</div>
+            <ul class="day-items">
+              <li>Only animate transform + opacity — always</li>
+              <li>layout animations: what's expensive, what's free</li>
+              <li>Avoid animating width/height — use scaleX/Y instead</li>
+              <li>
+                will-change: transform — when FM handles it, when you should
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 25</span
+              ><span class="day-date">May 21</span>
+            </div>
+            <div class="day-title">Open Source Component — Plan & Build</div>
+            <ul class="day-items">
+              <li>
+                Pick one FM component from this month to publish as a library
+              </li>
+              <li>Study Emil's README structure — show the thing first</li>
+              <li>npm init + TypeScript types + peer deps</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 26</span
+              ><span class="day-date">May 22</span>
+            </div>
+            <div class="day-title">Open Source — Publish & Demo</div>
+            <ul class="day-items">
+              <li>npm publish — your first package</li>
+              <li>A demo page that shows it in action</li>
+              <li>Tweet it. Tag @emilkowalski_ @rauchg if relevant</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 27</span
+              ><span class="day-date">May 23</span>
+            </div>
+            <div class="day-title">/craft Page — Build Day</div>
+            <ul class="day-items">
+              <li>Build your /craft page using FM for all transitions</li>
+              <li>Each experiment card has its own hover state</li>
+              <li>Page load: orchestrated stagger entrance</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 28–30</span
+              ><span class="day-date">May 24–26</span>
+            </div>
+            <div class="day-title">Month 3 Portfolio Feature — Ship</div>
+            <ul class="day-items">
+              <li>Pick your best FM work from this month</li>
+              <li>Add it to your portfolio. Record a 60s screen capture</li>
+              <li>
+                Write a short build post: the problem, the approach, the result
+              </li>
+            </ul>
+            <div class="day-build accent c3">
+              <span class="build-tag">Month 3 Final</span>Your /craft page live.
+              Your npm package published. Your best FM build in a
+              build-in-public post.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="resources">
+        <div class="res-group">
+          <div class="res-label">Framer Motion</div>
+          <div class="res-links">
+            <a class="res-link" href="https://motion.dev/docs" target="_blank"
+              >motion.dev/docs</a
+            >
+            <a
+              class="res-link"
+              href="https://motion.dev/examples"
+              target="_blank"
+              >motion.dev/examples</a
+            >
+            <a class="res-link" href="https://emilkowal.ski" target="_blank"
+              >emilkowal.ski</a
+            >
+          </div>
+        </div>
+        <div class="res-group">
+          <div class="res-label">Source to Read</div>
+          <div class="res-links">
+            <a
+              class="res-link"
+              href="https://github.com/emilkowalski/vaul"
+              target="_blank"
+              >vaul source</a
+            >
+            <a
+              class="res-link"
+              href="https://github.com/emilkowalski/sonner"
+              target="_blank"
+              >sonner source</a
+            >
+            <a class="res-link" href="https://cmdk.paco.me" target="_blank"
+              >cmdk source</a
+            >
+            <a
+              class="res-link"
+              href="https://calligraph.raphaelsalaja.com"
+              target="_blank"
+              >calligraph</a
+            >
+          </div>
+        </div>
+        <div class="res-group">
+          <div class="res-label">Study</div>
+          <div class="res-links">
+            <a
+              class="res-link"
+              href="https://lenis.darkroom.engineering"
+              target="_blank"
+              >Lenis scroll</a
+            >
+            <a class="res-link" href="https://jsr.io" target="_blank">jsr.io</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+     MONTH 4 — GSAP
+     May 27 – Jun 26
+════════════════════════════════════════════════ -->
+    <div class="month">
+      <div class="month-header">
+        <div class="month-id">
+          <div>
+            <div class="month-num">Month 04 · May 27 – Jun 26</div>
+            <div class="month-title">GSAP<br /><em>Mastery</em></div>
+          </div>
+          <div class="month-stripe" style="background: var(--m4)"></div>
+        </div>
+        <div class="month-meta">
+          <p class="month-summary">
+            You know Framer Motion deeply. Now learn <strong>GSAP</strong> — the
+            professional animation engine used by the studios (Basement, Active
+            Theory, Unfold). ScrollTrigger for complex scroll choreography,
+            SplitText for text, MorphSVG, DrawSVG, and GSAP's timeline for the
+            kind of cinematic sequences that FM can't match. This month you
+            combine GSAP with CSS animations and FM — each tool for what it does
+            best.
+          </p>
+          <div class="month-stats">
+            <div class="stat">
+              <div class="stat-num c4">30</div>
+              <div class="stat-label">Days</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num c4">3</div>
+              <div class="stat-label">Animation tools mastered</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num c4">60h</div>
+              <div class="stat-label">Pure motion craft</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="weeks">
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 1</div>
+            <div class="week-theme" style="color: var(--m4)">GSAP Core</div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 01</span
+              ><span class="day-date">May 27</span>
+            </div>
+            <div class="day-title">GSAP Fundamentals — gsap.to/from/set</div>
+            <ul class="day-items">
+              <li>gsap.to(), gsap.from(), gsap.fromTo()</li>
+              <li>
+                Properties: x, y, rotation, scale, opacity, duration, ease
+              </li>
+              <li>GSAP vs CSS: what GSAP does better</li>
+              <li>gsap.com/docs — read the Getting Started guide fully</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 02</span
+              ><span class="day-date">May 28</span>
+            </div>
+            <div class="day-title">GSAP Timeline — The Core Superpower</div>
+            <ul class="day-items">
+              <li>gsap.timeline() — chain animations in sequence</li>
+              <li>Position parameter: "<", "+=0.3", labels</li>
+              <li>pause, play, reverse, restart on a timeline</li>
+              <li>This is what CSS and FM can't replicate cleanly</li>
+            </ul>
+            <div class="day-build accent c4">
+              <span class="build-tag">Build</span>A complex entrance animation
+              for a hero section — 8+ elements, all choreographed with one
+              timeline. Cinematic.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 03</span
+              ><span class="day-date">May 29</span>
+            </div>
+            <div class="day-title">GSAP Easing — CustomEase & More</div>
+            <ul class="day-items">
+              <li>GSAP eases: power1–4, back, elastic, bounce, circ, expo</li>
+              <li>CustomEase.create() — draw any curve you want</li>
+              <li>gsap.com/ease-visualizer — your new best friend</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 04</span
+              ><span class="day-date">May 30</span>
+            </div>
+            <div class="day-title">Stagger — GSAP's Killer Feature</div>
+            <ul class="day-items">
+              <li>stagger: 0.1 on gsap.to() with NodeList/array</li>
+              <li>stagger: { each, from, grid, axis } — advanced config</li>
+              <li>from: "center", "edges", "random"</li>
+            </ul>
+            <div class="day-build accent c4">
+              <span class="build-tag">Build</span>A grid of cards that stagger
+              in from center outward. Then a text reveal where each word
+              staggers. Different feel from FM.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 05</span
+              ><span class="day-date">May 31</span>
+            </div>
+
+            <ul class="day-items">
+              <li>SplitText plugin — split into chars, words, lines</li>
+              <li>Reveal line-by-line: the cinematic text animation</li>
+              <li>Combining SplitText + timeline for orchestrated reveals</li>
+            </ul>
+            <div class="day-build accent c4">
+              <span class="build-tag">Build</span>A hero headline that splits
+              into lines and reveals with a mask-clip effect. The one that makes
+              designers ask "how?"
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 06</span
+              ><span class="day-date">Jun 1</span>
+            </div>
+            <div class="day-title">DrawSVG + MorphSVG</div>
+            <ul class="day-items">
+              <li>DrawSVG: animate stroke from 0% to 100%</li>
+              <li>MorphSVG: shape-shift between two SVG paths</li>
+              <li>Combining both: draw then morph sequence</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 07</span
+              ><span class="day-date">Jun 2</span>
+            </div>
+            <div class="day-title">GSAP in React — The Patterns</div>
+            <ul class="day-items">
+              <li>useGSAP() hook — the correct way to use GSAP in React</li>
+              <li>gsap.context() for cleanup</li>
+              <li>useRef for targets — never querySelector in React</li>
+            </ul>
+            <div class="day-build accent c4">
+              <span class="build-tag">Week 1 Build</span>A React component with
+              a timeline-driven entrance. useGSAP correctly. Multiple elements,
+              one timeline, clean cleanup.
+            </div>
+          </div>
+        </div>
+
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 2</div>
+            <div class="week-theme" style="color: var(--m4)">ScrollTrigger</div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 08</span
+              ><span class="day-date">Jun 3</span>
+            </div>
+            <div class="day-title">ScrollTrigger — Foundation</div>
+            <ul class="day-items">
+              <li>scrollTrigger: { trigger, start, end, markers }</li>
+              <li>scrub: true — animation scrubs with scroll position</li>
+              <li>pin: true — elements stick during scroll sequence</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 09</span
+              ><span class="day-date">Jun 4</span>
+            </div>
+            <div class="day-title">Scroll Pinning & Horizontal Scroll</div>
+            <ul class="day-items">
+              <li>Pinning sections during vertical scroll</li>
+              <li>Horizontal scroll sections with ScrollTrigger</li>
+              <li>The "Apple product page" style scroll sequence</li>
+            </ul>
+            <div class="day-build accent c4">
+              <span class="build-tag">Build</span>A horizontal scroll feature
+              showcase section. Cards scroll left as you scroll down. Premium
+              product feel.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 10</span
+              ><span class="day-date">Jun 5</span>
+            </div>
+            <div class="day-title">
+              Timeline + ScrollTrigger = Cinematic Scroll
+            </div>
+            <ul class="day-items">
+              <li>Scrubbing a full timeline with scroll position</li>
+              <li>Multiple sections, one pinned ScrollTrigger</li>
+              <li>Basement Studio-style storytelling scroll</li>
+            </ul>
+            <div class="day-build accent c4">
+              <span class="build-tag">Build</span>A 3-section scrolljacked
+              product story. Text changes, images zoom, colors shift — all
+              scrubbed by scroll.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 11</span
+              ><span class="day-date">Jun 6</span>
+            </div>
+            <div class="day-title">ScrollTrigger Callbacks & Batching</div>
+            <ul class="day-items">
+              <li>onEnter, onLeave, onEnterBack, onLeaveBack</li>
+              <li>ScrollTrigger.batch() for efficient list reveals</li>
+              <li>Refresh on resize — the gotcha that breaks everything</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 12</span
+              ><span class="day-date">Jun 7</span>
+            </div>
+            <div class="day-title">
+              Text Reveals with ScrollTrigger + SplitText
+            </div>
+            <ul class="day-items">
+              <li>Line-by-line reveal triggered by scroll</li>
+              <li>The clip-path mask reveal technique</li>
+              <li>Words blur in from below — the Basement Studio signature</li>
+            </ul>
+            <div class="day-build accent c4">
+              <span class="build-tag">Build</span>A long-form page where every
+              text block reveals line-by-line as it enters the viewport. Perfect
+              for portfolios.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 13</span
+              ><span class="day-date">Jun 8</span>
+            </div>
+            <div class="day-title">Image Parallax & Scaling Effects</div>
+            <ul class="day-items">
+              <li>Image-fills-container then parallax shifts on scroll</li>
+              <li>Scale up on enter, scale down on leave</li>
+              <li>Combining CSS clip-path + GSAP for masked reveals</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 14</span
+              ><span class="day-date">Jun 9</span>
+            </div>
+            <div class="day-title">GSAP Benchmark — Lighthouse Under Load</div>
+            <ul class="day-items">
+              <li>Run Lighthouse with GSAP animations active</li>
+              <li>Profile paint + composite layers in DevTools</li>
+              <li>
+                Fix: only animate transform/opacity. Never paint properties
+              </li>
+            </ul>
+            <div class="day-build accent c4">
+              <span class="build-tag">Week 2 Build</span>A full landing page
+              with GSAP scroll storytelling. Lighthouse 90+ before you move on.
+            </div>
+          </div>
+        </div>
+
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 3</div>
+            <div class="week-theme" style="color: var(--m4)">
+              Advanced + Hybrid
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 15</span
+              ><span class="day-date">Jun 10</span>
+            </div>
+            <div class="day-title">MotionPath — Animate Along a Path</div>
+            <ul class="day-items">
+              <li>gsap.to(el, { motionPath: svgPath })</li>
+              <li>align: true for auto-rotation along path</li>
+              <li>
+                Combining with ScrollTrigger for scroll-driven path motion
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 16</span
+              ><span class="day-date">Jun 11</span>
+            </div>
+            <div class="day-title">Flip Plugin — GSAP's FLIP</div>
+            <ul class="day-items">
+              <li>Gsap.Flip.getState() before change</li>
+              <li>Gsap.Flip.from(state) after change</li>
+              <li>Like FM's layout — but works with any DOM change</li>
+            </ul>
+            <div class="day-build accent c4">
+              <span class="build-tag">Build</span>A layout switcher (grid ↔
+              list) where every element transitions smoothly using GSAP Flip.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 17</span
+              ><span class="day-date">Jun 12</span>
+            </div>
+            <div class="day-title">GSAP + CSS Animations Together</div>
+            <ul class="day-items">
+              <li>When to use CSS vs GSAP — the decision framework</li>
+              <li>
+                CSS for: micro-interactions, hover states, simple transitions
+              </li>
+              <li>
+                GSAP for: complex timelines, scroll sequences, orchestration
+              </li>
+              <li>
+                Both for: trigger CSS animation class via GSAP ScrollTrigger
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 18</span
+              ><span class="day-date">Jun 13</span>
+            </div>
+            <div class="day-title">GSAP + Framer Motion — The Decision</div>
+            <ul class="day-items">
+              <li>FM for: React state-driven animations, gestures, layout</li>
+              <li>GSAP for: scroll choreography, SVG, timeline sequences</li>
+              <li>Using both in the same project — no conflict with care</li>
+              <li>Your personal decision framework: document it</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 19</span
+              ><span class="day-date">Jun 14</span>
+            </div>
+            <div class="day-title">Basement Studio Deep Dive</div>
+            <ul class="day-items">
+              <li>
+                basement.studio — study 3 projects. What animation library?
+              </li>
+              <li>Active Theory — activetheo.ry — same exercise</li>
+              <li>Identify GSAP patterns vs CSS patterns vs custom</li>
+            </ul>
+            <div class="day-build accent c4">
+              <span class="build-tag">Build</span>Recreate one Basement
+              Studio-style scroll section. Same feel, different content. Your
+              aesthetic.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 20</span
+              ><span class="day-date">Jun 15</span>
+            </div>
+            <div class="day-title">GSAP Observer — Beyond ScrollTrigger</div>
+            <ul class="day-items">
+              <li>
+                Observer plugin: listen to scroll, drag, touch, wheel, pointer
+              </li>
+              <li>Full-page scroll sections snapping between panels</li>
+              <li>Mobile-friendly scrolljacking with Observer</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 21</span
+              ><span class="day-date">Jun 16</span>
+            </div>
+            <div class="day-title">Three Tool Portfolio Audit</div>
+            <ul class="day-items">
+              <li>Review all Month 3 (FM) + Month 4 (GSAP) builds</li>
+              <li>For each: was this the right tool? What would be better?</li>
+              <li>Refactor 2 components using the "right" tool</li>
+            </ul>
+            <div class="day-build accent c4">
+              <span class="build-tag">Week 3 Build</span>A showcase page of your
+              best motion work from months 3–4. Each piece labeled with which
+              tool and why.
+            </div>
+          </div>
+        </div>
+
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 4</div>
+            <div class="week-theme" style="color: var(--m4)">Big Build</div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 22</span
+              ><span class="day-date">Jun 17</span>
+            </div>
+            <div class="day-title">Scroll Progress Indicators</div>
+            <ul class="day-items">
+              <li>Fixed reading progress bar with ScrollTrigger</li>
+              <li>Section indicators (like Medium's nav dots)</li>
+              <li>Active section highlighting synced to scroll</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 23</span
+              ><span class="day-date">Jun 18</span>
+            </div>
+            <div class="day-title">Number Counters + Data Animation</div>
+            <ul class="day-items">
+              <li>gsap.to(obj, { val: 1000, onUpdate }) pattern</li>
+              <li>Count up triggered by ScrollTrigger entering viewport</li>
+              <li>Combining with SplitText for animated stats sections</li>
+            </ul>
+            <div class="day-build accent c4">
+              <span class="build-tag">Build</span>An animated stats section.
+              Numbers count up on scroll. Uses GSAP + SplitText. Ships in your
+              portfolio.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 24–26</span
+              ><span class="day-date">Jun 19–21</span>
+            </div>
+            <div class="day-title">Big Build — Animated Landing Page</div>
+            <ul class="day-items">
+              <li>A full landing page for a fictional product</li>
+              <li>
+                GSAP: orchestrated load, scroll sequences, SplitText reveals
+              </li>
+              <li>FM: interactive UI elements, menu, hover states</li>
+              <li>CSS: micro-interactions, hover states, transitions</li>
+              <li>Lighthouse 90+ before it ships</li>
+            </ul>
+            <div class="day-build accent c4">
+              <span class="build-tag">The Build</span>This is your motion
+              portfolio centerpiece. 3 animation tools working together.
+              Cinematic quality.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 27</span
+              ><span class="day-date">Jun 22</span>
+            </div>
+            <div class="day-title">GSAP Club & Community</div>
+            <ul class="day-items">
+              <li>gsap.com — read the blog. Every post</li>
+              <li>CodePen GSAP collection — 10 pens to study today</li>
+              <li>gsap.com/community — your questions live here now</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 28–30</span
+              ><span class="day-date">Jun 23–26</span>
+            </div>
+            <div class="day-title">Ship + Write About It</div>
+            <ul class="day-items">
+              <li>Deploy the Month 4 big build</li>
+              <li>
+                Write a detailed build post: which tool for which part and why
+              </li>
+              <li>
+                Post the screen record + the article. This becomes reference
+                material
+              </li>
+            </ul>
+            <div class="day-build accent c4">
+              <span class="build-tag">Month 4 Final</span>Your motion toolkit is
+              now complete. CSS + GSAP + Framer Motion. You know when to use
+              each. That's the thing most don't.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="resources">
+        <div class="res-group">
+          <div class="res-label">GSAP</div>
+          <div class="res-links">
+            <a class="res-link" href="https://gsap.com/docs" target="_blank"
+              >gsap.com/docs</a
+            >
+            <a
+              class="res-link"
+              href="https://gsap.com/ease-visualizer"
+              target="_blank"
+              >Ease Visualizer</a
+            >
+            <a class="res-link" href="https://gsap.com/blog" target="_blank"
+              >GSAP Blog</a
+            >
+          </div>
+        </div>
+        <div class="res-group">
+          <div class="res-label">Study</div>
+          <div class="res-links">
+            <a class="res-link" href="https://basement.studio" target="_blank"
+              >basement.studio</a
+            >
+            <a
+              class="res-link"
+              href="https://codepen.io/GreenSock"
+              target="_blank"
+              >GSAP CodePen</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+     MONTH 5 — REACT UNDER THE HOOD + PERFORMANCE
+     Jun 27 – Jul 26
+════════════════════════════════════════════════ -->
+    <div class="month">
+      <div class="month-header">
+        <div class="month-id">
+          <div>
+            <div class="month-num">Month 05 · Jun 27 – Jul 26</div>
+            <div class="month-title">
+              React<br /><em>Deep</em> &<br />Performance
+            </div>
+          </div>
+          <div class="month-stripe" style="background: var(--m5)"></div>
+        </div>
+        <div class="month-meta">
+          <p class="month-summary">
+            The fullstack part of fullstack design engineer.
+            <strong>React under the hood</strong>: reconciliation, fiber,
+            concurrent features, Suspense, Server Components, Server Actions.
+            <strong>Lighthouse mastery</strong>: Core Web Vitals from a design
+            engineer's angle — how design decisions cause CLS, what causes LCP,
+            INP in interactive UIs. Plus:
+            <strong>Radix UI architecture</strong>, component systems, and the
+            backend layer (Next.js + Drizzle + tRPC).
+          </p>
+          <div class="month-stats">
+            <div class="stat">
+              <div class="stat-num c5">30</div>
+              <div class="stat-label">Days</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num c5">90+</div>
+              <div class="stat-label">Lighthouse score target</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num c5">60h</div>
+              <div class="stat-label">Architecture + perf</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="weeks">
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 1</div>
+            <div class="week-theme" style="color: var(--m5)">
+              React Internals
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 01</span
+              ><span class="day-date">Jun 27</span>
+            </div>
+            <div class="day-title">
+              React Reconciliation — How Re-renders Work
+            </div>
+            <ul class="day-items">
+              <li>The virtual DOM. Diffing algorithm. Fiber architecture</li>
+              <li>What triggers a re-render: state, props, context</li>
+              <li>React DevTools Profiler — your new best friend</li>
+              <li>Mark Erikson's "A Deep Dive into React Fiber" — read it</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 02</span
+              ><span class="day-date">Jun 28</span>
+            </div>
+            <div class="day-title">Unnecessary Re-renders — Find & Fix</div>
+            <ul class="day-items">
+              <li>React.memo() — when it helps, when it doesn't</li>
+              <li>useMemo, useCallback — the actual use cases</li>
+              <li>Context over-rendering — splitting contexts</li>
+            </ul>
+            <div class="day-build accent c5">
+              <span class="build-tag">Exercise</span>Profile one of your Month
+              3–4 React components. Find 2 unnecessary re-renders. Fix them.
+              Document before/after.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 03</span
+              ><span class="day-date">Jun 29</span>
+            </div>
+            <div class="day-title">
+              Concurrent Features — useTransition, useDeferredValue
+            </div>
+            <ul class="day-items">
+              <li>useTransition: mark state updates as non-urgent</li>
+              <li>useDeferredValue: defer expensive renders</li>
+              <li>How this interacts with animations — the tricky part</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 04</span
+              ><span class="day-date">Jun 30</span>
+            </div>
+            <div class="day-title">Suspense & Streaming in Next.js</div>
+            <ul class="day-items">
+              <li>Suspense boundaries — isolate loading states</li>
+              <li>Streaming: send HTML progressively to the client</li>
+              <li>
+                loading.tsx + Suspense: the design engineer's skeleton pattern
+              </li>
+            </ul>
+            <div class="day-build accent c5">
+              <span class="build-tag">Build</span>A Next.js page with 3 Suspense
+              boundaries. Each shows a skeleton, then streams in content. Zero
+              layout shift.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 05</span
+              ><span class="day-date">Jul 1</span>
+            </div>
+            <div class="day-title">Server Components vs Client Components</div>
+            <ul class="day-items">
+              <li>The mental model: server first, client when needed</li>
+              <li>"use client" boundary — what crosses, what doesn't</li>
+              <li>
+                The serialization constraint — no functions across the boundary
+              </li>
+              <li>Animations always need "use client" — understand why</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 06</span
+              ><span class="day-date">Jul 2</span>
+            </div>
+            <div class="day-title">Server Actions & Optimistic Updates</div>
+            <ul class="day-items">
+              <li>Server Actions: forms that work without JS</li>
+              <li>useOptimistic: update UI before server confirms</li>
+              <li>The design: instant feel + graceful error recovery</li>
+            </ul>
+            <div class="day-build accent c5">
+              <span class="build-tag">Build</span>A like button with optimistic
+              update. Clicks instantly, syncs with server, gracefully handles
+              errors. Full-stack feel.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 07</span
+              ><span class="day-date">Jul 3</span>
+            </div>
+            <div class="day-title">Parallel Routes & Intercepting Routes</div>
+            <ul class="day-items">
+              <li>@modal pattern — overlays as routes</li>
+              <li>Intercepting routes for lightbox/modal from feed</li>
+              <li>The Instagram-style URL pattern in Next.js</li>
+            </ul>
+            <div class="day-build accent c5">
+              <span class="build-tag">Week 1 Build</span>A photo gallery with
+              intercepting routes for modal view. URL updates. Share-able. FM
+              animations on open/close.
+            </div>
+          </div>
+        </div>
+
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 2</div>
+            <div class="week-theme" style="color: var(--m5)">
+              Lighthouse Mastery
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 08</span
+              ><span class="day-date">Jul 4</span>
+            </div>
+            <div class="day-title">Core Web Vitals — Design Causes</div>
+            <ul class="day-items">
+              <li>
+                LCP: what causes slow largest contentful paint? (hint: fonts,
+                images)
+              </li>
+              <li>
+                CLS: cumulative layout shift — the animations that break it
+              </li>
+              <li>
+                INP: interaction to next paint — what GSAP animations do to it
+              </li>
+              <li>web.dev/vitals — re-read with design engineer eyes</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 09</span
+              ><span class="day-date">Jul 5</span>
+            </div>
+            <div class="day-title">Images — The #1 LCP Killer</div>
+            <ul class="day-items">
+              <li>next/image: lazy loading, priority, sizes attr</li>
+              <li>WebP/AVIF: format matters more than compression</li>
+              <li>aspect-ratio in CSS: prevent CLS from image load</li>
+              <li>Blur placeholder + shimmer: perceived perf is real perf</li>
+            </ul>
+            <div class="day-build accent c5">
+              <span class="build-tag">Exercise</span>Take an image-heavy page.
+              Add proper next/image, sizes, priority. Before/after LCP
+              comparison.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 10</span
+              ><span class="day-date">Jul 6</span>
+            </div>
+            <div class="day-title">Fonts — FOUT, FOIT & font-display</div>
+            <ul class="day-items">
+              <li>font-display: swap vs optional vs block — trade-offs</li>
+              <li>next/font — zero layout shift font loading</li>
+              <li>
+                Variable fonts: one file, all weights — fewer network requests
+              </li>
+              <li>Preload: when and how (not always helpful)</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 11</span
+              ><span class="day-date">Jul 7</span>
+            </div>
+            <div class="day-title">
+              JavaScript Bundle — Animations Are Heavy
+            </div>
+            <ul class="day-items">
+              <li>@next/bundle-analyzer — see what's eating your bundle</li>
+              <li>GSAP tree-shaking: only import what you use</li>
+              <li>FM tree-shaking: same</li>
+              <li>Dynamic imports for animation-heavy sections</li>
+            </ul>
+            <div class="day-build accent c5">
+              <span class="build-tag">Exercise</span>Analyze your Month 4 big
+              build. Find the 3 heaviest things. Reduce bundle by 20%.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 12</span
+              ><span class="day-date">Jul 8</span>
+            </div>
+            <div class="day-title">
+              CSS Performance — Containment & Compositing
+            </div>
+            <ul class="day-items">
+              <li>will-change: transform — promote to compositor thread</li>
+              <li>contain: layout paint style — isolate repaint scope</li>
+              <li>content-visibility: auto — skip off-screen paint</li>
+              <li>DevTools Layers panel — see compositor layers</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 13</span
+              ><span class="day-date">Jul 9</span>
+            </div>
+            <div class="day-title">INP — Animation-Heavy Interactions</div>
+            <ul class="day-items">
+              <li>What causes high INP: long tasks during animation</li>
+              <li>Scheduler.postTask() for deferring non-urgent work</li>
+              <li>requestAnimationFrame vs setTimeout — which for what</li>
+              <li>GSAP and FM: do they block? Measure with DevTools</li>
+            </ul>
+            <div class="day-build accent c5">
+              <span class="build-tag">Build</span>Profile your most
+              animation-heavy page with Chrome DevTools Performance panel. Find
+              the long tasks. Fix two.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 14</span
+              ><span class="day-date">Jul 10</span>
+            </div>
+            <div class="day-title">Lighthouse CI — Make It Automatic</div>
+            <ul class="day-items">
+              <li>
+                Lighthouse CI in GitHub Actions — catch regressions before they
+                ship
+              </li>
+              <li>Budget: fail build if Perf < 85</li>
+              <li>web.dev/lighthouse-ci — the setup guide</li>
+            </ul>
+            <div class="day-build accent c5">
+              <span class="build-tag">Week 2 Build</span>Add Lighthouse CI to
+              your portfolio repo. Set a budget. Every deploy gets scored.
+              Performance is now automatic.
+            </div>
+          </div>
+        </div>
+
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 3</div>
+            <div class="week-theme" style="color: var(--m5)">
+              Component Systems
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 15</span
+              ><span class="day-date">Jul 11</span>
+            </div>
+            <div class="day-title">
+              Radix UI — Headless Component Architecture
+            </div>
+            <ul class="day-items">
+              <li>Headless: behavior + a11y without style</li>
+              <li>asChild pattern — polymorphic components</li>
+              <li>Compound components: Tabs.Root, Tabs.List, Tabs.Trigger</li>
+              <li>
+                radix-ui.com/primitives — read architecture overview first
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 16</span
+              ><span class="day-date">Jul 12</span>
+            </div>
+            <div class="day-title">Build Your Own Animated Dialog</div>
+            <ul class="day-items">
+              <li>Radix Dialog primitive + FM for animation layer</li>
+              <li>
+                Focus trap, scroll lock, Escape key — Radix handles all of it
+              </li>
+              <li>Your animation: not the default. Something with character</li>
+            </ul>
+            <div class="day-build accent c5">
+              <span class="build-tag">Build</span>A Dialog/Modal component:
+              Radix Primitive + FM animation. Accessible. Unique entrance.
+              Reusable. Goes in your design system.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 17</span
+              ><span class="day-date">Jul 13</span>
+            </div>
+            <div class="day-title">CVA + Tailwind v4 Variant Systems</div>
+            <ul class="day-items">
+              <li>class-variance-authority for type-safe component variants</li>
+              <li>Tailwind v4 @theme directive — CSS-first config</li>
+              <li>Your design tokens + Tailwind v4 = one source of truth</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 18</span
+              ><span class="day-date">Jul 14</span>
+            </div>
+            <div class="day-title">Data Visualization as Design</div>
+            <ul class="day-items">
+              <li>Recharts + FM: animated entrance for charts</li>
+              <li>Custom tooltips — never use the defaults</li>
+              <li>Spark lines, area charts, when less data = more truth</li>
+            </ul>
+            <div class="day-build accent c5">
+              <span class="build-tag">Build</span>An analytics widget: animated
+              line chart, custom tooltip, smooth data updates. Pitch-deck
+              quality.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 19</span
+              ><span class="day-date">Jul 15</span>
+            </div>
+            <div class="day-title">Fullstack Data Layer — Drizzle + tRPC</div>
+            <ul class="day-items">
+              <li>Drizzle ORM: typesafe schema, clean queries, migrations</li>
+              <li>tRPC: end-to-end type safety without thinking about it</li>
+              <li>T3 stack — t3.gg — understand the decisions</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 20</span
+              ><span class="day-date">Jul 16</span>
+            </div>
+            <div class="day-title">Auth — Clerk or Auth.js</div>
+            <ul class="day-items">
+              <li>Clerk for fast auth (UI included) — the pragmatic choice</li>
+              <li>Auth.js for control — roll your own sessions</li>
+              <li>Protecting routes in Next.js App Router with middleware</li>
+            </ul>
+            <div class="day-build accent c5">
+              <span class="build-tag">Build</span>A protected dashboard with
+              Clerk auth. The design of the auth flow matters. Make sign-in
+              beautiful.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 21</span
+              ><span class="day-date">Jul 17</span>
+            </div>
+            <div class="day-title">Real-time with Pusher or Ably</div>
+            <ul class="day-items">
+              <li>WebSockets in Next.js — the options and trade-offs</li>
+              <li>Pusher channels: subscribe + trigger for live updates</li>
+              <li>Design of real-time: how to animate incoming data</li>
+            </ul>
+            <div class="day-build accent c5">
+              <span class="build-tag">Week 3 Build</span>A real-time feed with
+              live updates. New items animate in with FM. Old items push down
+              with layout animation.
+            </div>
+          </div>
+        </div>
+
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 4</div>
+            <div class="week-theme" style="color: var(--m5)">Synthesis</div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 22</span
+              ><span class="day-date">Jul 18</span>
+            </div>
+            <div class="day-title">Interaction Design Deep Study</div>
+            <ul class="day-items">
+              <li>Re-study rauno.me/craft with your Month 5 eyes</li>
+              <li>You can now understand what was previously magic</li>
+              <li>
+                Identify: what React patterns enable each of his interactions?
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 23</span
+              ><span class="day-date">Jul 19</span>
+            </div>
+            <div class="day-title">userinterface.wiki Deep Dive</div>
+            <ul class="day-items">
+              <li>
+                userinterface.wiki — Raphael's living manual for better UI
+              </li>
+              <li>Read every entry. Take notes. Argue with 3 of them</li>
+              <li>Write your own 5 principles of UI interaction</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 24</span
+              ><span class="day-date">Jul 20</span>
+            </div>
+            <div class="day-title">The 50ms Rule — Perceived Performance</div>
+            <ul class="day-items">
+              <li>Under 50ms: instant. 100ms: responsive. 300ms: noticeable</li>
+              <li>
+                Optimistic UI: the design pattern that makes everything feel
+                fast
+              </li>
+              <li>Skeleton screens vs spinners: the perception science</li>
+            </ul>
+            <div class="day-build accent c5">
+              <span class="build-tag">Exercise</span>Add optimistic UI to 3
+              interactions across your projects. Measure perceived improvement
+              subjectively. It's dramatic.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 25</span
+              ><span class="day-date">Jul 21</span>
+            </div>
+            <div class="day-title">
+              AI as a Design Engineering Leverage Tool
+            </div>
+            <ul class="day-items">
+              <li>
+                v0.dev — generate, then immediately exceed what it gave you
+              </li>
+              <li>Claude for architecture decisions, not implementation</li>
+              <li>
+                Where AI falls short: the last 10% of taste and feel — that's
+                your value
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 26</span
+              ><span class="day-date">Jul 22</span>
+            </div>
+            <div class="day-title">Your Second Open Source Package</div>
+            <ul class="day-items">
+              <li>Pick one fullstack pattern from this month</li>
+              <li>Package it, README it, publish it</li>
+              <li>The second OSS contribution compounds the first</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 27</span
+              ><span class="day-date">Jul 23</span>
+            </div>
+            <div class="day-title">Everything Lighthouse 90+</div>
+            <ul class="day-items">
+              <li>Run Lighthouse on every project you've built</li>
+              <li>
+                Nothing ships at under 90 from now on — this is the standard
+              </li>
+              <li>Fix the ones that aren't. Document each fix</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 28–30</span
+              ><span class="day-date">Jul 24–26</span>
+            </div>
+            <div class="day-title">Real Product — Month 5 Final</div>
+            <ul class="day-items">
+              <li>
+                Build something real. Not a demo. A product someone could use
+              </li>
+              <li>Next.js + Drizzle + tRPC + auth + real-time</li>
+              <li>
+                FM for interactions. GSAP for marketing-style entrance. CSS for
+                everything static
+              </li>
+              <li>Lighthouse 90+ on all metrics</li>
+            </ul>
+            <div class="day-build accent c5">
+              <span class="build-tag">Month 5 Final</span>A real fullstack
+              product. Shipped. With a URL. This is the fullstack part of
+              "fullstack design engineer" proven.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="resources">
+        <div class="res-group">
+          <div class="res-label">React Deep</div>
+          <div class="res-links">
+            <a class="res-link" href="https://react.dev/blog" target="_blank"
+              >react.dev blog</a
+            >
+            <a class="res-link" href="https://nextjs.org/docs" target="_blank"
+              >Next.js docs</a
+            >
+            <a class="res-link" href="https://orm.drizzle.team" target="_blank"
+              >Drizzle ORM</a
+            >
+            <a class="res-link" href="https://trpc.io" target="_blank">tRPC</a>
+          </div>
+        </div>
+        <div class="res-group">
+          <div class="res-label">Performance</div>
+          <div class="res-links">
+            <a class="res-link" href="https://web.dev/vitals" target="_blank"
+              >web.dev/vitals</a
+            >
+            <a
+              class="res-link"
+              href="https://web.dev/lighthouse-ci"
+              target="_blank"
+              >Lighthouse CI</a
+            >
+            <a class="res-link" href="https://radix-ui.com" target="_blank"
+              >Radix UI</a
+            >
+          </div>
+        </div>
+        <div class="res-group">
+          <div class="res-label">Study</div>
+          <div class="res-links">
+            <a
+              class="res-link"
+              href="https://userinterface.wiki"
+              target="_blank"
+              >userinterface.wiki</a
+            >
+            <a class="res-link" href="https://t3.gg" target="_blank"
+              >T3 Stack</a
+            >
+            <a class="res-link" href="https://v0.dev" target="_blank">v0.dev</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+     MONTH 6 — SYNTHESIS & THE POSITION
+     Jul 27 – Aug 24
+════════════════════════════════════════════════ -->
+    <div class="month">
+      <div class="month-header">
+        <div class="month-id">
+          <div>
+            <div class="month-num">Month 06 · Jul 27 – Aug 24</div>
+            <div class="month-title">The<br /><em>Position</em></div>
+          </div>
+          <div class="month-stripe" style="background: var(--m6)"></div>
+        </div>
+        <div class="month-meta">
+          <p class="month-summary">
+            Everything comes together.
+            <strong
+              >Portfolio that proves the position. Public voice that builds
+              reputation. Open source that demonstrates craft.</strong
+            >
+            And — if you've kept up — you are now ready for Figma. Not as a new
+            tool to learn, but as another output for a mind that already knows
+            what good is. The position "Fullstack Design Engineer" is rare. This
+            month you make it undeniable.
+          </p>
+          <div class="month-stats">
+            <div class="stat">
+              <div class="stat-num c6">30</div>
+              <div class="stat-label">Days</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num c6">1</div>
+              <div class="stat-label">Undeniable position</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num c6">↑</div>
+              <div class="stat-label">Figma unlocked Aug 25</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="weeks">
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 1</div>
+            <div class="week-theme" style="color: var(--m6)">
+              Portfolio Architecture
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 01</span
+              ><span class="day-date">Jul 27</span>
+            </div>
+            <div class="day-title">What Your Portfolio Must Do</div>
+            <ul class="day-items">
+              <li>
+                The portfolio IS the work — it must feel like you, fully
+                expressed
+              </li>
+              <li>
+                It must answer: can they build? Can they design? Do they have
+                taste?
+              </li>
+              <li>
+                Study rauno.me, paco.me, brianglovier.com, anthonyhobday.com
+              </li>
+              <li>List 6 pieces from your 5 months to feature</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 02</span
+              ><span class="day-date">Jul 28</span>
+            </div>
+            <div class="day-title">Your Aesthetic — Commit to It</div>
+            <ul class="day-items">
+              <li>Look at cosmos.so. What have you saved most?</li>
+              <li>
+                Your portfolio must feel like you — not "a nice dark theme"
+              </li>
+              <li>Name 3 words that describe your design identity</li>
+              <li>Every design decision this month must pass: "is this me?"</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 03</span
+              ><span class="day-date">Jul 29</span>
+            </div>
+            <div class="day-title">Portfolio Tech Stack</div>
+            <ul class="day-items">
+              <li>Next.js App Router + your token system + Tailwind v4</li>
+              <li>FM for all transitions. GSAP for the hero if it earns it</li>
+              <li>OG image with @vercel/og — dynamic, on-brand</li>
+              <li>Vercel Analytics for feedback after launch</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 04</span
+              ><span class="day-date">Jul 30</span>
+            </div>
+            <div class="day-title">Hero Section — The First 3 Seconds</div>
+            <ul class="day-items">
+              <li>
+                One line: who you are. "Fullstack Design Engineer" is your title
+              </li>
+              <li>The feeling on load: what is the first emotion?</li>
+              <li>One signature animation — the thing people screenshot</li>
+              <li>
+                GSAP orchestrated entrance or FM stagger — choose and commit
+              </li>
+            </ul>
+            <div class="day-build accent c6">
+              <span class="build-tag">Build</span>Hero section + navigation.
+              Beautiful. Not shipped yet. Iterating.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 05</span
+              ><span class="day-date">Jul 31</span>
+            </div>
+            <div class="day-title">Work Section — Show, Don't List</div>
+            <ul class="day-items">
+              <li>
+                Each work item: the thing you built + what makes it notable
+              </li>
+              <li>Video over screenshots — record 30s of each project</li>
+              <li>
+                Hover: show a preview. Click: go to the case study or live demo
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 06</span
+              ><span class="day-date">Aug 1</span>
+            </div>
+            <div class="day-title">/craft Page — Your Experiments</div>
+            <ul class="day-items">
+              <li>Every experiment from 6 months, curated to the best 12</li>
+              <li>Each with: a visual, one line of context, a live link</li>
+              <li>
+                The /craft page is what separates a portfolio from a resume
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 07</span
+              ><span class="day-date">Aug 2</span>
+            </div>
+            <div class="day-title">About & Contact — The Human Layer</div>
+            <ul class="day-items">
+              <li>
+                About: the fullstack + design narrative. Honest, not
+                overproduced
+              </li>
+              <li>What you believe about design engineering — 3 sentences</li>
+              <li>Contact: Twitter, GitHub, email. No form. No friction</li>
+            </ul>
+            <div class="day-build accent c6">
+              <span class="build-tag">Week 1 Build</span>Full portfolio
+              architecture done. All sections scaffolded. Real content in all of
+              them.
+            </div>
+          </div>
+        </div>
+
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 2</div>
+            <div class="week-theme" style="color: var(--m6)">Polish & Ship</div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 08</span
+              ><span class="day-date">Aug 3</span>
+            </div>
+            <div class="day-title">Micro-polish — Every Hover, Every Focus</div>
+            <ul class="day-items">
+              <li>Every link: hover state. Every button: press state</li>
+              <li>Every focus state: accessible AND beautiful</li>
+              <li>Cursor: custom or default — decide and apply globally</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 09</span
+              ><span class="day-date">Aug 4</span>
+            </div>
+            <div class="day-title">Mobile — Real Device Testing</div>
+            <ul class="day-items">
+              <li>
+                Test on actual iPhone + Android. Devtools doesn't catch
+                everything
+              </li>
+              <li>
+                Touch interactions: do drag animations work? Hover states
+                degrade gracefully?
+              </li>
+              <li>GSAP on mobile: performance-test every scroll animation</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 10</span
+              ><span class="day-date">Aug 5</span>
+            </div>
+            <div class="day-title">Accessibility Audit</div>
+            <ul class="day-items">
+              <li>axe DevTools: run on every page. Fix everything red</li>
+              <li>
+                VoiceOver: navigate the whole portfolio with screen reader
+              </li>
+              <li>prefers-reduced-motion: every animation wrapped</li>
+              <li>Tab through everything. Focus trap working on modals?</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 11</span
+              ><span class="day-date">Aug 6</span>
+            </div>
+            <div class="day-title">Lighthouse — Final Score</div>
+            <ul class="day-items">
+              <li>
+                Performance: 90+. Accessibility: 100. Best Practices: 100. SEO:
+                100
+              </li>
+              <li>Fix whatever's below target</li>
+              <li>
+                A portfolio that scores 100 accessibility is a statement about
+                your craft
+              </li>
+            </ul>
+            <div class="day-build accent c6">
+              <span class="build-tag">Target</span>All Lighthouse metrics: Perf
+              90+ · A11y 100 · BP 100 · SEO 100. Non-negotiable.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 12</span
+              ><span class="day-date">Aug 7</span>
+            </div>
+            <div class="day-title">OG Image & Meta</div>
+            <ul class="day-items">
+              <li>@vercel/og: dynamic OG image that looks intentional</li>
+              <li>robots.txt, sitemap.xml — basic SEO completeness</li>
+              <li>Test every page URL in opengraph.xyz before shipping</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 13</span
+              ><span class="day-date">Aug 8</span>
+            </div>
+            <div class="day-title">Peer Review</div>
+            <ul class="day-items">
+              <li>Share with 3 people you respect — not family, not friends</li>
+              <li>Ask: "What's the first thing you noticed? What felt off?"</li>
+              <li>Feedback that stings is feedback that matters</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 14</span
+              ><span class="day-date">Aug 9</span>
+            </div>
+            <div class="day-title">Deploy — Custom Domain + Vercel</div>
+            <ul class="day-items">
+              <li>yourname.dev or firstnamelastname.com</li>
+              <li>
+                Vercel Analytics: on. Error monitoring: Sentry (free tier)
+              </li>
+              <li>
+                The portfolio is live. The URL exists. This changes things
+              </li>
+            </ul>
+            <div class="day-build accent c6">
+              <span class="build-tag">It's live.</span>Your portfolio is
+              deployed. The URL is real. The work is public.
+            </div>
+          </div>
+        </div>
+
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 3</div>
+            <div class="week-theme" style="color: var(--m6)">
+              Voice & Community
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 15</span
+              ><span class="day-date">Aug 10</span>
+            </div>
+            <div class="day-title">The Announcement</div>
+            <ul class="day-items">
+              <li>
+                Write the portfolio launch post. Show the process, not just the
+                result
+              </li>
+              <li>Record a 90-second walkthrough video</li>
+              <li>Post at a good time. Engage with every reply</li>
+              <li>
+                Tag @raphaelsalaja @emilkowalski_ @raunofreiberg if inspired by
+                their work
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 16</span
+              ><span class="day-date">Aug 11</span>
+            </div>
+            <div class="day-title">Your 3rd OSS Contribution</div>
+            <ul class="day-items">
+              <li>Pick one thing from Month 5 or 6 — package it</li>
+              <li>
+                The third one builds the pattern: you're someone who ships OSS
+              </li>
+              <li>Link all 3 from your portfolio /craft page</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 17</span
+              ><span class="day-date">Aug 12</span>
+            </div>
+            <div class="day-title">Your Content Voice — What You'll Post</div>
+            <ul class="day-items">
+              <li>
+                Your format: short demo video + code snippet + one insight
+              </li>
+              <li>Post once per week minimum. Twice is compounding</li>
+              <li>
+                You are a fullstack design engineer — your niche has no one
+                exactly like you
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 18</span
+              ><span class="day-date">Aug 13</span>
+            </div>
+            <div class="day-title">Case Study Writing</div>
+            <ul class="day-items">
+              <li>Write a proper case study for your Month 4 big build</li>
+              <li>Structure: problem → approach → tradeoffs → result</li>
+              <li>
+                Link to source code. Show the decisions, not just the outcome
+              </li>
+            </ul>
+            <div class="day-build accent c6">
+              <span class="build-tag">Build</span>A /writing section on your
+              portfolio. One case study published. The combination of work +
+              writing = authority.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 19</span
+              ><span class="day-date">Aug 14</span>
+            </div>
+            <div class="day-title">designengineer.io — Know the Landscape</div>
+            <ul class="day-items">
+              <li>designengineer.io job board — read 10 descriptions</li>
+              <li>Map each requirement to what you've built this 6 months</li>
+              <li>Gaps: if you have any, you have a month 7 roadmap</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 20</span
+              ><span class="day-date">Aug 15</span>
+            </div>
+            <div class="day-title">3 Companies — Deep Audit</div>
+            <ul class="day-items">
+              <li>Identify 3 companies where your work would fit</li>
+              <li>
+                Study their design language, their tech stack, their UI patterns
+              </li>
+              <li>
+                Build one small thing that speaks directly to each company's
+                aesthetic
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 21</span
+              ><span class="day-date">Aug 16</span>
+            </div>
+            <div class="day-title">ui.land & Community</div>
+            <ul class="day-items">
+              <li>
+                ui.land — the canonical design engineering community. Bookmark
+                it
+              </li>
+              <li>Engage: comment on work you genuinely admire</li>
+              <li>You are now a peer, not a student, to many here</li>
+            </ul>
+            <div class="day-build accent c6">
+              <span class="build-tag">Week 3 Build</span>3 company-specific
+              micro-demos. Each shows you understand their aesthetic. These are
+              your cold outreach pieces.
+            </div>
+          </div>
+        </div>
+
+        <div class="week-col">
+          <div class="week-head">
+            <div class="week-num">Week 4</div>
+            <div class="week-theme" style="color: var(--m6)">You're There</div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 22</span
+              ><span class="day-date">Aug 17</span>
+            </div>
+            <div class="day-title">Figma Unlock — Month 7 Prep</div>
+            <ul class="day-items">
+              <li>You've earned Figma. In 3 days you'll open it</li>
+              <li>Today: learn what Figma is — not tutorials, the concepts</li>
+              <li>
+                Components, variants, auto-layout, prototyping — map to what you
+                know in code
+              </li>
+              <li>
+                You will learn Figma faster than anyone because you already know
+                what good is
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 23</span
+              ><span class="day-date">Aug 18</span>
+            </div>
+            <div class="day-title">Continuous Learning System</div>
+            <ul class="day-items">
+              <li>
+                Your weekly ritual: awwwards, cosmos.so, lapa.ninja — 15 min
+                each Monday
+              </li>
+              <li>
+                Quarterly: audit your /craft page. Retire old work. Add new
+              </li>
+              <li>
+                Monthly: one new OSS contribution or build-in-public experiment
+              </li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 24</span
+              ><span class="day-date">Aug 19</span>
+            </div>
+            <div class="day-title">Month 7+ Roadmap</div>
+            <ul class="day-items">
+              <li>Figma mastery: Auto Layout, Components, Variables</li>
+              <li>Advanced GSAP: WebGL, custom shaders (if desired)</li>
+              <li>3D: React Three Fiber + shaders — the next frontier</li>
+              <li>Design systems: building one from scratch for a real team</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 25</span
+              ><span class="day-date">Aug 20</span>
+            </div>
+            <div class="day-title">The Manifesto — Final Version</div>
+            <ul class="day-items">
+              <li>Rewrite the Day 1, Month 2 manifesto one final time</li>
+              <li>Compare: Day 1 draft, Month 2 draft, today's version</li>
+              <li>The evolution across the three is who you became</li>
+              <li>
+                Publish this as a blog post. It is your definitive statement
+              </li>
+            </ul>
+            <div class="day-build accent c6">
+              <span class="build-tag">The Definitive Statement</span>You know
+              what a fullstack design engineer is. You are one. Write it down.
+              Publish it. Own it.
+            </div>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 26</span
+              ><span class="day-date">Aug 21</span>
+            </div>
+            <div class="day-title">The 6-Month Review</div>
+            <ul class="day-items">
+              <li>List everything you built. Count it</li>
+              <li>Open source packages published</li>
+              <li>Lighthouse scores across all projects</li>
+              <li>Twitter followers gained by building in public</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 27</span
+              ><span class="day-date">Aug 22</span>
+            </div>
+            <div class="day-title">Cold Outreach — The Three Companies</div>
+            <ul class="day-items">
+              <li>
+                One DM to each of your 3 target companies. Not a resume. A link
+                to one demo you made for them
+              </li>
+              <li>
+                "I built this inspired by your design language. I'd love to
+                contribute."
+              </li>
+              <li>This is not arrogance — this is demonstration</li>
+            </ul>
+          </div>
+          <div class="day">
+            <div class="day-head">
+              <span class="day-num">DAY 28–30</span
+              ><span class="day-date">Aug 23–24</span>
+            </div>
+            <div class="day-title">Done. Now Start Month 7.</div>
+            <ul class="day-items">
+              <li>Aug 25: open Figma for the first time</li>
+              <li>
+                You will understand every concept in 10 minutes because you've
+                been living it in code
+              </li>
+              <li>
+                Auto-layout = flexbox. Components = React components. Variables
+                = CSS custom properties
+              </li>
+              <li>
+                Figma is just another output for a mind that already knows what
+                good is
+              </li>
+            </ul>
+            <div class="day-build accent c6">
+              <span class="build-tag">You made it.</span>
+              CSS · Design Eye · Framer Motion · GSAP · React Internals ·
+              Performance · Fullstack · Portfolio · Voice · OSS. Six months. Two
+              hours a day. The position is real because you made it real.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="resources">
+        <div class="res-group">
+          <div class="res-label">Portfolio Study</div>
+          <div class="res-links">
+            <a class="res-link" href="https://rauno.me" target="_blank"
+              >rauno.me</a
+            >
+            <a class="res-link" href="https://paco.me" target="_blank"
+              >paco.me</a
+            >
+            <a class="res-link" href="https://brianglovier.com" target="_blank"
+              >brianglovier.com</a
+            >
+            <a class="res-link" href="https://anthonyhobday.com" target="_blank"
+              >anthonyhobday.com</a
+            >
+          </div>
+        </div>
+        <div class="res-group">
+          <div class="res-label">Community</div>
+          <div class="res-links">
+            <a class="res-link" href="https://ui.land" target="_blank"
+              >ui.land</a
+            >
+            <a class="res-link" href="https://designengineer.io" target="_blank"
+              >designengineer.io</a
+            >
+            <a class="res-link" href="https://opengraph.xyz" target="_blank"
+              >opengraph.xyz</a
+            >
+          </div>
+        </div>
+        <div class="res-group">
+          <div class="res-label">Next</div>
+          <div class="res-links">
+            <a class="res-link" href="https://figma.com" target="_blank"
+              >Figma — opens Aug 25</a
+            >
+            <a
+              class="res-link"
+              href="https://docs.pmnd.rs/react-three-fiber"
+              target="_blank"
+              >React Three Fiber</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>
+        Fullstack Design Engineer · 6 months · Feb 25 – Aug 24, 2025 · 2h/day ·
+        ~360 hours total
+      </p>
+      <p>
+        CSS · Taste · Framer Motion · GSAP · React · Performance · Ship · Figma
+        unlocks Aug 25
+      </p>
+    </footer>
+  </body>
+</html>

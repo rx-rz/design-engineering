@@ -1,0 +1,1026 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DAY 03 — Display, Block & Inline</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #f5f0e8;
+        --surface: #ede8df;
+        --surface2: #e2dcd2;
+        --ink: #1a1612;
+        --muted: #7a7168;
+        --rule: #c8c0b4;
+        --block-c: #c0392b;
+        --inline-c: #1a6fa8;
+        --iblock-c: #5c3d8f;
+        --none-c: #888;
+        --accent: #1a1612;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "DM Mono", monospace;
+        font-size: 14px;
+        line-height: 1.65;
+      }
+
+      /* ── HEADER ── */
+      header {
+        background: var(--ink);
+        color: var(--bg);
+        padding: 2.5rem 3rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+      .day-chip {
+        font-size: 0.65rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #9a917e;
+      }
+      h1 {
+        font-family: "Fraunces", serif;
+        font-size: clamp(1.8rem, 4vw, 3rem);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+      }
+      .subtitle {
+        font-size: 0.78rem;
+        color: #9a917e;
+        margin-top: 0.2rem;
+      }
+
+      /* ── LAYOUT ── */
+      main {
+        max-width: 1060px;
+        margin: 0 auto;
+        padding: 4rem 2rem 8rem;
+        display: grid;
+        gap: 5rem;
+      }
+
+      section {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .sec-label {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        font-size: 0.62rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .sec-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--rule);
+      }
+
+      h2 {
+        font-family: "Fraunces", serif;
+        font-size: 1.7rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+
+      p {
+        color: #3d3830;
+        max-width: 62ch;
+      }
+
+      code {
+        font-family: "DM Mono", monospace;
+        background: var(--surface2);
+        padding: 0.1em 0.35em;
+        border-radius: 3px;
+        font-size: 0.88em;
+      }
+
+      pre {
+        background: var(--ink);
+        color: #c8c0b4;
+        padding: 1.5rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        font-size: 0.8rem;
+        line-height: 1.9;
+      }
+      .c-sel {
+        color: #f5c842;
+      }
+      .c-prop {
+        color: #7ec8e3;
+      }
+      .c-val {
+        color: #a8e063;
+      }
+      .c-com {
+        color: #5a5248;
+        font-style: italic;
+      }
+      .c-kw {
+        color: #f0a0a0;
+      }
+
+      .compare-grid {
+        display: grid;
+        grid-template-columns: 1.4fr repeat(3, 1fr);
+        border: 1px solid var(--rule);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .cg-head {
+        font-size: 0.68rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-weight: 500;
+        padding: 0.8rem 1rem;
+        background: var(--surface2);
+        border-bottom: 1px solid var(--rule);
+      }
+      .cg-head.block-h {
+        color: var(--block-c);
+      }
+      .cg-head.inline-h {
+        color: var(--inline-c);
+      }
+      .cg-head.iblock-h {
+        color: var(--iblock-c);
+      }
+
+      .cg-row {
+        display: contents;
+      }
+      .cg-cell {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--rule);
+        border-right: 1px solid var(--rule);
+        font-size: 0.8rem;
+        line-height: 1.5;
+      }
+      .cg-cell:last-child {
+        border-right: none;
+      }
+      .cg-cell.label {
+        background: var(--surface);
+        color: var(--muted);
+        font-size: 0.75rem;
+      }
+      .cg-row:last-child .cg-cell {
+        border-bottom: none;
+      }
+      .yes {
+        color: #2a7a3b;
+        font-weight: 500;
+      }
+      .no {
+        color: var(--block-c);
+      }
+
+      .demo-stage {
+        background: var(--surface);
+        border: 1px solid var(--rule);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .demo-stage-header {
+        background: var(--surface2);
+        border-bottom: 1px solid var(--rule);
+        padding: 0.6rem 1rem;
+        font-size: 0.65rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .demo-stage-body {
+        padding: 1.5rem;
+      }
+
+      /* display switcher */
+      .switcher {
+        display: flex;
+        gap: 0.4rem;
+      }
+      .sw-btn {
+        font-family: "DM Mono", monospace;
+        font-size: 0.68rem;
+        padding: 0.25rem 0.65rem;
+        border-radius: 3px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        background: var(--bg);
+        color: var(--muted);
+        transition: all 0.15s;
+      }
+      .sw-btn:hover {
+        color: var(--ink);
+      }
+      .sw-btn.active-block {
+        background: var(--block-c);
+        color: #fff;
+        border-color: var(--block-c);
+      }
+      .sw-btn.active-inline {
+        background: var(--inline-c);
+        color: #fff;
+        border-color: var(--inline-c);
+      }
+      .sw-btn.active-inline-block {
+        background: var(--iblock-c);
+        color: #fff;
+        border-color: var(--iblock-c);
+      }
+      .sw-btn.active-none {
+        background: var(--none-c);
+        color: #fff;
+        border-color: var(--none-c);
+      }
+
+      .target-el {
+        transition: all 0.25s;
+        font-family: "DM Mono", monospace;
+        font-size: 0.78rem;
+      }
+
+      /* inline sibling text */
+      .inline-context {
+        font-size: 0.85rem;
+        color: var(--muted);
+        line-height: 2;
+      }
+
+      /* ── BLOCK VISUALIZER ── */
+      .block-vis {
+        display: grid;
+        gap: 0.4rem;
+      }
+      .bv-el {
+        border: 2px solid;
+        padding: 0.5rem 0.8rem;
+        border-radius: 3px;
+        font-size: 0.78rem;
+        position: relative;
+      }
+      .bv-el .bv-label {
+        position: absolute;
+        top: -1px;
+        right: 4px;
+        font-size: 0.58rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        opacity: 0.7;
+      }
+      .is-block {
+        border-color: var(--block-c);
+        background: rgba(192, 57, 43, 0.06);
+        color: var(--block-c);
+      }
+      .is-inline {
+        border-color: var(--inline-c);
+        background: rgba(26, 111, 168, 0.06);
+        color: var(--inline-c);
+        display: inline;
+      }
+      .is-iblock {
+        border-color: var(--iblock-c);
+        background: rgba(92, 61, 143, 0.06);
+        color: var(--iblock-c);
+        display: inline-block;
+      }
+
+      /* ── NORMAL FLOW DIAGRAM ── */
+      .flow-diagram {
+        background: var(--surface);
+        border: 1px solid var(--rule);
+        border-radius: 6px;
+        padding: 2rem;
+        display: grid;
+        gap: 0.5rem;
+      }
+      .flow-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.3rem;
+        min-height: 2rem;
+        position: relative;
+      }
+      .flow-block {
+        display: block;
+        width: 100%;
+        background: rgba(192, 57, 43, 0.08);
+        border: 1.5px solid var(--block-c);
+        border-radius: 3px;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.78rem;
+        color: var(--block-c);
+      }
+      .flow-inline {
+        display: inline;
+        background: rgba(26, 111, 168, 0.1);
+        border: 1.5px solid var(--inline-c);
+        border-radius: 2px;
+        padding: 0.1em 0.4em;
+        font-size: 0.78rem;
+        color: var(--inline-c);
+      }
+      .flow-iblock {
+        display: inline-block;
+        background: rgba(92, 61, 143, 0.08);
+        border: 1.5px solid var(--iblock-c);
+        border-radius: 3px;
+        padding: 0.3rem 0.6rem;
+        font-size: 0.78rem;
+        color: var(--iblock-c);
+        width: 90px;
+        text-align: center;
+      }
+      .flow-label {
+        font-size: 0.62rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.2rem;
+        margin-top: 0.8rem;
+      }
+
+      /* ── ANONYMOUS BOX ── */
+      .anon-demo {
+        background: var(--surface);
+        border: 1px solid var(--rule);
+        border-radius: 6px;
+        padding: 1.5rem;
+      }
+      .anon-html {
+        font-size: 0.8rem;
+        color: var(--muted);
+        margin-bottom: 1.2rem;
+      }
+      .anon-what-browser-sees {
+        border: 1px dashed var(--rule);
+        border-radius: 4px;
+        padding: 1rem;
+        position: relative;
+      }
+      .anon-browser-label {
+        position: absolute;
+        top: -10px;
+        left: 12px;
+        background: var(--surface);
+        font-size: 0.6rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 0 0.4rem;
+      }
+      .anon-p {
+        background: rgba(192, 57, 43, 0.06);
+        border: 1.5px solid var(--block-c);
+        border-radius: 3px;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        color: var(--block-c);
+        margin-bottom: 0.4rem;
+        position: relative;
+      }
+      .anon-anonymous {
+        background: rgba(150, 120, 60, 0.08);
+        border: 1.5px dashed #9a7a30;
+        border-radius: 3px;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        color: #7a5a10;
+        margin-bottom: 0.4rem;
+        position: relative;
+      }
+      .anon-tag {
+        position: absolute;
+        top: 2px;
+        right: 4px;
+        font-size: 0.55rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        opacity: 0.7;
+      }
+
+      /* ── 5 THINGS ── */
+      .five-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1px;
+        background: var(--rule);
+        border: 1px solid var(--rule);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .five-card {
+        background: var(--bg);
+        padding: 1.4rem;
+      }
+      .five-num {
+        font-family: "Fraunces", serif;
+        font-size: 2.5rem;
+        color: var(--rule);
+        line-height: 1;
+        margin-bottom: 0.5rem;
+      }
+      .five-card h3 {
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-bottom: 0.4rem;
+        color: var(--ink);
+      }
+      .five-card p {
+        font-size: 0.76rem;
+        color: var(--muted);
+        max-width: none;
+      }
+
+      /* ── INTERACTIVE SWITCHER DEMO ── */
+      #live-display-target {
+        background: rgba(255, 255, 255, 0.5);
+        border: 2px solid;
+        padding: 0.6rem 1rem;
+        border-radius: 3px;
+        font-size: 0.82rem;
+        font-weight: 500;
+        width: fit-content;
+        transition: all 0.25s;
+      }
+      #live-code-output {
+        margin-top: 1rem;
+        padding: 0.8rem 1rem;
+        background: var(--ink);
+        color: #a8e063;
+        border-radius: 4px;
+        font-size: 0.78rem;
+      }
+
+      /* ── KEY POINTS ── */
+      .kp-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1rem;
+      }
+      .kp-card {
+        border: 1px solid var(--rule);
+        border-radius: 6px;
+        padding: 1.25rem;
+        background: var(--surface);
+      }
+      .kp-card h3 {
+        font-family: "Fraunces", serif;
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
+      }
+      .kp-card p {
+        font-size: 0.8rem;
+        max-width: none;
+      }
+
+      /* block color badges */
+      .badge {
+        display: inline-block;
+        font-size: 0.65rem;
+        padding: 0.1em 0.5em;
+        border-radius: 20px;
+        font-weight: 500;
+        margin-right: 0.25rem;
+      }
+      .b-block {
+        background: rgba(192, 57, 43, 0.1);
+        color: var(--block-c);
+      }
+      .b-inline {
+        background: rgba(26, 111, 168, 0.1);
+        color: var(--inline-c);
+      }
+      .b-iblock {
+        background: rgba(92, 61, 143, 0.1);
+        color: var(--iblock-c);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="day-chip">CSS Fundamentals · Day 03 · Feb 27</div>
+      <h1>Display, Block & Inline</h1>
+      <div class="subtitle">
+        Normal flow · Anonymous boxes · The display deep dive
+      </div>
+    </header>
+
+    <main>
+      <!-- ① THE BIG THREE -->
+      <section>
+        <div class="sec-label">01 / The Big Three</div>
+        <h2>block vs inline vs inline-block</h2>
+        <p>
+          Every element has a default <code>display</code> value. It controls
+          two things: how the element behaves in the flow (does it take up a
+          full row?) and how its children are laid out.
+        </p>
+
+        <div class="compare-grid">
+          <div class="cg-head"></div>
+          <div class="cg-head block-h">block</div>
+          <div class="cg-head inline-h">inline</div>
+          <div class="cg-head iblock-h">inline-block</div>
+
+          <div class="cg-row">
+            <div class="cg-cell label">Starts on new line?</div>
+            <div class="cg-cell"><span class="yes">Yes</span> — always</div>
+            <div class="cg-cell">
+              <span class="no">No</span> — flows with text
+            </div>
+            <div class="cg-cell">
+              <span class="no">No</span> — flows with text
+            </div>
+          </div>
+          <div class="cg-row">
+            <div class="cg-cell label">Width by default</div>
+            <div class="cg-cell">Full parent width (stretches)</div>
+            <div class="cg-cell">Content width only</div>
+            <div class="cg-cell">Content width only</div>
+          </div>
+          <div class="cg-row">
+            <div class="cg-cell label">Can set width/height?</div>
+            <div class="cg-cell"><span class="yes">Yes</span></div>
+            <div class="cg-cell"><span class="no">No</span> — ignored</div>
+            <div class="cg-cell"><span class="yes">Yes</span></div>
+          </div>
+          <div class="cg-row">
+            <div class="cg-cell label">Vertical margin/padding?</div>
+            <div class="cg-cell">
+              <span class="yes">Yes</span> — pushes others
+            </div>
+            <div class="cg-cell">
+              Padding: visual only<br /><span class="no"
+                >Margin: left/right only</span
+              >
+            </div>
+            <div class="cg-cell">
+              <span class="yes">Yes</span> — pushes others
+            </div>
+          </div>
+          <div class="cg-row">
+            <div class="cg-cell label">Common elements</div>
+            <div class="cg-cell">
+              <code>div</code> <code>p</code> <code>h1–h6</code>
+              <code>section</code> <code>ul</code>
+            </div>
+            <div class="cg-cell">
+              <code>span</code> <code>a</code> <code>strong</code>
+              <code>em</code> <code>img</code>
+            </div>
+            <div class="cg-cell">
+              <code>button</code> <code>input</code> (sort of)
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ② VISUAL FLOW DEMO -->
+      <section>
+        <div class="sec-label">02 / Seeing It</div>
+        <h2>How they actually sit in a page</h2>
+
+        <div class="flow-diagram">
+          <div class="flow-label" style="margin-top: 0">
+            Block elements stack vertically — each on its own row:
+          </div>
+          <div class="flow-block">
+            <span class="bv-label">div (block)</span>Hello I am a div
+          </div>
+          <div class="flow-block">
+            <span class="bv-label">p (block)</span>I am a paragraph. I take the
+            full width.
+          </div>
+          <div class="flow-block">
+            <span class="bv-label">h2 (block)</span>I am a heading
+          </div>
+
+          <div class="flow-label">
+            Inline elements flow like text — sitting side by side:
+          </div>
+          <div
+            style="line-height: 2.2; font-size: 0.85rem; color: var(--muted)"
+          >
+            Here is some text with
+            <span class="flow-inline">a span</span>
+            and
+            <span class="flow-inline">another span</span>
+            and an
+            <span class="flow-inline">anchor tag</span>
+            all flowing inline with the surrounding prose.
+          </div>
+
+          <div class="flow-label">
+            inline-block: flows like inline, but respects width/height:
+          </div>
+          <div style="line-height: 3">
+            <span class="flow-iblock">button 1</span>
+            <span class="flow-iblock">button 2</span>
+            <span class="flow-iblock" style="width: 120px">longer button</span>
+            <span style="font-size: 0.78rem; color: var(--muted)">
+              ← these sit next to each other</span
+            >
+          </div>
+
+          <div class="flow-label">
+            The key difference — inline ignores top/bottom margin:
+          </div>
+          <div
+            style="line-height: 2.8; font-size: 0.85rem; color: var(--muted)"
+          >
+            Normal text,
+            <span
+              style="
+                display: inline;
+                background: rgba(26, 111, 168, 0.1);
+                border: 1.5px solid var(--inline-c);
+                color: var(--inline-c);
+                padding: 12px 8px;
+                border-radius: 2px;
+                font-size: 0.78rem;
+              "
+            >
+              inline with big padding
+            </span>
+            ← padding is visible but doesn't push neighbors vertically — it
+            bleeds through.
+          </div>
+        </div>
+      </section>
+
+      <!-- ③ INTERACTIVE SWITCHER -->
+      <section>
+        <div class="sec-label">03 / Interactive</div>
+        <h2>Switch display value live</h2>
+        <p>
+          Click the buttons to change the <code>display</code> property on the
+          target element. Notice how the surrounding text reacts.
+        </p>
+
+        <div class="demo-stage">
+          <div class="demo-stage-header">
+            <span>Live Demo</span>
+            <div class="switcher">
+              <button class="sw-btn active-block" onclick="setDisplay('block')">
+                block
+              </button>
+              <button class="sw-btn" onclick="setDisplay('inline')">
+                inline
+              </button>
+              <button class="sw-btn" onclick="setDisplay('inline-block')">
+                inline-block
+              </button>
+              <button class="sw-btn" onclick="setDisplay('none')">none</button>
+            </div>
+          </div>
+          <div class="demo-stage-body">
+            <div class="inline-context">
+              The quick brown fox jumps over the lazy dog.
+              <div
+                id="live-display-target"
+                style="
+                  display: block;
+                  border-color: var(--block-c);
+                  background: rgba(192, 57, 43, 0.06);
+                  color: var(--block-c);
+                "
+              >
+                ← I am the target element
+              </div>
+              Pack my box with five dozen liquor jugs.
+            </div>
+            <div id="live-code-output">display: block;</div>
+
+            <div
+              id="live-explanation"
+              style="
+                margin-top: 0.8rem;
+                font-size: 0.78rem;
+                color: var(--muted);
+                max-width: 60ch;
+              "
+            >
+              Takes the full row. Nothing sits beside it. Width stretches to the
+              container.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ④ NORMAL FLOW -->
+      <section>
+        <div class="sec-label">04 / Normal Flow</div>
+        <h2>What is "normal flow"?</h2>
+        <p>
+          Normal flow is the browser's default layout algorithm — no flexbox, no
+          grid, no float, no absolute positioning. Elements arrange themselves
+          following two rules: block elements stack vertically in a
+          <em>block formatting context (BFC)</em>, inline elements lay out
+          horizontally in an <em>inline formatting context (IFC)</em>.
+        </p>
+        <p style="margin-top: 0.6rem">
+          You break out of normal flow with <code>position: absolute</code>,
+          <code>position: fixed</code>, <code>float</code>, and by creating
+          flex/grid containers. Understanding flow is essential for knowing
+          <em>why</em> these tools behave the way they do.
+        </p>
+
+        <pre><code><span class="c-com">/* Default display values the browser applies (you can always override) */</span>
+<span class="c-sel">div, section, article, p, h1, ul, li</span>  → <span class="c-kw">block</span>
+<span class="c-sel">span, a, strong, em, label</span>            → <span class="c-kw">inline</span>
+<span class="c-sel">button, input, select, textarea</span>       → <span class="c-kw">inline-block</span>  <span class="c-com">/* roughly */</span>
+<span class="c-sel">head, script, style</span>                   → <span class="c-kw">none</span>           <span class="c-com">/* not rendered */</span></code></pre>
+      </section>
+
+      <!-- ⑤ ANONYMOUS BOXES -->
+      <section>
+        <div class="sec-label">05 / The Hidden Stuff</div>
+        <h2>Anonymous boxes</h2>
+        <p>
+          The browser silently wraps bare text nodes in anonymous boxes when it
+          needs to mix block and inline content. You can't style them directly —
+          you'll never see them in DevTools by name — but they affect layout in
+          surprising ways.
+        </p>
+
+        <div class="anon-demo">
+          <div class="anon-html">
+            <span
+              style="
+                color: var(--muted);
+                font-size: 0.72rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+              "
+              >Your HTML:</span
+            ><br /><br />
+            <code
+              style="background: none; font-size: 0.82rem; color: var(--ink)"
+              >&lt;div&gt;</code
+            ><br />
+            &nbsp;&nbsp;<code
+              style="
+                background: none;
+                font-size: 0.82rem;
+                color: var(--block-c);
+              "
+              >&lt;p&gt;A paragraph&lt;/p&gt;</code
+            ><br />
+            &nbsp;&nbsp;<code
+              style="background: none; font-size: 0.82rem; color: #7a5a10"
+              >Some loose text</code
+            >
+            <span style="font-size: 0.72rem; color: var(--muted)"
+              >← no tag, just text</span
+            ><br />
+            &nbsp;&nbsp;<code
+              style="
+                background: none;
+                font-size: 0.82rem;
+                color: var(--block-c);
+              "
+              >&lt;p&gt;Another paragraph&lt;/p&gt;</code
+            ><br />
+            <code
+              style="background: none; font-size: 0.82rem; color: var(--ink)"
+              >&lt;/div&gt;</code
+            >
+          </div>
+
+          <div class="anon-what-browser-sees">
+            <div class="anon-browser-label">
+              What the browser actually creates:
+            </div>
+            <div class="anon-p">
+              &lt;p&gt; — block box
+              <div class="anon-tag" style="color: var(--block-c)">block</div>
+            </div>
+            <div class="anon-anonymous">
+              anonymous block box wrapping "Some loose text"
+              <div class="anon-tag" style="color: #7a5a10">anonymous</div>
+            </div>
+            <div class="anon-p">
+              &lt;p&gt; — block box
+              <div class="anon-tag" style="color: var(--block-c)">block</div>
+            </div>
+            <p
+              style="
+                margin-top: 0.8rem;
+                font-size: 0.76rem;
+                color: var(--muted);
+                max-width: none;
+              "
+            >
+              The browser wraps the orphaned text in an anonymous block box so
+              it can sit alongside the <code>&lt;p&gt;</code> elements in a
+              block formatting context. Same happens in reverse — if you put a
+              block element inside an inline, the browser generates anonymous
+              block wrappers to fix the invalid nesting.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ⑥ 5 CSS DISPLAY THINGS -->
+      <section>
+        <div class="sec-label">06 / Display Deep Dive</div>
+        <h2>5 things about <code>display</code> to internalize</h2>
+
+        <div class="five-grid">
+          <div class="five-card">
+            <div class="five-num">01</div>
+            <h3><code>display</code> sets two things</h3>
+            <p>
+              The <em>outer</em> type (how it participates in flow: block or
+              inline) and the <em>inner</em> type (how its children are laid
+              out). <code>display: flex</code> means outer = block, inner =
+              flex. <code>display: inline-flex</code> means outer = inline,
+              inner = flex.
+            </p>
+          </div>
+          <div class="five-card">
+            <div class="five-num">02</div>
+            <h3>Inline top/bottom margin is a lie</h3>
+            <p>
+              <code>margin-top</code> and <code>margin-bottom</code> on inline
+              elements are completely ignored. Only <code>margin-left</code> and
+              <code>margin-right</code> work. Use <code>inline-block</code> if
+              you need vertical spacing.
+            </p>
+          </div>
+          <div class="five-card">
+            <div class="five-num">03</div>
+            <h3>
+              <code>display: none</code> vs <code>visibility: hidden</code>
+            </h3>
+            <p>
+              <code>none</code> removes the element from flow entirely — no
+              space reserved. <code>visibility: hidden</code> hides it but keeps
+              its space. Use the right one or your layout will jump.
+            </p>
+          </div>
+          <div class="five-card">
+            <div class="five-num">04</div>
+            <h3>Replaced elements are weird</h3>
+            <p>
+              <code>img</code>, <code>video</code>, <code>iframe</code> are
+              technically inline but behave like inline-block — they accept
+              width/height. The browser replaces their content with an external
+              resource, hence "replaced."
+            </p>
+          </div>
+          <div class="five-card">
+            <div class="five-num">05</div>
+            <h3>Absolute/fixed breaks out</h3>
+            <p>
+              Setting <code>position: absolute</code> or
+              <code>position: fixed</code> makes an element generate a block box
+              regardless of its <code>display</code> value. An
+              <code>inline span</code> becomes block-like once positioned.
+            </p>
+          </div>
+        </div>
+
+        <pre><code><span class="c-com">/* display: flex — outer is block, inner is flex */</span>
+<span class="c-sel">.container</span> { <span class="c-prop">display</span>: <span class="c-val">flex</span>; }          <span class="c-com">/* starts on new line, children use flex */</span>
+<span class="c-sel">.container</span> { <span class="c-prop">display</span>: <span class="c-val">inline-flex</span>; }   <span class="c-com">/* flows inline,  children use flex */</span>
+
+<span class="c-com">/* removed vs hidden */</span>
+<span class="c-sel">.gone</span>   { <span class="c-prop">display</span>: <span class="c-val">none</span>; }            <span class="c-com">/* element + its space = gone */</span>
+<span class="c-sel">.hidden</span> { <span class="c-prop">visibility</span>: <span class="c-val">hidden</span>; }       <span class="c-com">/* invisible but space remains */</span>
+
+<span class="c-com">/* opacity: 0 — also invisible, space remains, but events still fire! */</span>
+<span class="c-sel">.ghost</span>  { <span class="c-prop">opacity</span>: <span class="c-val">0</span>; }               <span class="c-com">/* still clickable! */</span></code></pre>
+      </section>
+
+      <!-- ⑦ KEY POINTS -->
+      <section>
+        <div class="sec-label">07 / Key Points</div>
+        <h2>Take these away.</h2>
+        <div class="kp-row">
+          <div class="kp-card">
+            <h3>Block <span class="badge b-block">block</span></h3>
+            <p>
+              Full width, stacks vertically, respects all margin/padding.
+              Default for structural elements: <code>div</code>, <code>p</code>,
+              <code>section</code>.
+            </p>
+          </div>
+          <div class="kp-card">
+            <h3>Inline <span class="badge b-inline">inline</span></h3>
+            <p>
+              Flows with text, width = content only, ignores top/bottom margin.
+              Don't try to set width/height on a pure inline — it won't work.
+            </p>
+          </div>
+          <div class="kp-card">
+            <h3>
+              Inline-block <span class="badge b-iblock">inline-block</span>
+            </h3>
+            <p>
+              Best of both: flows with text <em>and</em> accepts width, height,
+              and all margin/padding. The classic way to make horizontally
+              laid-out boxes (before flex).
+            </p>
+          </div>
+          <div class="kp-card">
+            <h3>Normal Flow</h3>
+            <p>
+              The default. Blocks stack. Inlines flow. Anonymous boxes fill
+              gaps. Everything else — flex, grid, position — is an intentional
+              escape from this baseline.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const configs = {
+        block: {
+          borderColor: "var(--block-c)",
+          bg: "rgba(192,57,43,0.06)",
+          color: "var(--block-c)",
+          code: "display: block;",
+          explanation:
+            "Takes the full row. Nothing sits beside it. Width stretches to the container. Respects all margin and padding.",
+        },
+        inline: {
+          borderColor: "var(--inline-c)",
+          bg: "rgba(26,111,168,0.08)",
+          color: "var(--inline-c)",
+          code: "display: inline;",
+          explanation:
+            "Flows inside the text. Width and height are ignored — it's sized by its content. Top/bottom margins have no effect.",
+        },
+        "inline-block": {
+          borderColor: "var(--iblock-c)",
+          bg: "rgba(92,61,143,0.06)",
+          color: "var(--iblock-c)",
+          code: "display: inline-block;",
+          explanation:
+            "Flows with text like inline, but respects width, height, and all margins. The sweet spot between the two.",
+        },
+        none: {
+          borderColor: "transparent",
+          bg: "transparent",
+          color: "transparent",
+          code: "display: none;",
+          explanation:
+            "The element is completely removed from layout. No space is reserved. It's as if it doesn't exist in the DOM (visually).",
+        },
+      };
+
+      function setDisplay(val) {
+        const el = document.getElementById("live-display-target");
+        const code = document.getElementById("live-code-output");
+        const explanation = document.getElementById("live-explanation");
+        const cfg = configs[val];
+
+        el.style.display = val;
+        el.style.borderColor = cfg.borderColor;
+        el.style.background = cfg.bg;
+        el.style.color = cfg.color;
+        code.textContent = cfg.code;
+        explanation.textContent = cfg.explanation;
+
+        document.querySelectorAll(".sw-btn").forEach((b) => {
+          b.className = "sw-btn";
+        });
+        const activeClass =
+          val === "inline-block" ? "active-inline-block" : `active-${val}`;
+        event.target.classList.add(activeClass);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAY 04 — CSS Units</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700;900&family=Onest:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #07080a;
+  --s1: #0d0f14;
+  --s2: #12151c;
+  --border: #1e2330;
+  --border2: #2a3040;
+  --text: #d8dce8;
+  --muted: #4a5268;
+  --px-c: #ff6b6b;
+  --em-c: #ffa94d;
+  --rem-c: #69db7c;
+  --pct-c: #4dabf7;
+  --vw-c: #da77f2;
+  --vh-c: #f783ac;
+  --ch-c: #a9e34b;
+  --accent: #5c7cfa;
+}
+
+html { font-size: 16px; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Onest', sans-serif;
+  line-height: 1.6;
+}
+
+/* HEADER */
+header {
+  padding: 3rem;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 2rem;
+}
+.day-tag {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+}
+h1 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(1.4rem, 3.5vw, 2.8rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.header-units {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.unit-pill {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  border: 1px solid;
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem 8rem;
+  display: grid;
+  gap: 5rem;
+}
+
+section { display: grid; gap: 1.5rem; }
+
+.sec-tag {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  color: var(--muted);
+}
+
+h2 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+p { color: #8892a8; max-width: 64ch; font-size: 0.92rem; }
+
+code {
+  font-family: 'Onest', monospace;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+pre {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  overflow-x: auto;
+  font-size: 0.8rem;
+  line-height: 2;
+  font-family: 'Onest', monospace;
+}
+.cp { color: #7ec8e3; }
+.cv { color: var(--rem-c); }
+.cs { color: #ffd43b; }
+.cc { color: #3a4258; font-style: italic; }
+.cu-px  { color: var(--px-c); font-weight: 600; }
+.cu-em  { color: var(--em-c); font-weight: 600; }
+.cu-rem { color: var(--rem-c); font-weight: 600; }
+.cu-pct { color: var(--pct-c); font-weight: 600; }
+.cu-vw  { color: var(--vw-c); font-weight: 600; }
+.cu-vh  { color: var(--vh-c); font-weight: 600; }
+.cu-ch  { color: var(--ch-c); font-weight: 600; }
+
+/* UNIT GRID */
+.unit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.unit-card {
+  background: var(--s1);
+  padding: 1.25rem;
+  transition: background 0.15s;
+}
+.unit-card:hover { background: var(--s2); }
+.uc-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.02em;
+}
+.uc-type {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+}
+.uc-desc { font-size: 0.78rem; color: #6a7590; line-height: 1.5; }
+.uc-rule {
+  margin-top: 0.8rem;
+  font-size: 0.72rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  border-left: 2px solid;
+  background: rgba(255,255,255,0.03);
+  line-height: 1.5;
+}
+
+/* EM VS REM DIAGRAM */
+.em-diagram {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2rem;
+  display: grid;
+  gap: 1.5rem;
+}
+.tree {
+  display: grid;
+  gap: 0.6rem;
+}
+.tree-node {
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: 0.8rem 1rem;
+  position: relative;
+  font-size: 0.82rem;
+}
+.tree-node.root { border-color: var(--accent); }
+.tn-label {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.25rem;
+}
+.tn-val { font-size: 0.75rem; color: var(--muted); }
+.tn-val span { font-weight: 500; }
+.tn-em  .tn-val span { color: var(--em-c); }
+.tn-rem .tn-val span { color: var(--rem-c); }
+
+.child-wrap { margin-left: 2rem; display: grid; gap: 0.4rem; border-left: 1px dashed var(--border2); padding-left: 1rem; }
+
+/* INTERACTIVE EM/REM */
+.interactive-panel {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.panel-header {
+  background: var(--s2);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1.25rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.panel-body { padding: 1.5rem; }
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+.slider-row label {
+  font-size: 0.75rem;
+  width: 220px;
+  flex-shrink: 0;
+}
+.slider-row input[type=range] {
+  flex: 1;
+  min-width: 120px;
+  accent-color: var(--accent);
+}
+.slider-val {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  width: 48px;
+  text-align: right;
+}
+
+.em-demo-area {
+  margin-top: 1.5rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.5rem;
+}
+.em-parent {
+  background: rgba(255,169,77,0.08);
+  border: 1px solid rgba(255,169,77,0.3);
+  border-radius: 4px;
+  padding: 1rem;
+  transition: all 0.2s;
+}
+.em-parent-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--em-c);
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
+}
+.em-child {
+  background: rgba(105,219,124,0.08);
+  border: 1px solid rgba(105,219,124,0.3);
+  border-radius: 4px;
+  padding: 0.75rem;
+  margin-top: 0.6rem;
+  transition: all 0.2s;
+}
+.em-child-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--rem-c);
+  margin-bottom: 0.3rem;
+  opacity: 0.7;
+}
+
+/* VIEWPORT UNITS */
+.vh-explainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.vh-card {
+  background: var(--s1);
+  padding: 1.25rem;
+}
+.vh-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 900;
+  margin-bottom: 0.3rem;
+}
+.vh-full { color: var(--vh-c); }
+.vh-small { color: var(--px-c); }
+.vh-dynamic { color: var(--rem-c); }
+.vh-sub {
+  font-size: 0.65rem;
+  color: var(--muted);
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.05em;
+}
+
+/* phone mockup for vh */
+.phone-wrap {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-end;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+.phone {
+  width: 80px;
+  border: 2px solid var(--border2);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  background: #0a0b0d;
+}
+.phone-bar {
+  background: var(--border2);
+  text-align: center;
+  font-size: 0.55rem;
+  color: var(--muted);
+  padding: 3px 0;
+}
+.phone-screen {
+  position: relative;
+}
+.phone-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  border-top: 1px dashed;
+  transition: height 0.3s;
+}
+
+/* WHICH TO USE */
+.which-table {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.wt-row {
+  display: grid;
+  grid-template-columns: 1.2fr 2fr 1fr;
+  border-bottom: 1px solid var(--border);
+}
+.wt-row:last-child { border-bottom: none; }
+.wt-row.header { background: var(--s2); }
+.wt-cell {
+  padding: 0.8rem 1rem;
+  font-size: 0.8rem;
+  border-right: 1px solid var(--border);
+}
+.wt-cell:last-child { border-right: none; }
+.wt-row.header .wt-cell {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+.use-yes { color: var(--rem-c); font-weight: 500; }
+.use-ok  { color: var(--em-c); }
+.use-no  { color: var(--muted); }
+
+/* KP CARDS */
+.kp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+.kp {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+.kp h3 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+.kp p { font-size: 0.78rem; max-width: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="day-tag">CSS Fundamentals · Day 04 · Feb 28</div>
+    <h1>CSS Units</h1>
+  </div>
+  <div class="header-units">
+    <span class="unit-pill" style="color:var(--px-c);border-color:var(--px-c);">px</span>
+    <span class="unit-pill" style="color:var(--em-c);border-color:var(--em-c);">em</span>
+    <span class="unit-pill" style="color:var(--rem-c);border-color:var(--rem-c);">rem</span>
+    <span class="unit-pill" style="color:var(--pct-c);border-color:var(--pct-c);">%</span>
+    <span class="unit-pill" style="color:var(--vw-c);border-color:var(--vw-c);">vw</span>
+    <span class="unit-pill" style="color:var(--vh-c);border-color:var(--vh-c);">dvh</span>
+    <span class="unit-pill" style="color:var(--ch-c);border-color:var(--ch-c);">ch</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- 01 THE UNITS -->
+  <section>
+    <div class="sec-tag">01 / The Units</div>
+    <h2>Every unit at a glance</h2>
+
+    <div class="unit-grid">
+      <div class="unit-card">
+        <div class="uc-name" style="color:var(--px-c);">px</div>
+        <div class="uc-type">Absolute</div>
+        <div class="uc-desc">One CSS pixel. Not one screen pixel (on retina displays, 1px = 2+ physical pixels). Doesn't scale with user font prefs.</div>
+        <div class="uc-rule" style="border-color:var(--px-c);color:var(--px-c);">Use for: borders, shadows, fine details that must stay crisp</div>
+      </div>
+      <div class="unit-card">
+        <div class="uc-name" style="color:var(--em-c);">em</div>
+        <div class="uc-type">Relative · parent font-size</div>
+        <div class="uc-desc">Relative to the element's own <code>font-size</code> (or parent's if used on font-size itself). Compounds in nested elements — the trap.</div>
+        <div class="uc-rule" style="border-color:var(--em-c);color:var(--em-c);">Use for: padding/margin that should scale with the element's text size</div>
+      </div>
+      <div class="unit-card">
+        <div class="uc-name" style="color:var(--rem-c);">rem</div>
+        <div class="uc-type">Relative · root font-size</div>
+        <div class="uc-desc">Always relative to the <code>html</code> element's font-size (default 16px). Predictable — never compounds. The go-to for font sizes.</div>
+        <div class="uc-rule" style="border-color:var(--rem-c);color:var(--rem-c);">Use for: font-size, spacing, anything that should respect user prefs</div>
+      </div>
+      <div class="unit-card">
+        <div class="uc-name" style="color:var(--pct-c);">%</div>
+        <div class="uc-type">Relative · parent</div>
+        <div class="uc-desc">Relative to the parent's value of the same property (usually width or font-size). For <code>height</code>, parent must have an explicit height.</div>
+        <div class="uc-rule" style="border-color:var(--pct-c);color:var(--pct-c);">Use for: widths, responsive columns, intrinsic sizing</div>
+      </div>
+      <div class="unit-card">
+        <div class="uc-name" style="color:var(--vw-c);">vw</div>
+        <div class="uc-type">Viewport width</div>
+        <div class="uc-desc"><code>1vw</code> = 1% of the viewport width. <code>100vw</code> can cause horizontal scroll if a scrollbar exists — watch out.</div>
+        <div class="uc-rule" style="border-color:var(--vw-c);color:var(--vw-c);">Use for: fluid typography (<code>clamp()</code>), full-width heroes</div>
+      </div>
+      <div class="unit-card">
+        <div class="uc-name" style="color:var(--vh-c);">dvh</div>
+        <div class="uc-type">Dynamic viewport height</div>
+        <div class="uc-desc">The modern viewport height. Accounts for mobile browser chrome (address bar). <code>svh</code> = smallest, <code>lvh</code> = largest, <code>dvh</code> = dynamic.</div>
+        <div class="uc-rule" style="border-color:var(--vh-c);color:var(--vh-c);">Use for: full-screen sections on mobile. Never use plain <code>vh</code> again.</div>
+      </div>
+      <div class="unit-card">
+        <div class="uc-name" style="color:var(--ch-c);">ch</div>
+        <div class="uc-type">Character width</div>
+        <div class="uc-desc">Width of the "0" character in the current font. Useful for controlling line length (typography sweet spot: 60–75ch).</div>
+        <div class="uc-rule" style="border-color:var(--ch-c);color:var(--ch-c);">Use for: <code>max-width</code> on text containers</div>
+      </div>
+      <div class="unit-card">
+        <div class="uc-name" style="color:#aaa;">ex</div>
+        <div class="uc-type">x-height</div>
+        <div class="uc-desc">Height of the lowercase "x". Rarely used in practice but exists. Useful for fine-tuning vertical rhythm with icons inline with text.</div>
+        <div class="uc-rule" style="border-color:#444;color:#666;">Use for: almost never. Know it exists.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 EM VS REM -->
+  <section>
+    <div class="sec-tag">02 / The Big One</div>
+    <h2>em vs rem — the difference that matters</h2>
+    <p>Both are relative units for font-size. The key: <code>em</code> looks at the <em>parent</em>, <code>rem</code> always looks at the <em>root</em> (<code>html</code>). <code>em</code> compounds when nested — that's its power and its curse.</p>
+
+    <div class="em-diagram">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;">
+        <!-- em compound problem -->
+        <div>
+          <div style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--em-c);margin-bottom:0.8rem;">em — cascades & compounds</div>
+          <div class="tree">
+            <div class="tree-node root">
+              <div class="tn-label" style="color:var(--accent);">html</div>
+              <div class="tn-val tn-em">font-size: 16px (browser default) → <span>1em = 16px</span></div>
+            </div>
+            <div class="child-wrap">
+              <div class="tree-node">
+                <div class="tn-label" style="color:var(--em-c);">div.parent</div>
+                <div class="tn-val tn-em">font-size: 1.25em → <span>= 20px</span> (1.25 × 16)</div>
+              </div>
+              <div class="child-wrap">
+                <div class="tree-node">
+                  <div class="tn-label" style="color:var(--em-c);">div.child</div>
+                  <div class="tn-val tn-em">font-size: 1.25em → <span>= 25px</span> (1.25 × 20) 😬</div>
+                </div>
+                <div class="child-wrap">
+                  <div class="tree-node">
+                    <div class="tn-label" style="color:var(--em-c);">div.grandchild</div>
+                    <div class="tn-val tn-em">font-size: 1.25em → <span>= 31.25px</span> (1.25 × 25) 🤯</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- rem stable -->
+        <div>
+          <div style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--rem-c);margin-bottom:0.8rem;">rem — always anchored to root</div>
+          <div class="tree">
+            <div class="tree-node root">
+              <div class="tn-label" style="color:var(--accent);">html</div>
+              <div class="tn-val tn-rem">font-size: 16px → <span>1rem = 16px always</span></div>
+            </div>
+            <div class="child-wrap">
+              <div class="tree-node">
+                <div class="tn-label" style="color:var(--rem-c);">div.parent</div>
+                <div class="tn-val tn-rem">font-size: 1.25rem → <span>= 20px</span> (1.25 × 16)</div>
+              </div>
+              <div class="child-wrap">
+                <div class="tree-node">
+                  <div class="tn-label" style="color:var(--rem-c);">div.child</div>
+                  <div class="tn-val tn-rem">font-size: 1.25rem → <span>= 20px</span> (1.25 × 16 still ✓)</div>
+                </div>
+                <div class="child-wrap">
+                  <div class="tree-node">
+                    <div class="tn-label" style="color:var(--rem-c);">div.grandchild</div>
+                    <div class="tn-val tn-rem">font-size: 1.25rem → <span>= 20px</span> (always 1.25 × 16 ✓)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive em/rem demo -->
+    <div class="interactive-panel">
+      <div class="panel-header">
+        <span>Interactive — watch how em compounds</span>
+        <span id="em-info" style="color:var(--em-c);font-size:0.7rem;"></span>
+      </div>
+      <div class="panel-body">
+        <div class="slider-row">
+          <label style="color:var(--accent);">Root font-size (<code>html</code>)</label>
+          <input type="range" min="12" max="24" value="16" id="root-fs">
+          <span class="slider-val" id="root-fs-val" style="color:var(--accent);">16px</span>
+        </div>
+        <div class="slider-row">
+          <label style="color:var(--em-c);">Parent em multiplier</label>
+          <input type="range" min="0.5" max="2" step="0.05" value="1.25" id="parent-em">
+          <span class="slider-val" id="parent-em-val" style="color:var(--em-c);">1.25em</span>
+        </div>
+        <div class="slider-row">
+          <label style="color:#a9a9ff;">Child em multiplier (same value as parent)</label>
+          <input type="range" min="0.5" max="2" step="0.05" value="1.25" id="child-em">
+          <span class="slider-val" id="child-em-val" style="color:#a9a9ff;">1.25em</span>
+        </div>
+
+        <div class="em-demo-area">
+          <div class="em-parent" id="em-parent-el">
+            <div class="em-parent-label">Parent (<span id="em-parent-info"></span>)</div>
+            <div class="em-child" id="em-child-el">
+              <div class="em-child-label">Child em: <span id="em-child-info"></span> | Child rem: <span id="rem-child-info"></span></div>
+              <div id="em-sample-text">Sample text — see the size difference between em and rem</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <pre><code><span class="cc">/* em — good for component-internal spacing that scales with its text */</span>
+<span class="cs">.button</span> {
+  <span class="cp">font-size</span>: <span class="cu-rem">1rem</span>;
+  <span class="cp">padding</span>: <span class="cu-em">0.5em 1em</span>;   <span class="cc">/* scales with button's own font-size */</span>
+}
+
+<span class="cc">/* rem — good for consistent spacing across the site */</span>
+<span class="cs">h1</span> { <span class="cp">font-size</span>: <span class="cu-rem">2.5rem</span>; }    <span class="cc">/* always 2.5 × 16px = 40px */</span>
+<span class="cs">h2</span> { <span class="cp">font-size</span>: <span class="cu-rem">2rem</span>; }      <span class="cc">/* always 32px */</span>
+<span class="cs">p</span>  { <span class="cp">font-size</span>: <span class="cu-rem">1rem</span>; }      <span class="cc">/* always 16px */</span>
+
+<span class="cc">/* The classic trick: set 10px base for easy rem math */</span>
+<span class="cs">html</span> { <span class="cp">font-size</span>: <span class="cv">62.5%</span>; }    <span class="cc">/* 62.5% of 16px = 10px */</span>
+<span class="cs">body</span> { <span class="cp">font-size</span>: <span class="cu-rem">1.6rem</span>; }   <span class="cc">/* restore 16px for normal text */</span>
+<span class="cc">/* Now 1.6rem = 16px, 2.4rem = 24px — much easier to reason about */</span></code></pre>
+  </section>
+
+  <!-- 03 VIEWPORT UNITS -->
+  <section>
+    <div class="sec-tag">03 / Mobile Safari Broke vh</div>
+    <h2>svh, lvh, dvh — the new viewport units</h2>
+    <p>Classic <code>100vh</code> on mobile doesn't account for the browser UI (address bar, nav). The bar appears/disappears as you scroll, making <code>100vh</code> either too tall or too short. The new units fix this.</p>
+
+    <div class="vh-explainer">
+      <div class="vh-card">
+        <div class="vh-name vh-small">svh</div>
+        <div class="vh-sub">Small Viewport Height</div>
+        <p style="font-size:0.78rem;color:#6a7590;max-width:none;">The viewport height when browser UI is <strong style="color:var(--text)">fully visible</strong> (the smallest it'll ever be). Safe to use when you want content that never gets cut off by appearing chrome.</p>
+      </div>
+      <div class="vh-card">
+        <div class="vh-name vh-full">lvh</div>
+        <div class="vh-sub">Large Viewport Height</div>
+        <p style="font-size:0.78rem;color:#6a7590;max-width:none;">The viewport height when browser UI is <strong style="color:var(--text)">fully hidden</strong> (the largest it'll be). Elements sized with lvh may be clipped by the appearing address bar.</p>
+      </div>
+      <div class="vh-card">
+        <div class="vh-name vh-dynamic">dvh</div>
+        <div class="vh-sub">Dynamic Viewport Height ← use this</div>
+        <p style="font-size:0.78rem;color:#6a7590;max-width:none;">Updates <strong style="color:var(--text)">dynamically</strong> as the browser UI appears and disappears. Can cause reflow on scroll (small perf hit), but correct. The right default for full-screen sections.</p>
+      </div>
+    </div>
+
+    <pre><code><span class="cc">/* OLD — breaks on mobile safari */</span>
+<span class="cs">.hero</span> { <span class="cp">height</span>: <span class="cu-vh">100vh</span>; }   <span class="cc">/* too tall when address bar is visible */</span>
+
+<span class="cc">/* NEW — use dvh */</span>
+<span class="cs">.hero</span> { <span class="cp">height</span>: <span class="cu-vh">100dvh</span>; }  <span class="cc">/* correct on all devices */</span>
+
+<span class="cc">/* fallback for older browsers */</span>
+<span class="cs">.hero</span> {
+  <span class="cp">height</span>: <span class="cu-vh">100vh</span>;    <span class="cc">/* fallback */</span>
+  <span class="cp">height</span>: <span class="cu-vh">100dvh</span>;   <span class="cc">/* modern — overrides above if supported */</span>
+}
+
+<span class="cc">/* Same logic applies to vw — use dvw for dynamic, svw/lvw for stable */</span>
+
+<span class="cc">/* ch — for readable text columns */</span>
+<span class="cs">.article</span> { <span class="cp">max-width</span>: <span class="cu-ch">70ch</span>; } <span class="cc">/* optimal reading width */</span></code></pre>
+  </section>
+
+  <!-- 04 WHICH TO USE -->
+  <section>
+    <div class="sec-tag">04 / Decision Guide</div>
+    <h2>Which unit, when</h2>
+
+    <div class="which-table">
+      <div class="wt-row header">
+        <div class="wt-cell">Use case</div>
+        <div class="wt-cell">Recommended unit</div>
+        <div class="wt-cell">Why</div>
+      </div>
+      <div class="wt-row">
+        <div class="wt-cell">Font sizes</div>
+        <div class="wt-cell"><span class="use-yes">rem</span></div>
+        <div class="wt-cell" style="color:#6a7590;font-size:0.76rem;">Scales with user preferences, never compounds</div>
+      </div>
+      <div class="wt-row">
+        <div class="wt-cell">Component padding/margin</div>
+        <div class="wt-cell"><span class="use-yes">em</span> or <span class="use-yes">rem</span></div>
+        <div class="wt-cell" style="color:#6a7590;font-size:0.76rem;">em if should scale with component text; rem for consistency</div>
+      </div>
+      <div class="wt-row">
+        <div class="wt-cell">Borders, shadows</div>
+        <div class="wt-cell"><span class="use-yes">px</span></div>
+        <div class="wt-cell" style="color:#6a7590;font-size:0.76rem;">Should never scale — always crisp</div>
+      </div>
+      <div class="wt-row">
+        <div class="wt-cell">Layout widths</div>
+        <div class="wt-cell"><span class="use-yes">%</span> or <span class="use-ok">rem</span></div>
+        <div class="wt-cell" style="color:#6a7590;font-size:0.76rem;">% for fluid; rem for fixed max-widths</div>
+      </div>
+      <div class="wt-row">
+        <div class="wt-cell">Fluid typography</div>
+        <div class="wt-cell"><span class="use-yes">clamp() + vw</span></div>
+        <div class="wt-cell" style="color:#6a7590;font-size:0.76rem;"><code>clamp(1rem, 2.5vw, 2rem)</code> — min, fluid, max</div>
+      </div>
+      <div class="wt-row">
+        <div class="wt-cell">Full-screen height</div>
+        <div class="wt-cell"><span class="use-yes">100dvh</span></div>
+        <div class="wt-cell" style="color:#6a7590;font-size:0.76rem;">Handles mobile browser chrome correctly</div>
+      </div>
+      <div class="wt-row">
+        <div class="wt-cell">Prose line length</div>
+        <div class="wt-cell"><span class="use-yes">ch</span></div>
+        <div class="wt-cell" style="color:#6a7590;font-size:0.76rem;"><code>max-width: 65ch</code> — readable in any font</div>
+      </div>
+      <div class="wt-row">
+        <div class="wt-cell">Media queries</div>
+        <div class="wt-cell"><span class="use-yes">em</span> or <span class="use-ok">rem</span></div>
+        <div class="wt-cell" style="color:#6a7590;font-size:0.76rem;">Scales with user font prefs (px breakpoints don't)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KEY POINTS -->
+  <section>
+    <div class="sec-tag">05 / Key Points</div>
+    <h2>Remember these.</h2>
+    <div class="kp-grid">
+      <div class="kp">
+        <h3>rem for fonts</h3>
+        <p>Always use <code>rem</code> for font-size. It respects user browser preferences and never compounds. <code>px</code> for fonts overrides accessibility settings.</p>
+      </div>
+      <div class="kp">
+        <h3>em compounds</h3>
+        <p><code>em</code> is relative to the element's own font-size. Nested <code>1.25em</code> elements get exponentially bigger. Use <code>em</code> intentionally for component-internal spacing.</p>
+      </div>
+      <div class="kp">
+        <h3>dvh not vh</h3>
+        <p>On mobile, <code>100vh</code> includes the browser chrome that can hide. Use <code>100dvh</code> instead. Always provide a <code>vh</code> fallback for older browsers.</p>
+      </div>
+      <div class="kp">
+        <h3>clamp() for fluidity</h3>
+        <p><code>clamp(min, preferred, max)</code> lets you do fluid sizing without media queries. E.g. <code>clamp(1rem, 2vw + 0.5rem, 1.5rem)</code> for responsive headings.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  function updateEmDemo() {
+    const rootFs = +document.getElementById('root-fs').value;
+    const parentEm = +document.getElementById('parent-em').value;
+    const childEm = +document.getElementById('child-em').value;
+
+    document.getElementById('root-fs-val').textContent = rootFs + 'px';
+    document.getElementById('parent-em-val').textContent = parentEm.toFixed(2) + 'em';
+    document.getElementById('child-em-val').textContent = childEm.toFixed(2) + 'em';
+
+    const parentPx = rootFs * parentEm;
+    const childEmPx = parentPx * childEm;
+    const childRemPx = rootFs * childEm;
+
+    document.getElementById('em-parent-el').style.fontSize = parentPx + 'px';
+    document.getElementById('em-parent-info').textContent = `${parentEm.toFixed(2)}em = ${parentPx.toFixed(1)}px`;
+
+    document.getElementById('em-child-info').textContent = `${childEm.toFixed(2)}em = ${childEmPx.toFixed(1)}px`;
+    document.getElementById('rem-child-info').textContent = `${childEm.toFixed(2)}rem = ${childRemPx.toFixed(1)}px`;
+
+    // The em child inherits parent size, rem child would be rootFs * childEm
+    // Show em text at compounded size, rem text at root-relative size
+    document.getElementById('em-child-el').style.fontSize = childEmPx + 'px';
+  }
+
+  ['root-fs','parent-em','child-em'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateEmDemo);
+  });
+  updateEmDemo();
+</script>
+</body>
+</html>

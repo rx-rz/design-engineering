@@ -1,0 +1,1242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DAY 05 — All Selectors + :has()</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #faf9f7;
+        --s1: #f2f0ec;
+        --s2: #e8e4de;
+        --ink: #1c1a17;
+        --muted: #8a8278;
+        --rule: #d8d4cc;
+        --green: #1a7a3c;
+        --green-bg: #e8f5ee;
+        --blue: #1a4fa0;
+        --blue-bg: #e8eef8;
+        --purple: #6b2fa0;
+        --purple-bg: #f0e8f8;
+        --orange: #b85c00;
+        --orange-bg: #fdf0e0;
+        --red: #a01a1a;
+        --red-bg: #fae8e8;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "JetBrains Mono", monospace;
+        line-height: 1.6;
+      }
+
+      header {
+        background: var(--ink);
+        color: var(--bg);
+        padding: 3rem;
+        position: relative;
+        overflow: hidden;
+      }
+      header::before {
+        content: ":has()";
+        position: absolute;
+        right: 3rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: "Instrument Serif", serif;
+        font-style: italic;
+        font-size: clamp(4rem, 10vw, 9rem);
+        color: rgba(255, 255, 255, 0.05);
+        pointer-events: none;
+        line-height: 1;
+      }
+      .day-tag {
+        font-size: 0.58rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: #6a6460;
+        margin-bottom: 0.6rem;
+      }
+      h1 {
+        font-family: "Instrument Serif", serif;
+        font-size: clamp(2rem, 5vw, 3.8rem);
+        font-weight: 400;
+        line-height: 1.05;
+        letter-spacing: -0.01em;
+      }
+      h1 em {
+        font-style: italic;
+        color: #c8b88a;
+      }
+
+      main {
+        max-width: 1060px;
+        margin: 0 auto;
+        padding: 4rem 2rem 8rem;
+        display: grid;
+        gap: 5rem;
+      }
+
+      section {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .sec-label {
+        font-size: 0.58rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+      }
+      .sec-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--rule);
+      }
+
+      h2 {
+        font-family: "Instrument Serif", serif;
+        font-size: clamp(1.4rem, 3vw, 2.2rem);
+        font-weight: 400;
+        letter-spacing: -0.01em;
+        line-height: 1.2;
+      }
+
+      p {
+        color: #4a4642;
+        max-width: 64ch;
+        font-size: 0.88rem;
+      }
+
+      code {
+        font-family: "JetBrains Mono", monospace;
+        background: var(--s2);
+        padding: 0.1em 0.4em;
+        border-radius: 3px;
+        font-size: 0.85em;
+        color: var(--ink);
+      }
+
+      pre {
+        background: var(--ink);
+        color: #c8c0b4;
+        padding: 1.5rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-size: 0.78rem;
+        line-height: 2;
+      }
+      .cs {
+        color: #c8b88a;
+      }
+      .cp {
+        color: #8ec8e8;
+      }
+      .cv {
+        color: #a8d888;
+      }
+      .cc {
+        color: #4a4540;
+        font-style: italic;
+      }
+      .cpseudo {
+        color: #d8a8f0;
+      }
+      .cattr {
+        color: #f0c880;
+      }
+
+      /* SELECTOR REFERENCE GRID */
+      .sel-groups {
+        display: grid;
+        gap: 1.5rem;
+      }
+      .sel-group-title {
+        font-size: 0.62rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+        border-bottom: 1px solid var(--rule);
+        padding-bottom: 0.4rem;
+        margin-bottom: 0.6rem;
+      }
+      .sel-group {
+        background: var(--s1);
+        border: 1px solid var(--rule);
+        border-radius: 6px;
+        padding: 1.25rem;
+      }
+      .sel-table {
+        display: grid;
+        gap: 2px;
+      }
+      .sel-row {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 1rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--rule);
+        align-items: start;
+      }
+      .sel-row:last-child {
+        border-bottom: none;
+      }
+      .sel-syntax {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--ink);
+      }
+      .sel-desc {
+        font-size: 0.78rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .sel-desc strong {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .sel-badge {
+        display: inline-block;
+        font-size: 0.58rem;
+        padding: 0.1em 0.4em;
+        border-radius: 3px;
+        margin-left: 0.3rem;
+        font-weight: 600;
+        vertical-align: middle;
+      }
+      .new {
+        background: var(--green-bg);
+        color: var(--green);
+      }
+
+      /* COMBINATOR DEMO */
+      .combinator-demo {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1px;
+        background: var(--rule);
+        border: 1px solid var(--rule);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .cd-card {
+        background: var(--bg);
+        padding: 1.25rem;
+      }
+      .cd-symbol {
+        font-family: "Instrument Serif", serif;
+        font-size: 2rem;
+        line-height: 1;
+        margin-bottom: 0.3rem;
+      }
+      .cd-name {
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.5rem;
+      }
+      .cd-example {
+        background: var(--s2);
+        border-radius: 4px;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.75rem;
+        margin-bottom: 0.6rem;
+      }
+      .cd-desc {
+        font-size: 0.76rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      /* INTERACTIVE SELECTOR SANDBOX */
+      .sandbox {
+        background: var(--s1);
+        border: 1px solid var(--rule);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .sandbox-header {
+        background: var(--s2);
+        border-bottom: 1px solid var(--rule);
+        padding: 0.75rem 1.25rem;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .sandbox-header span {
+        font-size: 0.62rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-right: 0.5rem;
+      }
+      .sel-chip {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.72rem;
+        padding: 0.3rem 0.65rem;
+        border-radius: 4px;
+        border: 1px solid var(--rule);
+        background: var(--bg);
+        color: var(--muted);
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .sel-chip:hover {
+        color: var(--ink);
+        border-color: var(--ink);
+      }
+      .sel-chip.active {
+        background: var(--ink);
+        color: var(--bg);
+        border-color: var(--ink);
+      }
+
+      .sandbox-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+      }
+      @media (max-width: 640px) {
+        .sandbox-body {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .sandbox-html {
+        padding: 1.5rem;
+        border-right: 1px solid var(--rule);
+      }
+      .sandbox-html-title {
+        font-size: 0.6rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 1rem;
+      }
+
+      /* The actual HTML demo structure */
+      .demo-ul {
+        list-style: none;
+        display: grid;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+      }
+      .demo-ul li {
+        padding: 0.4rem 0.7rem;
+        border-radius: 3px;
+        border: 1px solid var(--rule);
+        background: var(--bg);
+        transition: all 0.2s;
+        color: var(--muted);
+      }
+      .demo-ul li.first-child {
+      }
+      .demo-ul li.last-child {
+      }
+      .demo-ul li.nth-odd {
+      }
+      .demo-ul li a {
+        color: inherit;
+        text-decoration: underline;
+        font-size: 0.8rem;
+      }
+      .demo-ul li.has-link {
+      }
+
+      /* Highlighted states injected by JS */
+      .demo-ul li.hl {
+        background: #fffbea;
+        border-color: #f0c830;
+        color: var(--ink);
+        font-weight: 500;
+      }
+
+      .sandbox-result {
+        padding: 1.5rem;
+        background: var(--bg);
+      }
+      .sandbox-result-title {
+        font-size: 0.6rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.5rem;
+      }
+      #sel-description {
+        font-size: 0.82rem;
+        color: var(--ink);
+        line-height: 1.6;
+      }
+      #sel-code {
+        margin-top: 0.8rem;
+        background: var(--ink);
+        color: #c8c0b4;
+        border-radius: 4px;
+        padding: 0.75rem 1rem;
+        font-size: 0.75rem;
+      }
+
+      /* IS / WHERE / NOT */
+      .trio-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--rule);
+        border: 1px solid var(--rule);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      @media (max-width: 580px) {
+        .trio-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .trio-card {
+        background: var(--bg);
+        padding: 1.25rem;
+      }
+      .trio-name {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 0.2rem;
+      }
+      .trio-specificity {
+        display: inline-block;
+        font-size: 0.62rem;
+        padding: 0.1em 0.45em;
+        border-radius: 3px;
+        margin-bottom: 0.6rem;
+        font-weight: 600;
+      }
+      .spec-high {
+        background: var(--red-bg);
+        color: var(--red);
+      }
+      .spec-zero {
+        background: var(--green-bg);
+        color: var(--green);
+      }
+      .spec-match {
+        background: var(--blue-bg);
+        color: var(--blue);
+      }
+
+      .trio-desc {
+        font-size: 0.78rem;
+        color: var(--muted);
+        line-height: 1.5;
+        margin-bottom: 0.6rem;
+      }
+      .trio-example {
+        background: var(--s1);
+        border-radius: 4px;
+        padding: 0.6rem 0.8rem;
+        font-size: 0.72rem;
+        line-height: 1.7;
+      }
+
+      /* HAS SECTION */
+      .has-intro {
+        background: linear-gradient(135deg, #f8f4ff 0%, #f0fff4 100%);
+        border: 2px solid var(--purple);
+        border-radius: 8px;
+        padding: 2rem;
+      }
+      .has-title-big {
+        font-family: "Instrument Serif", serif;
+        font-size: 2rem;
+        color: var(--purple);
+        margin-bottom: 0.5rem;
+      }
+      .has-desc {
+        font-size: 0.88rem;
+        color: #4a3060;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+        max-width: none;
+      }
+
+      .has-examples {
+        display: grid;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .has-ex {
+        background: white;
+        border: 1px solid #d8c8f0;
+        border-radius: 6px;
+        padding: 1rem 1.25rem;
+      }
+      .has-ex-selector {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--purple);
+        margin-bottom: 0.3rem;
+      }
+      .has-ex-desc {
+        font-size: 0.78rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      /* INTERACTIVE HAS DEMO */
+      .has-demo {
+        background: var(--s1);
+        border: 1px solid var(--rule);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .has-demo-header {
+        background: var(--purple);
+        color: white;
+        padding: 0.75rem 1.25rem;
+        font-size: 0.65rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .has-demo-body {
+        padding: 1.5rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      }
+      @media (max-width: 640px) {
+        .has-demo-body {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* The card that reacts */
+      .demo-card-wrap {
+        display: grid;
+        gap: 0.6rem;
+      }
+      .demo-card {
+        border: 2px solid var(--rule);
+        border-radius: 6px;
+        padding: 1rem;
+        transition: all 0.25s;
+        background: var(--bg);
+      }
+      .demo-card.has-img-active {
+        border-color: var(--purple);
+        background: var(--purple-bg);
+      }
+      .demo-card.has-error-active {
+        border-color: var(--red);
+        background: var(--red-bg);
+      }
+      .demo-card.is-checked-active {
+        border-color: var(--green);
+        background: var(--green-bg);
+      }
+
+      .dc-title {
+        font-size: 0.8rem;
+        font-weight: 500;
+        margin-bottom: 0.4rem;
+      }
+      .dc-body {
+        font-size: 0.75rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .dc-img-placeholder {
+        width: 100%;
+        height: 60px;
+        background: var(--s2);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        color: var(--muted);
+        margin-bottom: 0.5rem;
+      }
+      .dc-err {
+        color: var(--red);
+        font-size: 0.72rem;
+        display: none;
+      }
+      .dc-err.visible {
+        display: block;
+      }
+
+      .has-controls {
+        display: grid;
+        gap: 0.8rem;
+        align-content: start;
+      }
+      .hc-label {
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.8rem;
+      }
+      .hc-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--bg);
+        border: 1px solid var(--rule);
+        border-radius: 5px;
+        padding: 0.6rem 0.8rem;
+        font-size: 0.78rem;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      .hc-toggle:hover {
+        background: var(--s2);
+      }
+      .hc-check {
+        width: 16px;
+        height: 16px;
+        border-radius: 3px;
+        border: 2px solid var(--rule);
+        background: var(--bg);
+        transition: all 0.15s;
+        flex-shrink: 0;
+      }
+      .hc-check.on {
+        background: var(--purple);
+        border-color: var(--purple);
+      }
+
+      #has-active-rule {
+        margin-top: 0.6rem;
+        font-size: 0.72rem;
+        color: var(--muted);
+        line-height: 1.7;
+        padding: 0.8rem;
+        background: var(--ink);
+        color: #a8d888;
+        border-radius: 4px;
+      }
+
+      /* KP */
+      .kp-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+      }
+      .kp {
+        background: var(--s1);
+        border: 1px solid var(--rule);
+        border-radius: 6px;
+        padding: 1.25rem;
+      }
+      .kp h3 {
+        font-family: "Instrument Serif", serif;
+        font-size: 1.1rem;
+        margin-bottom: 0.4rem;
+      }
+      .kp p {
+        font-size: 0.78rem;
+        max-width: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="day-tag">CSS Fundamentals · Day 05 · Mar 1</div>
+      <h1>All Selectors<br /><em>+ :has()</em></h1>
+    </header>
+
+    <main>
+      <!-- 01 COMBINATORS -->
+      <section>
+        <div class="sec-label">01 / Combinators</div>
+        <h2>Relationship selectors</h2>
+        <p>
+          Combinators express relationships between elements. These four are the
+          foundation — knowing them precisely means you almost never need extra
+          classes.
+        </p>
+
+        <div class="combinator-demo">
+          <div class="cd-card">
+            <div class="cd-symbol" style="color: #888">·</div>
+            <div class="cd-name">Descendant (space)</div>
+            <div class="cd-example"><code>ul li</code></div>
+            <div class="cd-desc">
+              Any <code>li</code> anywhere inside a <code>ul</code>, no matter
+              how deep.
+            </div>
+          </div>
+          <div class="cd-card">
+            <div class="cd-symbol" style="color: var(--blue)">&gt;</div>
+            <div class="cd-name">Direct child</div>
+            <div class="cd-example"><code>ul &gt; li</code></div>
+            <div class="cd-desc">
+              Only <code>li</code> elements that are <em>direct</em> children of
+              the <code>ul</code>. Grandchildren are excluded.
+            </div>
+          </div>
+          <div class="cd-card">
+            <div class="cd-symbol" style="color: var(--green)">+</div>
+            <div class="cd-name">Adjacent sibling</div>
+            <div class="cd-example"><code>h2 + p</code></div>
+            <div class="cd-desc">
+              The <code>p</code> that comes <em>immediately</em> after an
+              <code>h2</code>. Only the very next sibling.
+            </div>
+          </div>
+          <div class="cd-card">
+            <div class="cd-symbol" style="color: var(--orange)">~</div>
+            <div class="cd-name">General sibling</div>
+            <div class="cd-example"><code>h2 ~ p</code></div>
+            <div class="cd-desc">
+              <em>All</em> <code>p</code> elements that follow an
+              <code>h2</code> as siblings — not just the immediate next one.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02 SELECTOR REFERENCE -->
+      <section>
+        <div class="sec-label">02 / The Full Arsenal</div>
+        <h2>Attribute & pseudo selectors</h2>
+
+        <div class="sel-groups">
+          <div class="sel-group">
+            <div class="sel-group-title">Attribute Selectors</div>
+            <div class="sel-table">
+              <div class="sel-row">
+                <div class="sel-syntax"><code>[attr]</code></div>
+                <div class="sel-desc">
+                  Element has this attribute (any value)
+                </div>
+              </div>
+              <div class="sel-row">
+                <div class="sel-syntax"><code>[attr="val"]</code></div>
+                <div class="sel-desc">Exact value match</div>
+              </div>
+              <div class="sel-row">
+                <div class="sel-syntax"><code>[attr^="val"]</code></div>
+                <div class="sel-desc">
+                  <strong>Starts with</strong> "val" — e.g.
+                  <code>[href^="https"]</code>
+                </div>
+              </div>
+              <div class="sel-row">
+                <div class="sel-syntax"><code>[attr$="val"]</code></div>
+                <div class="sel-desc">
+                  <strong>Ends with</strong> "val" — e.g.
+                  <code>[href$=".pdf"]</code>
+                </div>
+              </div>
+              <div class="sel-row">
+                <div class="sel-syntax"><code>[attr*="val"]</code></div>
+                <div class="sel-desc">
+                  <strong>Contains</strong> "val" anywhere
+                </div>
+              </div>
+              <div class="sel-row">
+                <div class="sel-syntax"><code>[attr~="val"]</code></div>
+                <div class="sel-desc">
+                  Value is in a <strong>space-separated list</strong> — e.g.
+                  <code>[class~="active"]</code>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sel-group">
+            <div class="sel-group-title">Structural Pseudo-classes</div>
+            <div class="sel-table">
+              <div class="sel-row">
+                <div class="sel-syntax"><code>:first-child</code></div>
+                <div class="sel-desc">The first child of its parent</div>
+              </div>
+              <div class="sel-row">
+                <div class="sel-syntax"><code>:last-child</code></div>
+                <div class="sel-desc">The last child of its parent</div>
+              </div>
+              <div class="sel-row">
+                <div class="sel-syntax"><code>:nth-child(n)</code></div>
+                <div class="sel-desc">
+                  <code>2n</code> = even, <code>2n+1</code> = odd,
+                  <code>3n</code> = every 3rd, <code>-n+3</code> = first 3
+                </div>
+              </div>
+              <div class="sel-row">
+                <div class="sel-syntax"><code>:nth-of-type(n)</code></div>
+                <div class="sel-desc">
+                  Like <code>nth-child</code> but counts only elements of the
+                  same type
+                </div>
+              </div>
+              <div class="sel-row">
+                <div class="sel-syntax"><code>:only-child</code></div>
+                <div class="sel-desc">Element with no siblings</div>
+              </div>
+              <div class="sel-row">
+                <div class="sel-syntax"><code>:empty</code></div>
+                <div class="sel-desc">
+                  Element with no children (not even whitespace)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sel-group">
+            <div class="sel-group-title">State & UI Pseudo-classes</div>
+            <div class="sel-table">
+              <div class="sel-row">
+                <div class="sel-syntax">
+                  <code>:hover</code> <code>:focus</code>
+                </div>
+                <div class="sel-desc">Mouse over / keyboard focused</div>
+              </div>
+              <div class="sel-row">
+                <div class="sel-syntax">
+                  <code>:focus-visible</code>
+                  <span class="sel-badge new">modern</span>
+                </div>
+                <div class="sel-desc">
+                  Focused via keyboard only (not mouse click) — better for
+                  styling focus rings
+                </div>
+              </div>
+              <div class="sel-row">
+                <div class="sel-syntax"><code>:checked</code></div>
+                <div class="sel-desc">
+                  Checkbox/radio that is checked — combine with
+                  <code>~</code> for CSS-only toggles
+                </div>
+              </div>
+              <div class="sel-row">
+                <div class="sel-syntax">
+                  <code>:disabled</code> <code>:enabled</code>
+                </div>
+                <div class="sel-desc">
+                  Form elements in disabled/enabled state
+                </div>
+              </div>
+              <div class="sel-row">
+                <div class="sel-syntax">
+                  <code>:valid</code> <code>:invalid</code>
+                </div>
+                <div class="sel-desc">
+                  Form inputs passing/failing HTML validation
+                </div>
+              </div>
+              <div class="sel-row">
+                <div class="sel-syntax"><code>:placeholder-shown</code></div>
+                <div class="sel-desc">
+                  Input currently showing its placeholder — useful for float
+                  labels
+                </div>
+              </div>
+              <div class="sel-row">
+                <div class="sel-syntax"><code>:target</code></div>
+                <div class="sel-desc">
+                  Element whose <code>id</code> matches the URL hash. Good for
+                  tabless tabs.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 INTERACTIVE SANDBOX -->
+      <section>
+        <div class="sec-label">03 / Interactive</div>
+        <h2>Click a selector, see it fire</h2>
+
+        <div class="sandbox">
+          <div class="sandbox-header">
+            <span>Try:</span>
+            <button
+              class="sel-chip active"
+              onclick="activateSel(this, 'first-child')"
+            >
+              :first-child
+            </button>
+            <button class="sel-chip" onclick="activateSel(this, 'last-child')">
+              :last-child
+            </button>
+            <button class="sel-chip" onclick="activateSel(this, 'nth-odd')">
+              :nth-child(odd)
+            </button>
+            <button class="sel-chip" onclick="activateSel(this, 'nth-3')">
+              :nth-child(3)
+            </button>
+            <button class="sel-chip" onclick="activateSel(this, 'has-link')">
+              :has(a)
+            </button>
+            <button class="sel-chip" onclick="activateSel(this, 'not-last')">
+              :not(:last-child)
+            </button>
+          </div>
+          <div class="sandbox-body">
+            <div class="sandbox-html">
+              <div class="sandbox-html-title">HTML Structure</div>
+              <ul class="demo-ul" id="demo-list">
+                <li class="first-child nth-odd not-last" data-n="1">
+                  List item 1
+                </li>
+                <li class="not-last" data-n="2">List item 2</li>
+                <li class="nth-odd nth-3 not-last" data-n="3">
+                  List item 3 <a href="#">with a link</a>
+                </li>
+                <li class="not-last" data-n="4">List item 4</li>
+                <li class="nth-odd not-last" data-n="5">List item 5</li>
+                <li class="last-child" data-n="6">
+                  List item 6 <a href="#">also has a link</a>
+                </li>
+              </ul>
+            </div>
+            <div class="sandbox-result">
+              <div class="sandbox-result-title">What matches</div>
+              <div id="sel-description"></div>
+              <div id="sel-code"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 IS / WHERE / NOT -->
+      <section>
+        <div class="sec-label">04 / Modern Selector Trio</div>
+        <h2>:is(), :where(), :not()</h2>
+
+        <div class="trio-grid">
+          <div class="trio-card">
+            <div class="trio-name" style="color: var(--blue)">:is()</div>
+            <div class="trio-specificity spec-high">
+              Takes highest specificity of its args
+            </div>
+            <div class="trio-desc">
+              Matches any element in its list. Forgives invalid selectors (won't
+              break if one is unsupported). Reduces repetition.
+            </div>
+            <div class="trio-example">
+              <code style="color: var(--blue)">:is(h1, h2, h3) a { }</code
+              ><br />
+              <code style="color: #888; font-size: 0.7em"
+                >/* instead of: h1 a, h2 a, h3 a */</code
+              >
+            </div>
+          </div>
+          <div class="trio-card">
+            <div class="trio-name" style="color: var(--green)">:where()</div>
+            <div class="trio-specificity spec-zero">
+              Zero specificity always
+            </div>
+            <div class="trio-desc">
+              Identical to <code>:is()</code> but contributes
+              <strong>0 specificity</strong>. Perfect for base/reset styles that
+              should be easy to override.
+            </div>
+            <div class="trio-example">
+              <code style="color: var(--green)">:where(h1, h2, h3) { }</code
+              ><br />
+              <code style="color: #888; font-size: 0.7em"
+                >/* overrideable by any selector */</code
+              >
+            </div>
+          </div>
+          <div class="trio-card">
+            <div class="trio-name" style="color: var(--orange)">:not()</div>
+            <div class="trio-specificity spec-match">
+              Takes specificity of its argument
+            </div>
+            <div class="trio-desc">
+              Selects elements that do <em>not</em> match. Now accepts complex
+              selector lists (modern CSS).
+            </div>
+            <div class="trio-example">
+              <code style="color: var(--orange)">li:not(:last-child) { }</code
+              ><br />
+              <code style="color: var(--orange)"
+                >a:not(.btn, .nav-link) { }</code
+              >
+            </div>
+          </div>
+        </div>
+
+        <pre><code><span class="cc">/* Old way — repetitive */</span>
+<span class="cs">header a</span>,
+<span class="cs">main a</span>,
+<span class="cs">footer a</span> { <span class="cp">color</span>: <span class="cv">blue</span>; }
+
+<span class="cc">/* :is() — clean */</span>
+<span class="cpseudo">:is</span>(header, main, footer) a { <span class="cp">color</span>: <span class="cv">blue</span>; }
+
+<span class="cc">/* :where() — for resets you want easily overrideable */</span>
+<span class="cpseudo">:where</span>(article, section) p { <span class="cp">margin-bottom</span>: <span class="cv">1rem</span>; }  <span class="cc">/* 0 specificity */</span>
+
+<span class="cc">/* :not() with multiple args (modern) */</span>
+<span class="cpseudo">a:not</span>(.btn, [role="button"]) { <span class="cp">text-decoration</span>: <span class="cv">underline</span>; }</code></pre>
+      </section>
+
+      <!-- 05 HAS -->
+      <section>
+        <div class="sec-label">05 / Game Changer</div>
+        <h2>:has() — the parent selector</h2>
+
+        <div class="has-intro">
+          <div class="has-title-big">:has()</div>
+          <p class="has-desc">
+            For years, CSS had no way to style a parent based on its children.
+            JavaScript was required. <code>:has()</code> changed everything —
+            it's a relational selector that reads "select this element
+            <em>if it has</em> a matching descendant." Now in all modern
+            browsers.
+          </p>
+
+          <div class="has-examples">
+            <div class="has-ex">
+              <div class="has-ex-selector">
+                <code>figure:has(figcaption)</code>
+              </div>
+              <div class="has-ex-desc">
+                Style a figure differently when it contains a caption. No class
+                needed.
+              </div>
+            </div>
+            <div class="has-ex">
+              <div class="has-ex-selector">
+                <code>form:has(input:invalid)</code>
+              </div>
+              <div class="has-ex-desc">
+                Style the entire form when any input is invalid — highlight the
+                submit button, change the border, etc.
+              </div>
+            </div>
+            <div class="has-ex">
+              <div class="has-ex-selector"><code>li:has(+ li)</code></div>
+              <div class="has-ex-desc">
+                Select every list item that has a sibling after it — i.e. all
+                except the last. Equivalent to
+                <code>:not(:last-child)</code> but using a different approach.
+              </div>
+            </div>
+            <div class="has-ex">
+              <div class="has-ex-selector">
+                <code>:root:has(#menu:checked)</code>
+              </div>
+              <div class="has-ex-desc">
+                CSS-only mobile menu! When a hidden checkbox is checked, style
+                the entire page — slide in a sidebar, dim the overlay, etc.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive :has() demo -->
+        <div class="has-demo">
+          <div class="has-demo-header">
+            Interactive :has() demo — toggle features, watch the card react
+          </div>
+          <div class="has-demo-body">
+            <div class="demo-card-wrap">
+              <div class="demo-card" id="demo-has-card">
+                <div
+                  class="dc-img-placeholder"
+                  id="demo-img-placeholder"
+                  style="display: none"
+                >
+                  🖼 image placeholder
+                </div>
+                <div class="dc-title">Product Card</div>
+                <div class="dc-body">
+                  This card reacts to its own contents using
+                  <code>:has()</code>. No JavaScript classes needed to change
+                  the styles.
+                </div>
+                <div class="dc-err" id="demo-err">⚠ Error message present</div>
+              </div>
+              <div id="has-active-rule">
+                ← toggle something to see the active :has() rule
+              </div>
+            </div>
+
+            <div class="has-controls">
+              <div class="hc-label">Toggle card contents:</div>
+              <div class="hc-toggle" onclick="toggleHas('img')">
+                <span>Show image element</span>
+                <div class="hc-check" id="hc-img"></div>
+              </div>
+              <div class="hc-toggle" onclick="toggleHas('err')">
+                <span>Show error message</span>
+                <div class="hc-check" id="hc-err"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <pre><code><span class="cc">/* :has() — style parent based on child */</span>
+<span class="cs">.card:has(img)</span> {
+  <span class="cp">border-color</span>: <span class="cv">purple</span>;       <span class="cc">/* card has an image */</span>
+  <span class="cp">padding-top</span>: <span class="cv">0</span>;
+}
+
+<span class="cs">.card:has(.error-msg)</span> {
+  <span class="cp">border-color</span>: <span class="cv">red</span>;          <span class="cc">/* card has an error */</span>
+}
+
+<span class="cs">form:has(input:invalid)</span> {
+  <span class="cp">background</span>: <span class="cv">#fff5f5</span>;       <span class="cc">/* form contains invalid input */</span>
+}
+
+<span class="cc">/* :has() as a quantity selector */</span>
+<span class="cs">ul:has(li:nth-child(5))</span> {
+  <span class="cp">display</span>: <span class="cv">grid</span>;             <span class="cc">/* switch to grid if 5+ items */</span>
+  <span class="cp">grid-template-columns</span>: <span class="cv">1fr 1fr</span>;
+}
+
+<span class="cc">/* :has() with :not() */</span>
+<span class="cs">.card:not(:has(img))</span> {
+  <span class="cp">background</span>: <span class="cv">#f5f5f5</span>;       <span class="cc">/* card WITHOUT an image */</span>
+}</code></pre>
+      </section>
+
+      <!-- KP -->
+      <section>
+        <div class="sec-label">06 / Key Points</div>
+        <h2>Selectors to internalize.</h2>
+        <div class="kp-grid">
+          <div class="kp">
+            <h3>Combinators</h3>
+            <p>
+              Space (descendant), <code>&gt;</code> (child),
+              <code>+</code> (adjacent), <code>~</code> (all following
+              siblings). Master these before reaching for extra classes.
+            </p>
+          </div>
+          <div class="kp">
+            <h3>:is() vs :where()</h3>
+            <p>
+              Same behavior, different specificity. Use <code>:is()</code> for
+              normal selectors, <code>:where()</code> for resets and base styles
+              you want to be easily overridden.
+            </p>
+          </div>
+          <div class="kp">
+            <h3>:has() is the parent selector</h3>
+            <p>
+              Select an element based on its descendants. Replaces huge amounts
+              of JavaScript class-toggling. Fully supported in all modern
+              browsers since late 2023.
+            </p>
+          </div>
+          <div class="kp">
+            <h3>Specificity of modern selectors</h3>
+            <p>
+              <code>:not()</code>, <code>:is()</code>, <code>:has()</code> take
+              the specificity of their most specific argument.
+              <code>:where()</code> is always 0. Plan your architecture
+              accordingly.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // SELECTOR DEMO
+      const selConfigs = {
+        "first-child": {
+          desc: "Matches the very first child of its parent — regardless of element type.",
+          code: "li:first-child { ... }",
+          match: (el) => el.classList.contains("first-child"),
+        },
+        "last-child": {
+          desc: "Matches the very last child of its parent.",
+          code: "li:last-child { ... }",
+          match: (el) => el.classList.contains("last-child"),
+        },
+        "nth-odd": {
+          desc: "Matches odd-numbered children: 1st, 3rd, 5th, ... Same as :nth-child(2n+1).",
+          code: "li:nth-child(odd) { ... }",
+          match: (el) => el.classList.contains("nth-odd"),
+        },
+        "nth-3": {
+          desc: "Matches the 3rd child specifically. Use :nth-child(3n) for every 3rd.",
+          code: "li:nth-child(3) { ... }",
+          match: (el) => el.classList.contains("nth-3"),
+        },
+        "has-link": {
+          desc: "Matches any li that contains an anchor element inside it — even a deeply nested one.",
+          code: "li:has(a) { ... }",
+          match: (el) => el.querySelector("a"),
+        },
+        "not-last": {
+          desc: "Matches every li that is NOT the last child. Great for adding a divider between all but the last item.",
+          code: "li:not(:last-child) { ... }",
+          match: (el) => el.classList.contains("not-last"),
+        },
+      };
+
+      function activateSel(btn, key) {
+        document
+          .querySelectorAll(".sel-chip")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const cfg = selConfigs[key];
+        document.querySelectorAll("#demo-list li").forEach((el) => {
+          el.classList.toggle("hl", !!cfg.match(el));
+        });
+        document.getElementById("sel-description").textContent = cfg.desc;
+        document.getElementById("sel-code").textContent = cfg.code;
+      }
+      activateSel(document.querySelector(".sel-chip.active"), "first-child");
+
+      // HAS DEMO
+      const hasState = { img: false, err: false };
+      function toggleHas(type) {
+        hasState[type] = !hasState[type];
+        document
+          .getElementById("hc-" + type)
+          .classList.toggle("on", hasState[type]);
+
+        const card = document.getElementById("demo-has-card");
+        const imgEl = document.getElementById("demo-img-placeholder");
+        const errEl = document.getElementById("demo-err");
+        const ruleEl = document.getElementById("has-active-rule");
+
+        imgEl.style.display = hasState.img ? "flex" : "none";
+        errEl.classList.toggle("visible", hasState.err);
+
+        card.classList.remove("has-img-active", "has-error-active");
+
+        if (hasState.err) {
+          card.classList.add("has-error-active");
+          ruleEl.textContent =
+            ".card:has(.error-msg) { border-color: red; background: #fae8e8; }";
+        } else if (hasState.img) {
+          card.classList.add("has-img-active");
+          ruleEl.textContent =
+            ".card:has(img) { border-color: purple; background: #f0e8f8; padding-top: 0; }";
+        } else {
+          ruleEl.textContent =
+            "← toggle something to see the active :has() rule";
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAY 08 — Flexbox: Full Picture</title>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;600;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f8f6ff;
+  --s1: #f0ecff;
+  --s2: #e4deff;
+  --border: #d0c8f0;
+  --ink: #16122a;
+  --muted: #6a6388;
+  --accent: #5b3ff8;
+  --accent-light: #ede8ff;
+  --grow: #059669;
+  --shrink: #dc2626;
+  --basis: #d97706;
+}
+
+body { background: var(--bg); color: var(--ink); font-family: 'Epilogue', sans-serif; line-height: 1.6; }
+
+header {
+  background: var(--accent);
+  color: white;
+  padding: 3rem;
+}
+.day-tag { font-family: 'Fira Code', monospace; font-size: 0.6rem; letter-spacing: 0.2em; color: rgba(255,255,255,0.5); margin-bottom: 0.5rem; }
+h1 { font-size: clamp(2rem, 4.5vw, 3.5rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.05; }
+.header-sub { font-size: 0.9rem; color: rgba(255,255,255,0.6); margin-top: 0.4rem; }
+
+main { max-width: 1080px; margin: 0 auto; padding: 4rem 2rem 8rem; display: grid; gap: 5rem; }
+
+section { display: grid; gap: 1.5rem; }
+
+.sec-tag {
+  font-family: 'Fira Code', monospace; font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.sec-tag::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+h2 { font-size: clamp(1.3rem, 2.5vw, 2rem); font-weight: 900; letter-spacing: -0.02em; line-height: 1.15; }
+
+p { color: #3a3660; max-width: 64ch; font-size: 0.9rem; }
+
+code {
+  font-family: 'Fira Code', monospace; background: var(--s2); border: 1px solid var(--border);
+  padding: 0.1em 0.4em; border-radius: 3px; font-size: 0.82em;
+}
+
+pre {
+  background: var(--ink); color: #c8c4e8; padding: 1.5rem; border-radius: 8px;
+  overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 0.78rem; line-height: 2;
+}
+.cp { color: #9d8ff0; } .cv { color: #7ce8b0; } .cs { color: #f0d070; }
+.cc { color: #3a3660; font-style: italic; }
+.cg { color: #7ce8b0; } .csh { color: #f08080; } .cb { color: #f0b050; }
+.ctw { color: #60a5fa; font-size: 0.72em; }
+
+/* ── AXIS DIAGRAM ── */
+.axis-explainer {
+  background: var(--s1); border: 1px solid var(--border); border-radius: 8px; padding: 2rem;
+  display: grid; gap: 1.5rem;
+}
+.axis-row {
+  background: white; border: 1px solid var(--border); border-radius: 6px; padding: 1.25rem;
+  display: flex; flex-direction: column; gap: 0.8rem;
+}
+.axis-label { font-family: 'Fira Code', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.axis-demo { display: flex; gap: 8px; align-items: flex-start; }
+.ax-item {
+  background: var(--accent); color: white; font-size: 0.72rem; font-weight: 700;
+  padding: 0.5rem 0.8rem; border-radius: 4px; white-space: nowrap;
+}
+.ax-arrow {
+  display: flex; align-items: center; justify-content: center; font-size: 0.7rem;
+  color: var(--muted); padding: 0.5rem; position: relative;
+}
+.main-axis-line {
+  display: flex; align-items: center; gap: 0; position: relative;
+  height: 32px;
+}
+.mal {
+  height: 2px; background: var(--accent); flex: 1;
+}
+.mal-arrow {
+  width: 0; height: 0;
+  border-top: 6px solid transparent; border-bottom: 6px solid transparent;
+  border-left: 10px solid var(--accent);
+}
+.cross-axis-line {
+  display: flex; flex-direction: column; align-items: center; width: 32px;
+}
+.cal { width: 2px; height: 60px; background: var(--muted); }
+.cal-arrow {
+  width: 0; height: 0;
+  border-left: 6px solid transparent; border-right: 6px solid transparent;
+  border-top: 10px solid var(--muted);
+}
+
+/* ── CONTAINER vs ITEM props ── */
+.prop-split {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border);
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+@media (max-width: 560px) { .prop-split { grid-template-columns: 1fr; } }
+.ps-col { background: var(--bg); padding: 1.25rem; }
+.ps-title {
+  font-family: 'Fira Code', monospace; font-size: 0.62rem; letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 0.8rem;
+}
+.prop-list { display: grid; gap: 0.35rem; }
+.prop-item {
+  display: grid; grid-template-columns: auto 1fr; gap: 0.6rem; align-items: start;
+  font-size: 0.8rem; padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.prop-item:last-child { border-bottom: none; }
+.prop-name { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--accent); font-weight: 500; }
+.prop-desc { color: var(--muted); font-size: 0.74rem; line-height: 1.4; }
+
+/* ── TRINITY ── */
+.trinity {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border);
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+@media (max-width: 560px) { .trinity { grid-template-columns: 1fr; } }
+.tr-card { background: var(--bg); padding: 1.25rem; }
+.tr-name { font-size: 1rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 0.2rem; }
+.tr-formula { font-family: 'Fira Code', monospace; font-size: 0.68rem; color: var(--muted); margin-bottom: 0.8rem; }
+.tr-bar-wrap { background: var(--s1); border-radius: 4px; padding: 6px; margin-bottom: 0.8rem; display: flex; gap: 4px; align-items: center; height: 48px; }
+.tr-bar {
+  height: 36px; border-radius: 3px; display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; font-weight: 700; color: white; transition: all 0.3s; white-space: nowrap; overflow: hidden;
+}
+.tr-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.5; }
+
+/* ── INTERACTIVE TRINITY DEMO ── */
+.trinity-demo {
+  background: var(--s1); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+.td-header {
+  background: var(--s2); border-bottom: 1px solid var(--border); padding: 0.75rem 1.25rem;
+  font-family: 'Fira Code', monospace; font-size: 0.62rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;
+}
+.td-body { padding: 1.5rem; }
+.item-controls { display: grid; gap: 1rem; margin-bottom: 1.5rem; }
+.ic-row { display: grid; grid-template-columns: auto 1fr 1fr 1fr; gap: 0.75rem; align-items: center; padding: 0.6rem; background: white; border: 1px solid var(--border); border-radius: 5px; }
+.ic-label { font-family: 'Fira Code', monospace; font-size: 0.68rem; color: var(--accent); font-weight: 500; white-space: nowrap; }
+.ic-input { display: flex; align-items: center; gap: 0.3rem; }
+.ic-input label { font-size: 0.62rem; color: var(--muted); }
+.ic-input input[type=range] { flex: 1; min-width: 50px; }
+.ic-val { font-family: 'Fira Code', monospace; font-size: 0.65rem; color: var(--ink); width: 28px; text-align: right; }
+@media (max-width: 640px) { .ic-row { grid-template-columns: auto 1fr; } }
+
+.flex-stage {
+  background: white; border: 2px dashed var(--border); border-radius: 6px; padding: 12px;
+  display: flex; gap: 8px; min-height: 80px; overflow: hidden;
+}
+.flex-item-demo {
+  height: 56px; border-radius: 4px; display: flex; align-items: center; justify-content: center;
+  font-family: 'Fira Code', monospace; font-size: 0.68rem; font-weight: 500; color: white;
+  transition: all 0.3s; min-width: 0;
+}
+
+.current-css { margin-top: 1rem; background: var(--ink); color: #9d8ff0; border-radius: 5px; padding: 0.75rem 1rem; font-family: 'Fira Code', monospace; font-size: 0.72rem; line-height: 1.8; }
+
+/* ── FLEX 1 EXPLAINER ── */
+.flex1-breakdown {
+  background: var(--s1); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem;
+}
+.f1-equation {
+  font-family: 'Fira Code', monospace; font-size: clamp(0.85rem, 2vw, 1.15rem);
+  background: var(--ink); color: #c8c4e8; padding: 1rem 1.5rem; border-radius: 6px;
+  margin-bottom: 1.25rem; line-height: 2;
+}
+.e-1 { color: #7ce8b0; font-weight: 700; }
+.e-grow { color: #7ce8b0; }
+.e-shrink { color: #f08080; }
+.e-basis { color: #f0b050; }
+
+.flex1-scenarios {
+  display: grid; gap: 0.75rem;
+}
+.f1-row {
+  background: white; border: 1px solid var(--border); border-radius: 5px; padding: 0.75rem 1rem;
+  display: grid; grid-template-columns: 120px 1fr; gap: 1rem; align-items: center;
+}
+.f1-code { font-family: 'Fira Code', monospace; font-size: 0.76rem; color: var(--accent); }
+.f1-stage { background: var(--s1); border-radius: 4px; padding: 6px; display: flex; gap: 4px; }
+.f1-box { height: 32px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 700; color: white; transition: all 0.3s; }
+
+/* ── ALIGN PROPERTIES ── */
+.align-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 560px) { .align-grid { grid-template-columns: 1fr; } }
+.ag-card { background: var(--s1); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.ag-header { background: var(--s2); border-bottom: 1px solid var(--border); padding: 0.6rem 1rem; font-family: 'Fira Code', monospace; font-size: 0.65rem; color: var(--muted); }
+.ag-body { padding: 1rem; }
+.align-demo-btns { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.75rem; }
+.align-btn { font-family: 'Fira Code', monospace; font-size: 0.62rem; padding: 0.25rem 0.5rem; border-radius: 3px; border: 1px solid var(--border); background: white; color: var(--muted); cursor: pointer; }
+.align-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+.align-stage { background: white; border: 1.5px dashed var(--border); border-radius: 5px; height: 80px; display: flex; gap: 6px; padding: 6px; transition: all 0.25s; }
+.ag-item { background: var(--accent); color: white; font-size: 0.65rem; font-weight: 700; border-radius: 3px; display: flex; align-items: center; justify-content: center; padding: 0 8px; min-height: 20px; }
+
+/* KP */
+.kp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.kp { background: var(--s1); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; }
+.kp h3 { font-size: 0.95rem; font-weight: 900; margin-bottom: 0.4rem; }
+.kp p { font-size: 0.78rem; max-width: none; }
+.tw { display: inline-block; background: #dbeafe; color: #1d4ed8; font-family: 'Fira Code', monospace; font-size: 0.65rem; padding: 0.1em 0.45em; border-radius: 3px; margin: 0 0.1rem; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="day-tag">CSS FUNDAMENTALS · DAY 08 · MAR 4</div>
+  <h1>Flexbox —<br>Full Picture</h1>
+  <div class="header-sub">flex-grow · flex-shrink · flex-basis · alignment</div>
+</header>
+
+<main>
+
+  <!-- 01 AXES -->
+  <section>
+    <div class="sec-tag">01 / The Mental Model</div>
+    <h2>Two axes, two roles</h2>
+    <p>Flexbox is one-dimensional: it works along a single <strong>main axis</strong>. The <code>flex-direction</code> sets which axis is main. Items are distributed along the main axis; they're aligned along the <strong>cross axis</strong>.</p>
+
+    <div class="axis-explainer">
+      <div class="axis-row">
+        <div class="axis-label">flex-direction: row (default) — main axis is horizontal</div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="display:flex; gap:8px; flex:1;">
+            <div class="ax-item">A</div>
+            <div class="ax-item">B</div>
+            <div class="ax-item">C</div>
+          </div>
+          <div>
+            <div style="font-size:0.65rem;color:var(--accent);font-family:'Fira Code',monospace;margin-bottom:2px;">→ main axis</div>
+            <div style="font-size:0.65rem;color:var(--muted);font-family:'Fira Code',monospace;">↕ cross axis</div>
+          </div>
+        </div>
+      </div>
+      <div class="axis-row">
+        <div class="axis-label">flex-direction: column — main axis is vertical</div>
+        <div style="display:flex; gap:12px; align-items:flex-start;">
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div class="ax-item">A</div>
+            <div class="ax-item">B</div>
+            <div class="ax-item">C</div>
+          </div>
+          <div style="align-self:center;">
+            <div style="font-size:0.65rem;color:var(--accent);font-family:'Fira Code',monospace;margin-bottom:2px;">↓ main axis</div>
+            <div style="font-size:0.65rem;color:var(--muted);font-family:'Fira Code',monospace;">↔ cross axis</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 CONTAINER vs ITEM PROPS -->
+  <section>
+    <div class="sec-tag">02 / Properties</div>
+    <h2>Container props vs item props</h2>
+    <p>The most common flexbox mistake: applying item properties to the container, or vice versa. Know which is which.</p>
+
+    <div class="prop-split">
+      <div class="ps-col">
+        <div class="ps-title" style="color:var(--accent);">On the container (<code>display: flex</code>)</div>
+        <div class="prop-list">
+          <div class="prop-item">
+            <div class="prop-name">flex-direction</div>
+            <div class="prop-desc">row | column | row-reverse | column-reverse. Sets main axis. <span class="tw">flex-row</span> <span class="tw">flex-col</span></div>
+          </div>
+          <div class="prop-item">
+            <div class="prop-name">flex-wrap</div>
+            <div class="prop-desc">nowrap (default) | wrap | wrap-reverse. Do items wrap to next line? <span class="tw">flex-wrap</span></div>
+          </div>
+          <div class="prop-item">
+            <div class="prop-name">justify-content</div>
+            <div class="prop-desc">Distribution along the <em>main</em> axis. <span class="tw">justify-start</span> <span class="tw">justify-between</span></div>
+          </div>
+          <div class="prop-item">
+            <div class="prop-name">align-items</div>
+            <div class="prop-desc">Alignment on the <em>cross</em> axis for all items. <span class="tw">items-center</span> <span class="tw">items-stretch</span></div>
+          </div>
+          <div class="prop-item">
+            <div class="prop-name">align-content</div>
+            <div class="prop-desc">Distributes rows when wrapping. Only works with flex-wrap. <span class="tw">content-start</span></div>
+          </div>
+          <div class="prop-item">
+            <div class="prop-name">gap</div>
+            <div class="prop-desc">Space between items. Replaces margin hacks. <span class="tw">gap-4</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="ps-col">
+        <div class="ps-title" style="color:var(--grow);">On each item (the children)</div>
+        <div class="prop-list">
+          <div class="prop-item">
+            <div class="prop-name" style="color:var(--grow);">flex-grow</div>
+            <div class="prop-desc">How much the item grows to fill extra space. 0 = don't grow. <span class="tw">grow</span> <span class="tw">grow-0</span></div>
+          </div>
+          <div class="prop-item">
+            <div class="prop-name" style="color:var(--shrink);">flex-shrink</div>
+            <div class="prop-desc">How much the item shrinks when space is tight. 0 = never shrink. <span class="tw">shrink-0</span></div>
+          </div>
+          <div class="prop-item">
+            <div class="prop-name" style="color:var(--basis);">flex-basis</div>
+            <div class="prop-desc">Starting size before grow/shrink applies. Like width on the main axis. <span class="tw">basis-1/2</span></div>
+          </div>
+          <div class="prop-item">
+            <div class="prop-name">flex</div>
+            <div class="prop-desc">Shorthand: grow shrink basis. <code>flex: 1</code> = <code>1 1 0</code>. <span class="tw">flex-1</span> <span class="tw">flex-auto</span></div>
+          </div>
+          <div class="prop-item">
+            <div class="prop-name">align-self</div>
+            <div class="prop-desc">Override align-items for this one item only. <span class="tw">self-end</span> <span class="tw">self-center</span></div>
+          </div>
+          <div class="prop-item">
+            <div class="prop-name">order</div>
+            <div class="prop-desc">Change visual order without changing DOM order. Default 0. <span class="tw">order-first</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 TRINITY -->
+  <section>
+    <div class="sec-tag">03 / The Trinity</div>
+    <h2>flex-grow, flex-shrink, flex-basis</h2>
+    <p>These three properties control how items respond to available space. Understand them individually first — then <code>flex: 1</code> will make total sense.</p>
+
+    <div class="trinity">
+      <div class="tr-card">
+        <div class="tr-name" style="color:var(--grow);">flex-grow</div>
+        <div class="tr-formula">Default: 0 (don't grow)</div>
+        <div class="tr-bar-wrap">
+          <div class="tr-bar" style="width:60px;background:#d1fae5;color:#065f46;flex-shrink:0;">fixed</div>
+          <div class="tr-bar" style="flex-grow:1;background:var(--grow);">grow: 1</div>
+        </div>
+        <div class="tr-desc">A <strong>ratio</strong> of how extra space is distributed. If one item has <code>grow: 2</code> and another has <code>grow: 1</code>, the first gets twice the leftover space.</div>
+      </div>
+      <div class="tr-card">
+        <div class="tr-name" style="color:var(--shrink);">flex-shrink</div>
+        <div class="tr-formula">Default: 1 (can shrink)</div>
+        <div class="tr-bar-wrap" style="width:180px;overflow:hidden;">
+          <div class="tr-bar" style="width:120px;flex-shrink:1;background:var(--shrink);">shrink:1</div>
+          <div class="tr-bar" style="width:120px;flex-shrink:0;background:#fca5a5;color:#7f1d1d;">shrink:0</div>
+        </div>
+        <div class="tr-desc">How much an item shrinks when the container is too small. <code>shrink: 0</code> means "never shrink" — the item stays its full size, possibly overflowing.</div>
+      </div>
+      <div class="tr-card">
+        <div class="tr-name" style="color:var(--basis);">flex-basis</div>
+        <div class="tr-formula">Default: auto</div>
+        <div class="tr-bar-wrap">
+          <div class="tr-bar" style="flex-basis:80px;flex-grow:0;flex-shrink:0;background:var(--basis);">80px</div>
+          <div class="tr-bar" style="flex-basis:40%;flex-grow:0;flex-shrink:0;background:#fbbf24;">40%</div>
+        </div>
+        <div class="tr-desc">The <em>starting</em> size of the item, before grow/shrink adjustments. Overrides <code>width</code> (on row) or <code>height</code> (on column). <code>auto</code> uses the item's content size.</div>
+      </div>
+    </div>
+
+    <!-- Interactive -->
+    <div class="trinity-demo">
+      <div class="td-header">
+        <span>Interactive Trinity — drag the values</span>
+        <span id="td-output" style="color:#7ce8b0;font-size:0.68rem;"></span>
+      </div>
+      <div class="td-body">
+        <div class="item-controls" id="item-controls"></div>
+        <div class="flex-stage" id="flex-stage"></div>
+        <div class="current-css" id="td-css"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 FLEX:1 -->
+  <section>
+    <div class="sec-tag">04 / Most Used Shorthand</div>
+    <h2>flex: 1 — what it actually means</h2>
+
+    <div class="flex1-breakdown">
+      <div class="f1-equation">
+        <code>flex: 1</code> &nbsp;=&nbsp;
+        <span class="e-grow">flex-grow: 1</span> &nbsp;
+        <span class="e-shrink">flex-shrink: 1</span> &nbsp;
+        <span class="e-basis">flex-basis: 0%</span>
+      </div>
+      <p style="margin-bottom:1rem;">The key is <code>flex-basis: 0%</code> — items start from zero and grow equally from there. This is different from <code>flex: auto</code> which starts from the item's content size.</p>
+
+      <div class="flex1-scenarios">
+        <div class="f1-row">
+          <div class="f1-code">flex: 1</div>
+          <div>
+            <div class="f1-stage">
+              <div class="f1-box" style="flex:1;background:var(--accent);">1</div>
+              <div class="f1-box" style="flex:1;background:var(--accent);">1</div>
+              <div class="f1-box" style="flex:1;background:var(--accent);">1</div>
+            </div>
+            <div style="font-size:0.7rem;color:var(--muted);margin-top:0.3rem;">All equal — start from 0, divide space equally <span class="tw">flex-1</span></div>
+          </div>
+        </div>
+        <div class="f1-row">
+          <div class="f1-code">flex: auto</div>
+          <div>
+            <div class="f1-stage">
+              <div class="f1-box" style="flex:auto;background:var(--grow);">Short</div>
+              <div class="f1-box" style="flex:auto;background:var(--grow);">Much longer text</div>
+              <div class="f1-box" style="flex:auto;background:var(--grow);">Mid</div>
+            </div>
+            <div style="font-size:0.7rem;color:var(--muted);margin-top:0.3rem;">= grow:1 shrink:1 basis:auto — starts from content size, then distributes leftover <span class="tw">flex-auto</span></div>
+          </div>
+        </div>
+        <div class="f1-row">
+          <div class="f1-code">flex: none</div>
+          <div>
+            <div class="f1-stage">
+              <div class="f1-box" style="flex:none;background:var(--shrink);">Fixed</div>
+              <div class="f1-box" style="flex:1;background:var(--accent);">Flex 1</div>
+              <div class="f1-box" style="flex:1;background:var(--accent);">Flex 1</div>
+            </div>
+            <div style="font-size:0.7rem;color:var(--muted);margin-top:0.3rem;">= grow:0 shrink:0 basis:auto — rigid, won't grow or shrink <span class="tw">flex-none</span></div>
+          </div>
+        </div>
+        <div class="f1-row">
+          <div class="f1-code">flex: 2 / flex: 1</div>
+          <div>
+            <div class="f1-stage">
+              <div class="f1-box" style="flex:2;background:var(--basis);">2</div>
+              <div class="f1-box" style="flex:1;background:var(--accent);">1</div>
+              <div class="f1-box" style="flex:1;background:var(--accent);">1</div>
+            </div>
+            <div style="font-size:0.7rem;color:var(--muted);margin-top:0.3rem;">First item gets twice the space. grow values are ratios, not sizes. <span class="tw">flex-[2]</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 ALIGNMENT -->
+  <section>
+    <div class="sec-tag">05 / Alignment</div>
+    <h2>justify-content & align-items</h2>
+    <p>The most confused part of flexbox: <code>justify-content</code> works on the <strong>main axis</strong>; <code>align-items</code> works on the <strong>cross axis</strong>. Both change when you change <code>flex-direction</code>.</p>
+
+    <div class="align-grid">
+      <div class="ag-card">
+        <div class="ag-header">justify-content — main axis (←→ in row)</div>
+        <div class="ag-body">
+          <div class="align-demo-btns" id="jc-btns">
+            <button class="align-btn active" onclick="setJc('flex-start',this)">flex-start</button>
+            <button class="align-btn" onclick="setJc('center',this)">center</button>
+            <button class="align-btn" onclick="setJc('flex-end',this)">flex-end</button>
+            <button class="align-btn" onclick="setJc('space-between',this)">space-between</button>
+            <button class="align-btn" onclick="setJc('space-around',this)">space-around</button>
+            <button class="align-btn" onclick="setJc('space-evenly',this)">space-evenly</button>
+          </div>
+          <div class="align-stage" id="jc-stage">
+            <div class="ag-item" style="width:40px;">A</div>
+            <div class="ag-item" style="width:60px;">B</div>
+            <div class="ag-item" style="width:40px;">C</div>
+          </div>
+          <div id="jc-label" style="font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--muted);margin-top:0.5rem;"></div>
+        </div>
+      </div>
+      <div class="ag-card">
+        <div class="ag-header">align-items — cross axis (↕ in row)</div>
+        <div class="ag-body">
+          <div class="align-demo-btns" id="ai-btns">
+            <button class="align-btn active" onclick="setAi('stretch',this)">stretch</button>
+            <button class="align-btn" onclick="setAi('flex-start',this)">flex-start</button>
+            <button class="align-btn" onclick="setAi('center',this)">center</button>
+            <button class="align-btn" onclick="setAi('flex-end',this)">flex-end</button>
+            <button class="align-btn" onclick="setAi('baseline',this)">baseline</button>
+          </div>
+          <div class="align-stage" id="ai-stage">
+            <div class="ag-item" style="padding:0 8px;font-size:0.7rem;">Short</div>
+            <div class="ag-item" style="padding:0 8px;font-size:1rem;">Tall</div>
+            <div class="ag-item" style="padding:0 8px;font-size:0.55rem;">Tiny</div>
+          </div>
+          <div id="ai-label" style="font-family:'Fira Code',monospace;font-size:0.7rem;color:var(--muted);margin-top:0.5rem;"></div>
+        </div>
+      </div>
+    </div>
+
+    <pre><code><span class="cc">/* Tailwind alignment classes */</span>
+<span class="cc">/* justify-content */</span>
+<span class="ctw">justify-start</span>   → justify-content: flex-start
+<span class="ctw">justify-center</span>  → justify-content: center
+<span class="ctw">justify-end</span>     → justify-content: flex-end
+<span class="ctw">justify-between</span> → justify-content: space-between
+<span class="ctw">justify-around</span>  → justify-content: space-around
+<span class="ctw">justify-evenly</span>  → justify-content: space-evenly
+
+<span class="cc">/* align-items */</span>
+<span class="ctw">items-start</span>    → align-items: flex-start
+<span class="ctw">items-center</span>   → align-items: center
+<span class="ctw">items-end</span>      → align-items: flex-end
+<span class="ctw">items-stretch</span>  → align-items: stretch
+<span class="ctw">items-baseline</span> → align-items: baseline
+
+<span class="cc">/* align-self (on the item) */</span>
+<span class="ctw">self-auto</span> <span class="ctw">self-start</span> <span class="ctw">self-center</span> <span class="ctw">self-end</span> <span class="ctw">self-stretch</span></code></pre>
+  </section>
+
+  <!-- KP -->
+  <section>
+    <div class="sec-tag">06 / Key Points</div>
+    <h2>Flexbox fundamentals.</h2>
+    <div class="kp-grid">
+      <div class="kp">
+        <h3>flex: 1 = 1 1 0%</h3>
+        <p>flex-basis 0% means items start from nothing and share space equally. <code>flex: auto</code> starts from content size — very different results. <span class="tw">flex-1</span></p>
+      </div>
+      <div class="kp">
+        <h3>shrink: 0 for fixed items</h3>
+        <p>Add <code>flex-shrink: 0</code> to icons, avatars, and fixed-size elements so they never get squished when siblings need space. <span class="tw">shrink-0</span></p>
+      </div>
+      <div class="kp">
+        <h3>justify vs align</h3>
+        <p><code>justify-content</code> → main axis. <code>align-items</code> → cross axis. These swap when you change <code>flex-direction</code>. Memorize the axes, not the properties.</p>
+      </div>
+      <div class="kp">
+        <h3>gap not margin</h3>
+        <p>Use <code>gap</code> on the flex container instead of adding <code>margin</code> to every child. Cleaner, no first/last child edge cases. <span class="tw">gap-4</span> <span class="tw">gap-x-2</span></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+// ─── TRINITY INTERACTIVE ───
+const items = [
+  { name: 'A', grow: 1, shrink: 1, basis: 0, color: '#5b3ff8' },
+  { name: 'B', grow: 1, shrink: 1, basis: 0, color: '#059669' },
+  { name: 'C', grow: 1, shrink: 1, basis: 0, color: '#d97706' },
+];
+
+function renderControls() {
+  const wrap = document.getElementById('item-controls');
+  wrap.innerHTML = items.map((item, i) => `
+    <div class="ic-row">
+      <div class="ic-label" style="color:${item.color};">Item ${item.name}</div>
+      <div class="ic-input">
+        <label>grow</label>
+        <input type="range" min="0" max="4" step="0.5" value="${item.grow}" oninput="setVal(${i},'grow',this.value)">
+        <span class="ic-val" id="g${i}">${item.grow}</span>
+      </div>
+      <div class="ic-input">
+        <label>shrink</label>
+        <input type="range" min="0" max="4" step="0.5" value="${item.shrink}" oninput="setVal(${i},'shrink',this.value)">
+        <span class="ic-val" id="s${i}">${item.shrink}</span>
+      </div>
+      <div class="ic-input">
+        <label>basis px</label>
+        <input type="range" min="0" max="200" step="10" value="${item.basis}" oninput="setVal(${i},'basis',this.value)">
+        <span class="ic-val" id="b${i}">${item.basis}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function setVal(i, prop, val) {
+  items[i][prop] = parseFloat(val);
+  document.getElementById(`${prop[0]}${i}`).textContent = prop === 'basis' ? val + 'px' : val;
+  renderStage();
+}
+
+function renderStage() {
+  const stage = document.getElementById('flex-stage');
+  stage.innerHTML = items.map(item => {
+    const fs = `${item.grow} ${item.shrink} ${item.basis}px`;
+    return `<div class="flex-item-demo" style="flex:${fs};background:${item.color};">
+      ${item.name}<br><span style="font-size:0.55rem;opacity:0.8;">${item.grow}/${item.shrink}/${item.basis}px</span>
+    </div>`;
+  }).join('');
+  const css = items.map(item =>
+    `.item-${item.name.toLowerCase()} { flex: ${item.grow} ${item.shrink} ${item.basis}px; }`
+  ).join('\n');
+  document.getElementById('td-css').textContent = css;
+}
+
+renderControls();
+renderStage();
+
+// ─── ALIGNMENT ───
+function setJc(val, btn) {
+  document.getElementById('jc-stage').style.justifyContent = val;
+  document.querySelectorAll('#jc-btns .align-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('jc-label').textContent = `justify-content: ${val}`;
+}
+function setAi(val, btn) {
+  document.getElementById('ai-stage').style.alignItems = val;
+  document.querySelectorAll('#ai-btns .align-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('ai-label').textContent = `align-items: ${val}`;
+}
+document.getElementById('jc-label').textContent = 'justify-content: flex-start';
+document.getElementById('ai-label').textContent = 'align-items: stretch';
+</script>
+</body>
+</html>

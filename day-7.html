@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAY 07 — Colors, oklch() & Custom Properties</title>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800&family=Commit+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #fafaf8;
+  --s1: #f2f2ee;
+  --s2: #e8e8e2;
+  --border: #ddddd6;
+  --ink: #1a1a18;
+  --muted: #7a7a72;
+  --accent: oklch(60% 0.2 250);
+  --accent2: oklch(65% 0.18 140);
+  --accent3: oklch(65% 0.2 30);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  line-height: 1.6;
+}
+
+header {
+  background: var(--ink);
+  color: #fafaf8;
+  padding: 3rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: end;
+}
+.day-tag {
+  font-family: 'Commit Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+h1 {
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+.header-swatch-row {
+  display: flex;
+  gap: 6px;
+  align-items: end;
+}
+.hs {
+  width: 36px;
+  border-radius: 4px;
+}
+
+main {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 4rem 2rem 8rem;
+  display: grid;
+  gap: 5rem;
+}
+
+section { display: grid; gap: 1.5rem; }
+
+.sec-tag {
+  font-family: 'Commit Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.sec-tag::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+h2 {
+  font-size: clamp(1.3rem, 2.5vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+p { color: #4a4a44; max-width: 64ch; font-size: 0.92rem; }
+
+code {
+  font-family: 'Commit Mono', monospace;
+  background: var(--s2);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.82em;
+}
+
+pre {
+  background: var(--ink);
+  color: #c8c8c0;
+  padding: 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Commit Mono', monospace;
+  font-size: 0.78rem;
+  line-height: 2;
+}
+.cp { color: #88c8f0; }
+.cv { color: #a8e888; }
+.cs { color: #f0e080; }
+.cc { color: #444440; font-style: italic; }
+.cok { color: oklch(75% 0.18 160); }
+.ctw { color: oklch(70% 0.15 250); font-size: 0.72em; }
+
+/* COLOR SPACE COMPARISON */
+.space-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+@media (max-width: 600px) { .space-compare { grid-template-columns: 1fr; } }
+.sc-card {
+  background: var(--bg);
+  padding: 1.25rem;
+}
+.sc-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.2rem;
+}
+.sc-sub {
+  font-family: 'Commit Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.8rem;
+}
+.sc-swatches {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 0.8rem;
+}
+.sc-swatch {
+  flex: 1;
+  height: 28px;
+  border-radius: 3px;
+}
+.sc-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+.badge-good { display: inline-block; background: #e8f5ee; color: #1a6a3c; font-size: 0.62rem; font-weight: 700; padding: 0.1em 0.5em; border-radius: 10px; margin-left: 0.4rem; }
+.badge-bad  { display: inline-block; background: #fce8e8; color: #a01a1a; font-size: 0.62rem; font-weight: 700; padding: 0.1em 0.5em; border-radius: 10px; margin-left: 0.4rem; }
+
+/* OKLCH ANATOMY */
+.oklch-anatomy {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2rem;
+}
+.anatomy-formula {
+  font-family: 'Commit Mono', monospace;
+  font-size: clamp(0.9rem, 2vw, 1.4rem);
+  margin-bottom: 1.5rem;
+  line-height: 2;
+  color: var(--ink);
+}
+.aL { color: oklch(55% 0.2 250); font-weight: 700; }
+.aC { color: oklch(55% 0.22 30); font-weight: 700; }
+.aH { color: oklch(55% 0.2 140); font-weight: 700; }
+.anatomy-parts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 560px) { .anatomy-parts { grid-template-columns: 1fr; } }
+.ap-card {
+  border-radius: 6px;
+  padding: 1rem;
+  border: 1px solid;
+}
+.ap-label { font-family: 'Commit Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.3rem; }
+.ap-value { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+.ap-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.4; }
+
+/* INTERACTIVE OKLCH */
+.oklch-sandbox {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.osb-header {
+  background: var(--s2);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1.25rem;
+  font-family: 'Commit Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.osb-body { padding: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+@media (max-width: 580px) { .osb-body { grid-template-columns: 1fr; } }
+.osb-controls { display: grid; gap: 0.8rem; }
+.osb-row { display: grid; gap: 0.3rem; }
+.osb-row label { font-family: 'Commit Mono', monospace; font-size: 0.7rem; color: var(--muted); display: flex; justify-content: space-between; }
+.osb-row label span { font-weight: 700; color: var(--ink); }
+.osb-row input[type=range] { width: 100%; }
+.osb-preview {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+}
+.osb-big-swatch {
+  height: 120px;
+  border-radius: 8px;
+  transition: background 0.1s;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+.osb-value {
+  font-family: 'Commit Mono', monospace;
+  font-size: 0.78rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--ink);
+  color: #a8e888;
+  border-radius: 5px;
+}
+.osb-lighter-row {
+  display: flex;
+  gap: 4px;
+}
+.osb-l-swatch {
+  flex: 1;
+  height: 32px;
+  border-radius: 4px;
+  transition: background 0.1s;
+}
+
+/* COLOR MIX */
+.colormix-demo {
+  display: grid;
+  gap: 1rem;
+}
+.cm-row {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 1rem;
+  align-items: center;
+}
+@media (max-width: 560px) { .cm-row { grid-template-columns: 1fr; } }
+.cm-code { font-family: 'Commit Mono', monospace; font-size: 0.75rem; color: var(--ink); }
+.cm-swatch { width: 40px; height: 40px; border-radius: 5px; border: 1px solid rgba(0,0,0,0.1); }
+.cm-plus { font-weight: 800; color: var(--muted); }
+.cm-result { width: 70px; height: 40px; border-radius: 5px; border: 1px solid rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; font-family: 'Commit Mono', monospace; font-size: 0.55rem; color: white; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+
+/* CSS VARIABLES */
+.var-anatomy {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+.va-rule-list { display: grid; gap: 0.5rem; margin-top: 1rem; }
+.va-rule {
+  padding: 0.7rem 1rem;
+  border-radius: 5px;
+  border-left: 3px solid;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+/* THEME DEMO */
+.theme-switch {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.theme-btn {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.35rem 0.8rem;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.theme-btn.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.themed-card {
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: all 0.3s;
+  border: 1.5px solid;
+}
+
+/* KP */
+.kp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.kp { background: var(--s1); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; }
+.kp h3 { font-size: 0.95rem; font-weight: 800; margin-bottom: 0.4rem; }
+.kp p { font-size: 0.78rem; max-width: none; }
+
+/* TW badge */
+.tw { display: inline-block; background: #dbeafe; color: #1d4ed8; font-family: 'Commit Mono', monospace; font-size: 0.65rem; padding: 0.1em 0.45em; border-radius: 3px; margin-left: 0.3rem; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="day-tag">CSS FUNDAMENTALS · DAY 07 · MAR 3</div>
+    <h1>Colors, oklch() &<br>Custom Properties</h1>
+  </div>
+  <div class="header-swatch-row">
+    <div class="hs" style="height:80px;background:oklch(65% 0.2 250);"></div>
+    <div class="hs" style="height:65px;background:oklch(65% 0.2 180);"></div>
+    <div class="hs" style="height:50px;background:oklch(65% 0.2 90);"></div>
+    <div class="hs" style="height:38px;background:oklch(65% 0.2 30);"></div>
+    <div class="hs" style="height:28px;background:oklch(65% 0.2 330);"></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- 01 COLOR SPACES -->
+  <section>
+    <div class="sec-tag">01 / Color Spaces</div>
+    <h2>hsl vs oklch — perceptual uniformity wins</h2>
+    <p>All color spaces can represent the same colors. The difference is in how they're structured. <code>oklch</code> is perceptually uniform — which means equal steps in lightness/chroma look equal to your eye. <code>hsl</code> is not.</p>
+
+    <div class="space-compare">
+      <div class="sc-card">
+        <div class="sc-name" style="color:#888;">hex / rgb</div>
+        <div class="sc-sub">legacy · device-oriented</div>
+        <div class="sc-swatches">
+          <div class="sc-swatch" style="background:#3b82f6;"></div>
+          <div class="sc-swatch" style="background:#22c55e;"></div>
+          <div class="sc-swatch" style="background:#ef4444;"></div>
+          <div class="sc-swatch" style="background:#a855f7;"></div>
+          <div class="sc-swatch" style="background:#f59e0b;"></div>
+        </div>
+        <div class="sc-desc">Machine-readable but unintuitive. Hard to manipulate meaningfully. <span class="badge-bad">no</span> — learn to read, but don't design in hex.</div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-name" style="color:hsl(220 80% 50%);">hsl</div>
+        <div class="sc-sub">hue · saturation · lightness</div>
+        <div class="sc-swatches">
+          <div class="sc-swatch" style="background:hsl(220 80% 55%);"></div>
+          <div class="sc-swatch" style="background:hsl(140 70% 45%);"></div>
+          <div class="sc-swatch" style="background:hsl(0 80% 55%);"></div>
+          <div class="sc-swatch" style="background:hsl(280 70% 55%);"></div>
+          <div class="sc-swatch" style="background:hsl(40 90% 55%);"></div>
+        </div>
+        <div class="sc-desc">Human-readable. Great improvement over hex. But "50% lightness" looks wildly different between hues — yellow at 50% L is much brighter than blue. <span class="badge-bad">not uniform</span></div>
+      </div>
+      <div class="sc-card">
+        <div class="sc-name" style="color:oklch(55% 0.2 250);">oklch</div>
+        <div class="sc-sub">lightness · chroma · hue</div>
+        <div class="sc-swatches">
+          <div class="sc-swatch" style="background:oklch(60% 0.18 250);"></div>
+          <div class="sc-swatch" style="background:oklch(60% 0.18 140);"></div>
+          <div class="sc-swatch" style="background:oklch(60% 0.18 30);"></div>
+          <div class="sc-swatch" style="background:oklch(60% 0.18 310);"></div>
+          <div class="sc-swatch" style="background:oklch(60% 0.18 80);"></div>
+        </div>
+        <div class="sc-desc">Perceptually uniform — the same L value looks equally bright across all hues. Easy to create harmonious palettes by varying H while keeping L and C fixed. <span class="badge-good">use this</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 OKLCH ANATOMY -->
+  <section>
+    <div class="sec-tag">02 / oklch Anatomy</div>
+    <h2>Three values, total control</h2>
+
+    <div class="oklch-anatomy">
+      <div class="anatomy-formula">
+        <code>oklch(</code><span class="aL">60%</span> <span class="aC">0.18</span> <span class="aH">250</span><code>)</code>
+      </div>
+      <div class="anatomy-parts">
+        <div class="ap-card" style="border-color:oklch(70% 0.15 250);background:oklch(97% 0.02 250);">
+          <div class="ap-label" style="color:oklch(55% 0.2 250);">L — Lightness</div>
+          <div class="ap-value" style="color:oklch(55% 0.2 250);">60%</div>
+          <div class="ap-desc">0% = black, 100% = white. Perceptually uniform — 60% looks 60% bright regardless of hue. Use this to build consistent tonal scales.</div>
+        </div>
+        <div class="ap-card" style="border-color:oklch(70% 0.2 30);background:oklch(97% 0.02 30);">
+          <div class="ap-label" style="color:oklch(55% 0.22 30);">C — Chroma</div>
+          <div class="ap-value" style="color:oklch(55% 0.22 30);">0.18</div>
+          <div class="ap-desc">Color intensity. 0 = grey, ~0.4 = maximum vivid (varies by hue/L). Unlike HSL saturation, chroma is an absolute value — not percentage of possible.</div>
+        </div>
+        <div class="ap-card" style="border-color:oklch(70% 0.18 140);background:oklch(97% 0.02 140);">
+          <div class="ap-label" style="color:oklch(55% 0.2 140);">H — Hue</div>
+          <div class="ap-value" style="color:oklch(55% 0.2 140);">250</div>
+          <div class="ap-desc">0–360° color wheel. Blues ~250°, Greens ~140°, Reds ~30°, Purples ~310°. Rotate this to get analogous colors; add 180° for complement.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive oklch sandbox -->
+    <div class="oklch-sandbox">
+      <div class="osb-header">
+        <span>Build an oklch color</span>
+        <span id="osb-output-label" style="color:#a8e888;">oklch(60% 0.18 250)</span>
+      </div>
+      <div class="osb-body">
+        <div class="osb-controls">
+          <div class="osb-row">
+            <label>Lightness (L) <span id="lval">60%</span></label>
+            <input type="range" min="0" max="100" value="60" id="oL" oninput="updateOklch()">
+          </div>
+          <div class="osb-row">
+            <label>Chroma (C) <span id="cval">0.18</span></label>
+            <input type="range" min="0" max="0.4" step="0.01" value="0.18" id="oC" oninput="updateOklch()">
+          </div>
+          <div class="osb-row">
+            <label>Hue (H) <span id="hval">250°</span></label>
+            <input type="range" min="0" max="360" value="250" id="oH" oninput="updateOklch()">
+          </div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:0.5rem;">
+            Lighter/darker steps at same chroma & hue:
+          </div>
+          <div class="osb-lighter-row" id="step-swatches"></div>
+        </div>
+        <div class="osb-preview">
+          <div class="osb-big-swatch" id="osb-swatch"></div>
+          <div class="osb-value" id="osb-value"></div>
+          <div style="font-size:0.72rem;color:var(--muted);">
+            Tailwind uses oklch in v4: <code style="font-size:0.68rem;">text-blue-500</code> → <code style="font-size:0.68rem;">oklch(62.3% 0.214 259)</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <pre><code><span class="cc">/* oklch palette — consistent brightness across hues */</span>
+<span class="cs">:root</span> {
+  <span class="cc">/* Keep L and C fixed, rotate H → harmonious palette */</span>
+  --blue:   <span class="cok">oklch(60% 0.18 250)</span>;
+  --green:  <span class="cok">oklch(60% 0.18 140)</span>;
+  --red:    <span class="cok">oklch(60% 0.18 30)</span>;
+  --purple: <span class="cok">oklch(60% 0.18 310)</span>;
+
+  <span class="cc">/* Tonal scale — fix H and C, vary L */</span>
+  --blue-100: <span class="cok">oklch(95% 0.04 250)</span>;
+  --blue-300: <span class="cok">oklch(75% 0.12 250)</span>;
+  --blue-500: <span class="cok">oklch(60% 0.18 250)</span>;
+  --blue-700: <span class="cok">oklch(40% 0.18 250)</span>;
+  --blue-900: <span class="cok">oklch(20% 0.10 250)</span>;
+}
+<span class="cc">/* Tailwind v4 uses oklch natively for all color utilities */</span></code></pre>
+  </section>
+
+  <!-- 03 COLOR-MIX -->
+  <section>
+    <div class="sec-tag">03 / color-mix()</div>
+    <h2>Native CSS color mixing</h2>
+    <p>No more JavaScript or preprocessors to blend colors. <code>color-mix()</code> mixes two colors in any color space. Mixing in <code>oklch</code> produces perceptually smooth results — unlike mixing in <code>srgb</code> which can create muddy mid-tones.</p>
+
+    <div class="colormix-demo">
+      <div class="cm-row">
+        <div class="cm-code">color-mix(in oklch, oklch(60% 0.18 250) 50%, white)</div>
+        <div class="cm-swatch" style="background:oklch(60% 0.18 250);"></div>
+        <div class="cm-plus">+</div>
+        <div class="cm-result" style="background:oklch(80% 0.09 250);color:#333;">tint</div>
+      </div>
+      <div class="cm-row">
+        <div class="cm-code">color-mix(in oklch, oklch(60% 0.18 250) 50%, black)</div>
+        <div class="cm-swatch" style="background:oklch(60% 0.18 250);"></div>
+        <div class="cm-plus">+</div>
+        <div class="cm-result" style="background:oklch(32% 0.1 250);">shade</div>
+      </div>
+      <div class="cm-row">
+        <div class="cm-code">color-mix(in oklch, oklch(60% 0.18 250), oklch(60% 0.18 30))</div>
+        <div class="cm-swatch" style="background:oklch(60% 0.18 250);"></div>
+        <div class="cm-plus">+</div>
+        <div class="cm-result" style="background:oklch(60% 0.15 140);">mix</div>
+      </div>
+      <div class="cm-row">
+        <div class="cm-code">color-mix(in oklch, var(--brand) 70%, transparent)</div>
+        <div class="cm-swatch" style="background:oklch(55% 0.2 310);"></div>
+        <div class="cm-plus">+</div>
+        <div class="cm-result" style="background:oklch(55% 0.14 310 / 0.7);">alpha</div>
+      </div>
+    </div>
+
+    <pre><code><span class="cc">/* color-mix() syntax */</span>
+color-mix(in <span class="cok">oklch</span>, <span class="cv">color1 percentage</span>, <span class="cv">color2</span>)
+
+<span class="cc">/* Tints & shades from a single variable */</span>
+<span class="cs">.button</span> { <span class="cp">background</span>: var(--brand); }
+<span class="cs">.button:hover</span> { <span class="cp">background</span>: color-mix(in oklch, var(--brand) <span class="cv">85%</span>, black); }
+<span class="cs">.button:active</span> { <span class="cp">background</span>: color-mix(in oklch, var(--brand) <span class="cv">70%</span>, black); }
+
+<span class="cc">/* Transparent variant */</span>
+<span class="cs">.tooltip</span> { <span class="cp">background</span>: color-mix(in oklch, var(--brand) <span class="cv">15%</span>, transparent); }
+
+<span class="cc">/* Tailwind v4 uses color-mix internally for opacity utilities */</span>
+<span class="cc">/* bg-blue-500/30 → color-mix(in oklch, blue 30%, transparent) */</span></code></pre>
+  </section>
+
+  <!-- 04 CUSTOM PROPERTIES -->
+  <section>
+    <div class="sec-tag">04 / CSS Custom Properties</div>
+    <h2>Variables — deeper than you think</h2>
+    <p>CSS custom properties aren't just variables — they cascade, inherit, and can be set at different scopes. They're the foundation of component theming, dark mode, and design token systems.</p>
+
+    <div class="var-anatomy">
+      <pre style="margin-bottom:1rem;"><code><span class="cc">/* Declaration: always on an element (scope matters) */</span>
+<span class="cs">:root</span>  { <span class="cp">--color</span>: <span class="cok">oklch(60% 0.18 250)</span>; }  <span class="cc">/* global */</span>
+<span class="cs">.card</span>  { <span class="cp">--color</span>: <span class="cok">oklch(60% 0.18 30)</span>;  }  <span class="cc">/* scoped to .card */</span>
+<span class="cs">[data-theme="dark"]</span> { <span class="cp">--bg</span>: <span class="cv">#111</span>; <span class="cp">--text</span>: <span class="cv">#eee</span>; }
+
+<span class="cc">/* Usage with fallback */</span>
+<span class="cs">.button</span> { <span class="cp">background</span>: var(<span class="cv">--color</span>, <span class="cok">oklch(60% 0.18 250)</span>); }
+
+<span class="cc">/* Custom properties accept ANY valid token — even partials */</span>
+<span class="cs">:root</span> { <span class="cp">--spacing</span>: <span class="cv">8px</span>; }
+<span class="cs">.box</span>  { <span class="cp">padding</span>: calc(var(<span class="cv">--spacing</span>) * 2); }  <span class="cc">/* 16px */</span>
+
+<span class="cc">/* They can hold non-CSS values too — read by JS */</span>
+<span class="cs">:root</span> { <span class="cp">--brand-hue</span>: <span class="cv">250</span>; }
+<span class="cs">.el</span>   { <span class="cp">color</span>: <span class="cok">oklch(60% 0.18</span> var(<span class="cv">--brand-hue</span>)<span class="cok">)</span>; }  <span class="cc">/* hue from variable! */</span></code></pre>
+
+      <div class="va-rule-list">
+        <div class="va-rule" style="background:#eff6ff;border-color:#3b82f6;color:#1e40af;">
+          <strong>They cascade.</strong> A variable defined closer to an element wins — just like regular CSS specificity.
+        </div>
+        <div class="va-rule" style="background:#f0fdf4;border-color:#22c55e;color:#166534;">
+          <strong>They inherit.</strong> Children see the parent's variables unless overridden. Perfect for component theming: set variables on the component root, consume inside.
+        </div>
+        <div class="va-rule" style="background:#fefce8;border-color:#eab308;color:#713f12;">
+          <strong>They can hold anything.</strong> Not just colors — spacing values, font stacks, timing functions, partial values used in <code>calc()</code>. Even raw numbers.
+        </div>
+        <div class="va-rule" style="background:#fdf4ff;border-color:#a855f7;color:#6b21a8;">
+          <strong>JavaScript can read and write them.</strong> <code>el.style.setProperty('--hue', 250)</code>. This is how runtime theming works.
+        </div>
+      </div>
+    </div>
+
+    <!-- Theme switcher demo -->
+    <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:1.5rem;">
+      <p style="margin-bottom:0.8rem;font-size:0.8rem;color:var(--muted);">Switch theme — one variable change cascades through the component:</p>
+      <div class="theme-switch">
+        <button class="theme-btn active" onclick="setTheme('blue',this)">Blue</button>
+        <button class="theme-btn" onclick="setTheme('green',this)">Green</button>
+        <button class="theme-btn" onclick="setTheme('red',this)">Red</button>
+        <button class="theme-btn" onclick="setTheme('purple',this)">Purple</button>
+      </div>
+      <div class="themed-card" id="themed-card">
+        <div id="tc-badge" style="display:inline-block;font-size:0.65rem;font-weight:700;padding:0.2em 0.6em;border-radius:10px;margin-bottom:0.6rem;letter-spacing:0.08em;text-transform:uppercase;transition:all 0.3s;">New</div>
+        <div id="tc-title" style="font-size:1.1rem;font-weight:800;margin-bottom:0.3rem;transition:color 0.3s;">Component Card</div>
+        <div id="tc-body" style="font-size:0.82rem;transition:color 0.3s;margin-bottom:0.8rem;">All colors derived from a single <code>--brand-hue</code> custom property. Change the hue, everything updates.</div>
+        <button id="tc-btn" style="font-family:'Cabinet Grotesk',sans-serif;font-size:0.78rem;font-weight:700;padding:0.4rem 1rem;border-radius:5px;border:none;cursor:pointer;transition:all 0.3s;">Action</button>
+      </div>
+      <div id="tc-code" style="margin-top:0.8rem;font-family:'Commit Mono',monospace;font-size:0.72rem;color:var(--muted);"></div>
+    </div>
+  </section>
+
+  <!-- KP -->
+  <section>
+    <div class="sec-tag">05 / Key Points</div>
+    <h2>Color essentials.</h2>
+    <div class="kp-grid">
+      <div class="kp">
+        <h3>Use oklch</h3>
+        <p>Perceptually uniform — equal lightness steps look equal. Build palettes by keeping L and C fixed, rotating H. Tailwind v4 uses oklch natively. <span class="tw">text-blue-500</span></p>
+      </div>
+      <div class="kp">
+        <h3>Custom property scope</h3>
+        <p>Define on <code>:root</code> for globals. Override on component roots for theming. Use <code>var(--x, fallback)</code> for safe consumption. They cascade and inherit.</p>
+      </div>
+      <div class="kp">
+        <h3>color-mix()</h3>
+        <p>Native tints and shades. Always mix <code>in oklch</code> for clean results. Replaces Sass <code>lighten()</code>/<code>darken()</code> with no preprocessor needed.</p>
+      </div>
+      <div class="kp">
+        <h3>Gradients in oklch</h3>
+        <p>CSS gradients can interpolate <code>in oklch</code>: <code>linear-gradient(in oklch, blue, red)</code>. Avoids the muddy grey mid-point you get with sRGB interpolation.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+// OKLCH SANDBOX
+function updateOklch() {
+  const L = document.getElementById('oL').value;
+  const C = parseFloat(document.getElementById('oC').value).toFixed(2);
+  const H = document.getElementById('oH').value;
+  document.getElementById('lval').textContent = L + '%';
+  document.getElementById('cval').textContent = C;
+  document.getElementById('hval').textContent = H + '°';
+  const val = `oklch(${L}% ${C} ${H})`;
+  document.getElementById('osb-swatch').style.background = val;
+  document.getElementById('osb-value').textContent = val;
+  document.getElementById('osb-output-label').textContent = val;
+
+  // Step swatches
+  const steps = [20,35,50,65,80,92];
+  const container = document.getElementById('step-swatches');
+  container.innerHTML = steps.map(l =>
+    `<div class="osb-l-swatch" style="background:oklch(${l}% ${C} ${H});" title="${l}%"></div>`
+  ).join('');
+}
+updateOklch();
+
+// THEME SWITCHER
+const themes = {
+  blue:   { hue: 250, L: '60%', C: '0.18' },
+  green:  { hue: 140, L: '55%', C: '0.18' },
+  red:    { hue: 30,  L: '58%', C: '0.2'  },
+  purple: { hue: 310, L: '58%', C: '0.18' },
+};
+function setTheme(name, btn) {
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const t = themes[name];
+  const primary = `oklch(${t.L} ${t.C} ${t.hue})`;
+  const light = `oklch(96% 0.02 ${t.hue})`;
+  const mid = `oklch(90% 0.05 ${t.hue})`;
+  const dark = `oklch(35% ${t.C} ${t.hue})`;
+
+  const card = document.getElementById('themed-card');
+  card.style.background = light;
+  card.style.borderColor = `oklch(80% 0.08 ${t.hue})`;
+
+  document.getElementById('tc-badge').style.background = mid;
+  document.getElementById('tc-badge').style.color = dark;
+  document.getElementById('tc-title').style.color = dark;
+  document.getElementById('tc-body').style.color = `oklch(45% 0.05 ${t.hue})`;
+  document.getElementById('tc-btn').style.background = primary;
+  document.getElementById('tc-btn').style.color = 'white';
+  document.getElementById('tc-code').textContent = `:root { --brand-hue: ${t.hue}; } /* everything above derived from this one value */`;
+}
+setTheme('blue', document.querySelector('.theme-btn.active'));
+</script>
+</body>
+</html>

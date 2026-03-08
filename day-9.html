@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAY 09 — Flexbox: Advanced Patterns</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f7faf7;
+  --s1: #eef4ee;
+  --s2: #e0eee0;
+  --border: #c8dcc8;
+  --ink: #111f11;
+  --muted: #5a7a5a;
+  --accent: #1a6e3a;
+  --accent2: #e8f5e8;
+  --warn: #b85c00;
+  --warn-bg: #fff5e8;
+  --err: #a01a1a;
+  --err-bg: #fde8e8;
+}
+
+body { background: var(--bg); color: var(--ink); font-family: 'DM Sans', sans-serif; line-height: 1.6; }
+
+header {
+  background: var(--accent);
+  color: white;
+  padding: 3rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: center;
+}
+.day-tag { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; color: rgba(255,255,255,0.5); margin-bottom: 0.5rem; }
+h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+.header-badge {
+  font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em;
+  background: rgba(255,255,255,0.15); padding: 0.5rem 0.8rem; border-radius: 4px;
+  color: rgba(255,255,255,0.8); text-transform: uppercase;
+}
+
+main { max-width: 1080px; margin: 0 auto; padding: 4rem 2rem 8rem; display: grid; gap: 5rem; }
+
+section { display: grid; gap: 1.5rem; }
+
+.sec-tag {
+  font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.sec-tag::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+h2 { font-size: clamp(1.3rem, 2.5vw, 2rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
+
+p { color: #2a4a2a; max-width: 64ch; font-size: 0.9rem; }
+
+code {
+  font-family: 'DM Mono', monospace; background: var(--s2); border: 1px solid var(--border);
+  padding: 0.1em 0.4em; border-radius: 3px; font-size: 0.82em;
+}
+
+pre {
+  background: var(--ink); color: #c0d8c0; padding: 1.5rem; border-radius: 8px;
+  overflow-x: auto; font-family: 'DM Mono', monospace; font-size: 0.78rem; line-height: 2;
+}
+.cp { color: #70d090; } .cv { color: #90c870; } .cs { color: #d0d060; }
+.cc { color: #3a5a3a; font-style: italic; }
+.cw { color: #f0a050; }
+.ctw { color: #60a5fa; font-size: 0.72em; }
+
+/* ── AUTO MARGIN ── */
+.am-explainer {
+  background: var(--s1); border: 1px solid var(--border); border-radius: 8px; padding: 2rem;
+  display: grid; gap: 1.5rem;
+}
+.am-demo-row {
+  background: white; border: 1px solid var(--border); border-radius: 6px; padding: 1rem;
+}
+.am-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+.am-flex {
+  display: flex; gap: 8px; background: var(--s2); padding: 8px; border-radius: 5px;
+  align-items: center;
+}
+.am-item {
+  padding: 0.4rem 0.8rem; border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 0.72rem; font-weight: 500; color: white;
+}
+.am-arrow { font-size: 0.7rem; color: var(--accent); font-family: 'DM Mono', monospace; padding: 0 4px; }
+
+/* ── HOLY GRAIL ── */
+.holy-grail-demo {
+  background: white; border: 2px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+.hg-header { background: var(--accent); color: white; padding: 0.6rem 1rem; font-size: 0.78rem; font-weight: 700; text-align: center; }
+.hg-body { display: flex; min-height: 180px; }
+.hg-nav { background: var(--s2); border-right: 1px solid var(--border); padding: 0.75rem; width: 120px; flex-shrink: 0; }
+.hg-main { flex: 1; padding: 0.75rem; font-size: 0.8rem; color: var(--muted); }
+.hg-aside { background: var(--s2); border-left: 1px solid var(--border); padding: 0.75rem; width: 100px; flex-shrink: 0; }
+.hg-footer { background: var(--s2); border-top: 1px solid var(--border); padding: 0.6rem 1rem; font-size: 0.72rem; text-align: center; color: var(--muted); font-family: 'DM Mono', monospace; }
+.hg-nav-item { font-size: 0.72rem; color: var(--accent); padding: 0.3rem 0; border-bottom: 1px solid var(--border); }
+.hg-nav-item:last-child { border-bottom: none; }
+
+/* ── FULL HEIGHT SECTION ── */
+.fullh-demo {
+  background: white; border: 2px solid var(--border); border-radius: 8px; overflow: hidden; max-width: 320px;
+}
+.fh-inner {
+  display: flex; flex-direction: column; min-height: 260px;
+  font-size: 0.8rem;
+}
+.fh-header { background: var(--accent); color: white; padding: 0.6rem 1rem; font-weight: 700; }
+.fh-body { flex: 1; padding: 1rem; color: var(--muted); }
+.fh-footer { background: var(--s1); border-top: 1px solid var(--border); padding: 0.6rem 1rem; display: flex; justify-content: flex-end; gap: 0.5rem; }
+.fh-btn { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; padding: 0.3rem 0.7rem; border-radius: 4px; border: none; cursor: pointer; }
+
+/* ── COMMON GOTCHAS ── */
+.gotchas { display: grid; gap: 1.5rem; }
+.gotcha {
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+.gotcha-header {
+  display: flex; gap: 0.75rem; align-items: center; padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+.gotcha-icon { font-size: 1rem; }
+.gotcha-title { font-weight: 700; font-size: 0.88rem; }
+.gotcha-body { padding: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+@media (max-width: 560px) { .gotcha-body { grid-template-columns: 1fr; } }
+.gotcha-col-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+.bad-label { color: var(--err); }
+.good-label { color: var(--accent); }
+.demo-area { background: var(--s1); border: 1px solid var(--border); border-radius: 5px; padding: 8px; display: flex; gap: 8px; margin-bottom: 0.5rem; }
+.gotcha-note { font-size: 0.76rem; color: var(--muted); line-height: 1.5; }
+
+/* gotcha items */
+.gi { display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 0.72rem; font-weight: 500; }
+
+/* ── NAVBAR PATTERN ── */
+.pattern-grid { display: grid; gap: 1.5rem; }
+.pattern-card {
+  background: var(--s1); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+.pc-label {
+  background: var(--s2); border-bottom: 1px solid var(--border); padding: 0.6rem 1rem;
+  font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.pc-body { padding: 1.25rem; }
+.pattern-demo { background: white; border: 1px solid var(--border); border-radius: 5px; padding: 0.75rem 1rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; }
+.pd-logo { background: var(--accent); color: white; font-size: 0.72rem; font-weight: 700; padding: 0.3rem 0.6rem; border-radius: 4px; flex-shrink: 0; }
+.pd-link { font-size: 0.75rem; color: var(--muted); padding: 0.3rem 0.5rem; }
+.pd-spacer { flex: 1; }
+.pd-btn { background: var(--accent); color: white; font-size: 0.72rem; font-weight: 700; padding: 0.3rem 0.7rem; border-radius: 4px; flex-shrink: 0; }
+
+/* card patterns */
+.card-pattern-demo { background: white; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; max-width: 260px; }
+.cpd-img { background: linear-gradient(135deg, var(--s2), var(--border)); height: 80px; }
+.cpd-body { padding: 0.75rem; flex: 1; }
+.cpd-title { font-size: 0.82rem; font-weight: 700; margin-bottom: 0.3rem; }
+.cpd-text { font-size: 0.72rem; color: var(--muted); line-height: 1.4; }
+.cpd-footer { padding: 0.75rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; }
+.cpd-cta { background: var(--accent); color: white; font-size: 0.72rem; font-weight: 700; padding: 0.3rem 0.7rem; border-radius: 4px; }
+
+/* chips row */
+.chips-demo { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 1rem; background: white; border: 1px solid var(--border); border-radius: 5px; margin-bottom: 0.75rem; }
+.chip { background: var(--s2); border: 1px solid var(--border); border-radius: 20px; padding: 0.25rem 0.7rem; font-size: 0.72rem; color: var(--accent); }
+
+/* KP */
+.kp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.kp { background: var(--s1); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; }
+.kp h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+.kp p { font-size: 0.78rem; max-width: none; }
+.tw { display: inline-block; background: #dbeafe; color: #1d4ed8; font-family: 'DM Mono', monospace; font-size: 0.65rem; padding: 0.1em 0.45em; border-radius: 3px; margin: 0 0.1rem; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="day-tag">CSS FUNDAMENTALS · DAY 09 · MAR 5</div>
+    <h1>Flexbox —<br>Advanced Patterns</h1>
+  </div>
+  <div class="header-badge">Week 2 · Layout Mastery</div>
+</header>
+
+<main>
+
+  <!-- 01 AUTO MARGINS -->
+  <section>
+    <div class="sec-tag">01 / The Spacer Trick</div>
+    <h2>Auto margins as spacers</h2>
+    <p><code>margin: auto</code> in flexbox is special: it consumes all available free space on that side. This makes it an incredibly useful layout tool — no need for spacer divs or complex calculations.</p>
+
+    <div class="am-explainer">
+      <div class="am-demo-row">
+        <div class="am-label">margin-left: auto on last item → pushes it to the right</div>
+        <div class="am-flex">
+          <div class="am-item" style="background:var(--accent);">Logo</div>
+          <div class="am-item" style="background:#4a9a6a;">Nav 1</div>
+          <div class="am-item" style="background:#4a9a6a;">Nav 2</div>
+          <div class="am-item" style="background:var(--warn);margin-left:auto;">Login</div>
+        </div>
+        <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);margin-top:0.5rem;">.login { margin-left: auto; } <span class="tw">ml-auto</span></div>
+      </div>
+
+      <div class="am-demo-row">
+        <div class="am-label">margin on both sides → perfectly centered single item</div>
+        <div class="am-flex">
+          <div class="am-item" style="background:#888;">Left</div>
+          <div class="am-item" style="background:var(--accent);margin:0 auto;">Centered</div>
+          <div class="am-item" style="background:#888;">Right</div>
+        </div>
+        <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);margin-top:0.5rem;">.center { margin: 0 auto; } <span class="tw">mx-auto</span></div>
+      </div>
+
+      <div class="am-demo-row">
+        <div class="am-label">margin-top: auto on footer → pushes footer to bottom of column</div>
+        <div style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;">
+          <div class="fullh-demo" style="max-width:none;flex:1;min-width:200px;">
+            <div class="fh-inner">
+              <div class="fh-header">Card Title</div>
+              <div class="fh-body">Short content here. The footer below will always stick to the bottom regardless of how much text is in this area.</div>
+              <div class="fh-footer" style="margin-top:auto;">
+                <button class="fh-btn" style="background:var(--accent);color:white;">Action</button>
+              </div>
+            </div>
+          </div>
+          <div class="fullh-demo" style="max-width:none;flex:1;min-width:200px;">
+            <div class="fh-inner">
+              <div class="fh-header">Card Title</div>
+              <div class="fh-body">Much longer content that takes up more space. The footer still stays at the bottom because of margin-top: auto on it. No JavaScript needed.</div>
+              <div class="fh-footer" style="margin-top:auto;">
+                <button class="fh-btn" style="background:var(--accent);color:white;">Action</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);margin-top:0.5rem;">.footer { margin-top: auto; } <span class="tw">mt-auto</span></div>
+      </div>
+    </div>
+
+    <pre><code><span class="cc">/* auto margins eat all available free space on that side */</span>
+<span class="cs">.navbar</span> { <span class="cp">display</span>: <span class="cv">flex</span>; <span class="cp">align-items</span>: <span class="cv">center</span>; <span class="cp">gap</span>: <span class="cv">1rem</span>; }
+<span class="cs">.navbar .cta</span> { <span class="cp">margin-left</span>: <span class="cv">auto</span>; }  <span class="cc">/* pushes to far right  */</span>   <span class="ctw">ml-auto</span>
+
+<span class="cc">/* push footer to bottom of a flex column card */</span>
+<span class="cs">.card</span>        { <span class="cp">display</span>: <span class="cv">flex</span>; <span class="cp">flex-direction</span>: <span class="cv">column</span>; }
+<span class="cs">.card-footer</span> { <span class="cp">margin-top</span>: <span class="cv">auto</span>; }              <span class="ctw">mt-auto</span>
+
+<span class="cc">/* center one item in a group */</span>
+<span class="cs">.center-item</span> { <span class="cp">margin-inline</span>: <span class="cv">auto</span>; }  <span class="cc">/* left + right auto */</span>    <span class="ctw">mx-auto</span></code></pre>
+  </section>
+
+  <!-- 02 HOLY GRAIL -->
+  <section>
+    <div class="sec-tag">02 / Classic Pattern</div>
+    <h2>Holy Grail layout</h2>
+    <p>The "holy grail" is a full-page layout with header, footer, and a three-column middle section. Flexbox makes it trivial — what used to require floats, negative margins, and tears now takes a few lines.</p>
+
+    <div class="holy-grail-demo">
+      <div class="hg-header">Header — full width</div>
+      <div class="hg-body">
+        <div class="hg-nav">
+          <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;">Nav</div>
+          <div class="hg-nav-item">Home</div>
+          <div class="hg-nav-item">About</div>
+          <div class="hg-nav-item">Work</div>
+          <div class="hg-nav-item">Contact</div>
+        </div>
+        <div class="hg-main">
+          <strong style="font-size:0.82rem;color:var(--ink);">Main content</strong>
+          <p style="font-size:0.75rem;margin-top:0.3rem;max-width:none;">flex: 1 — takes all remaining space. Sidebar and nav are fixed width with flex-shrink: 0.</p>
+        </div>
+        <div class="hg-aside">
+          <div style="font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;">Sidebar</div>
+          <div style="background:var(--border);height:20px;border-radius:3px;margin-bottom:4px;"></div>
+          <div style="background:var(--border);height:20px;border-radius:3px;margin-bottom:4px;"></div>
+          <div style="background:var(--border);height:20px;border-radius:3px;"></div>
+        </div>
+      </div>
+      <div class="hg-footer">Footer — full width</div>
+    </div>
+
+    <pre><code><span class="cs">.page</span>   { <span class="cp">display</span>: <span class="cv">flex</span>; <span class="cp">flex-direction</span>: <span class="cv">column</span>; <span class="cp">min-height</span>: <span class="cv">100dvh</span>; }
+<span class="cs">.middle</span> { <span class="cp">display</span>: <span class="cv">flex</span>; <span class="cp">flex</span>: <span class="cv">1</span>; }
+
+<span class="cs">nav</span>     { <span class="cp">width</span>: <span class="cv">200px</span>; <span class="cp">flex-shrink</span>: <span class="cv">0</span>; }   <span class="ctw">shrink-0 w-48</span>
+<span class="cs">main</span>    { <span class="cp">flex</span>: <span class="cv">1</span>; }                          <span class="ctw">flex-1</span>
+<span class="cs">aside</span>   { <span class="cp">width</span>: <span class="cv">160px</span>; <span class="cp">flex-shrink</span>: <span class="cv">0</span>; }   <span class="ctw">shrink-0 w-40</span>
+
+<span class="cc">/* Footer naturally stays at the bottom because page has min-height: 100dvh */</span></code></pre>
+  </section>
+
+  <!-- 03 COMMON GOTCHAS -->
+  <section>
+    <div class="sec-tag">03 / The Traps</div>
+    <h2>Common gotchas</h2>
+
+    <div class="gotchas">
+      <!-- Gotcha 1: Image stretch -->
+      <div class="gotcha">
+        <div class="gotcha-header" style="background:var(--err-bg);">
+          <div class="gotcha-icon">⚠️</div>
+          <div class="gotcha-title" style="color:var(--err);">Images stretch vertically in flex rows</div>
+        </div>
+        <div class="gotcha-body">
+          <div>
+            <div class="gotcha-col-label bad-label">❌ Default (align-items: stretch)</div>
+            <div class="demo-area" style="align-items:stretch;height:80px;">
+              <div style="background:linear-gradient(135deg,#e8f0f8,#c8d8e8);width:60px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;">🖼</div>
+              <div style="flex:1;font-size:0.75rem;padding:4px;color:var(--muted);">Image stretches to full height of the row</div>
+            </div>
+            <div class="gotcha-note" style="color:var(--err);">align-items defaults to <code>stretch</code> — images fill the cross axis, distorting their aspect ratio.</div>
+          </div>
+          <div>
+            <div class="gotcha-col-label good-label">✓ Fix: align-self: flex-start (or align-items)</div>
+            <div class="demo-area" style="align-items:flex-start;height:80px;">
+              <div style="background:linear-gradient(135deg,#e8f0f8,#c8d8e8);width:60px;height:40px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">🖼</div>
+              <div style="flex:1;font-size:0.75rem;padding:4px;color:var(--muted);">Image stays its natural size</div>
+            </div>
+            <div class="gotcha-note" style="color:var(--accent);">Add <code>align-self: flex-start</code> to the image or <code>align-items: flex-start</code> to the container. <span class="tw">self-start</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gotcha 2: min-width -->
+      <div class="gotcha">
+        <div class="gotcha-header" style="background:var(--warn-bg);">
+          <div class="gotcha-icon">⚠️</div>
+          <div class="gotcha-title" style="color:var(--warn);">min-width: auto prevents shrinking</div>
+        </div>
+        <div class="gotcha-body">
+          <div>
+            <div class="gotcha-col-label bad-label">❌ Flex item won't shrink past content</div>
+            <div class="demo-area" style="width:100%;overflow:hidden;">
+              <div style="flex:1;background:#ffe8e8;border:1px solid #f0a0a0;border-radius:4px;padding:6px;font-size:0.7rem;white-space:nowrap;overflow:hidden;color:var(--err);">This long text makes this item refuse to shrink below its content width because min-width: auto</div>
+              <div style="flex:1;background:#e8ffe8;border:1px solid #a0f0a0;border-radius:4px;padding:6px;font-size:0.7rem;color:var(--accent);">Normal</div>
+            </div>
+            <div class="gotcha-note" style="color:var(--warn);">Flex items have <code>min-width: auto</code> by default — they can't shrink below their content's intrinsic size.</div>
+          </div>
+          <div>
+            <div class="gotcha-col-label good-label">✓ Fix: min-width: 0</div>
+            <div class="demo-area" style="width:100%;overflow:hidden;">
+              <div style="flex:1;min-width:0;background:#ffe8e8;border:1px solid #f0a0a0;border-radius:4px;padding:6px;font-size:0.7rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--err);">This long text now truncates properly because min-width: 0</div>
+              <div style="flex:1;background:#e8ffe8;border:1px solid #a0f0a0;border-radius:4px;padding:6px;font-size:0.7rem;color:var(--accent);">Normal</div>
+            </div>
+            <div class="gotcha-note" style="color:var(--accent);">Add <code>min-width: 0</code> to the item that needs to shrink. Also needed for text-overflow to work. <span class="tw">min-w-0</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gotcha 3: gap vs margin -->
+      <div class="gotcha">
+        <div class="gotcha-header" style="background:var(--s1);">
+          <div class="gotcha-icon">💡</div>
+          <div class="gotcha-title">flex-wrap + gap = responsive rows, no media queries</div>
+        </div>
+        <div class="gotcha-body">
+          <div>
+            <div class="gotcha-col-label bad-label">❌ Wrapping with margin-right hacks</div>
+            <div class="demo-area" style="flex-wrap:wrap;">
+              <div style="width:calc(33% - 8px);margin-right:8px;margin-bottom:8px;background:#ffe8e8;border:1px solid #f0a0a0;border-radius:4px;height:36px;font-size:0.65rem;display:flex;align-items:center;justify-content:center;color:var(--err);">calc(33% - 8px)</div>
+              <div style="width:calc(33% - 8px);margin-right:8px;margin-bottom:8px;background:#ffe8e8;border:1px solid #f0a0a0;border-radius:4px;height:36px;font-size:0.65rem;display:flex;align-items:center;justify-content:center;color:var(--err);">Item</div>
+              <div style="width:calc(33% - 8px);margin-bottom:8px;background:#ffe8e8;border:1px solid #f0a0a0;border-radius:4px;height:36px;font-size:0.65rem;display:flex;align-items:center;justify-content:center;color:var(--err);">Last (no margin-right)</div>
+            </div>
+            <div class="gotcha-note" style="color:var(--err);">Fragile calc hacks, last child needs different margin, prone to breaking.</div>
+          </div>
+          <div>
+            <div class="gotcha-col-label good-label">✓ flex-wrap + gap</div>
+            <div class="demo-area" style="flex-wrap:wrap;gap:8px;">
+              <div style="flex:1;min-width:80px;background:#e8f5e8;border:1px solid #a0d0a0;border-radius:4px;height:36px;font-size:0.65rem;display:flex;align-items:center;justify-content:center;color:var(--accent);">flex: 1</div>
+              <div style="flex:1;min-width:80px;background:#e8f5e8;border:1px solid #a0d0a0;border-radius:4px;height:36px;font-size:0.65rem;display:flex;align-items:center;justify-content:center;color:var(--accent);">flex: 1</div>
+              <div style="flex:1;min-width:80px;background:#e8f5e8;border:1px solid #a0d0a0;border-radius:4px;height:36px;font-size:0.65rem;display:flex;align-items:center;justify-content:center;color:var(--accent);">flex: 1</div>
+            </div>
+            <div class="gotcha-note" style="color:var(--accent);">Clean and responsive. Items wrap when they hit <code>min-width</code>. <span class="tw">flex-wrap gap-2</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 COMMON PATTERNS -->
+  <section>
+    <div class="sec-tag">04 / Real World Patterns</div>
+    <h2>Patterns you'll use every week</h2>
+
+    <div class="pattern-grid">
+      <div class="pattern-card">
+        <div class="pc-label">
+          <span>Navbar with pushed CTA</span>
+          <span class="tw">flex items-center gap-4 ml-auto</span>
+        </div>
+        <div class="pc-body">
+          <div class="pattern-demo">
+            <div class="pd-logo">Logo</div>
+            <div class="pd-link">Home</div>
+            <div class="pd-link">About</div>
+            <div class="pd-link">Work</div>
+            <div class="pd-spacer"></div><!-- OR margin-left: auto on CTA -->
+            <div class="pd-btn">Sign up</div>
+          </div>
+          <pre style="font-size:0.72rem;padding:0.75rem;"><code><span class="cs">nav</span> { <span class="cp">display</span>: <span class="cv">flex</span>; <span class="cp">align-items</span>: <span class="cv">center</span>; <span class="cp">gap</span>: <span class="cv">1rem</span>; }
+<span class="cs">.cta</span> { <span class="cp">margin-left</span>: <span class="cv">auto</span>; }</code></pre>
+        </div>
+      </div>
+
+      <div class="pattern-card">
+        <div class="pc-label">
+          <span>Sticky footer card</span>
+          <span class="tw">flex flex-col flex-1 mt-auto</span>
+        </div>
+        <div class="pc-body">
+          <div style="display:flex;gap:1rem;">
+            <div class="card-pattern-demo" style="flex:1;">
+              <div class="cpd-img"></div>
+              <div class="cpd-body">
+                <div class="cpd-title">Short Card</div>
+                <div class="cpd-text">Brief text.</div>
+              </div>
+              <div class="cpd-footer"><div class="cpd-cta">View</div></div>
+            </div>
+            <div class="card-pattern-demo" style="flex:1;">
+              <div class="cpd-img"></div>
+              <div class="cpd-body">
+                <div class="cpd-title">Longer Card</div>
+                <div class="cpd-text">Much more content here that takes up several lines of space inside the card body.</div>
+              </div>
+              <div class="cpd-footer"><div class="cpd-cta">View</div></div>
+            </div>
+          </div>
+          <pre style="font-size:0.72rem;padding:0.75rem;margin-top:0.75rem;"><code><span class="cs">.card</span>        { <span class="cp">display</span>: <span class="cv">flex</span>; <span class="cp">flex-direction</span>: <span class="cv">column</span>; }
+<span class="cs">.card-body</span>   { <span class="cp">flex</span>: <span class="cv">1</span>; }  <span class="cc">/* grow to fill */</span>
+<span class="cs">.card-footer</span> { <span class="cp">margin-top</span>: <span class="cv">auto</span>; }</code></pre>
+        </div>
+      </div>
+
+      <div class="pattern-card">
+        <div class="pc-label">
+          <span>Responsive chip cloud</span>
+          <span class="tw">flex flex-wrap gap-2</span>
+        </div>
+        <div class="pc-body">
+          <div class="chips-demo">
+            <div class="chip">React</div>
+            <div class="chip">TypeScript</div>
+            <div class="chip">CSS</div>
+            <div class="chip">Node.js</div>
+            <div class="chip">PostgreSQL</div>
+            <div class="chip">GraphQL</div>
+            <div class="chip">Docker</div>
+            <div class="chip">AWS</div>
+          </div>
+          <pre style="font-size:0.72rem;padding:0.75rem;"><code><span class="cs">.chips</span> { <span class="cp">display</span>: <span class="cv">flex</span>; <span class="cp">flex-wrap</span>: <span class="cv">wrap</span>; <span class="cp">gap</span>: <span class="cv">0.5rem</span>; }</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KP -->
+  <section>
+    <div class="sec-tag">05 / Key Points</div>
+    <h2>Advanced flex patterns.</h2>
+    <div class="kp-grid">
+      <div class="kp">
+        <h3>margin: auto = spacer</h3>
+        <p>Auto margins consume remaining flex space on that side. The cleanest way to push elements to opposite ends. <span class="tw">ml-auto</span> <span class="tw">mt-auto</span></p>
+      </div>
+      <div class="kp">
+        <h3>min-width: 0</h3>
+        <p>When a flex child won't shrink — add <code>min-width: 0</code>. Default is <code>auto</code> (content size). Also required for <code>text-overflow: ellipsis</code> to work. <span class="tw">min-w-0</span></p>
+      </div>
+      <div class="kp">
+        <h3>Images need align-self</h3>
+        <p><code>align-items: stretch</code> distorts images. Add <code>align-self: flex-start</code> to images (or the container). <span class="tw">self-start</span></p>
+      </div>
+      <div class="kp">
+        <h3>flex-wrap for responsive</h3>
+        <p><code>flex-wrap: wrap</code> + <code>flex: 1</code> + <code>min-width</code> gives you a responsive grid without media queries. The simplest responsive layout pattern. <span class="tw">flex-wrap</span></p>
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

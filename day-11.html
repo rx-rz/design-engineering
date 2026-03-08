@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>DAY 11 — CSS Grid: Placement & Areas</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            :root {
+                --bg-dark: #09090b;
+                --surface: #18181b;
+                --surface-hover: #27272a;
+                --border: #3f3f46;
+                --text-main: #f4f4f5;
+                --text-muted: #a1a1aa;
+
+                /* Syntax & Accents */
+                --accent-cyan: #22d3ee;
+                --accent-purple: #c084fc;
+                --accent-pink: #f472b6;
+                --accent-green: #4ade80;
+                --accent-yellow: #facc15;
+
+                /* Grid Visuals */
+                --grid-gap: #3f3f46;
+                --cell-bg: #18181b;
+            }
+
+            body {
+                background: var(--bg-dark);
+                color: var(--text-main);
+                font-family: "Outfit", sans-serif;
+                line-height: 1.7;
+                padding-bottom: 5rem;
+            }
+
+            header {
+                background: linear-gradient(135deg, #1e1b4b, #0f172a);
+                border-bottom: 1px solid var(--border);
+                padding: 4rem 2rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .tagline {
+                font-family: "Fira Code", monospace;
+                color: var(--accent-cyan);
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                letter-spacing: 0.15em;
+            }
+            h1 {
+                font-size: clamp(2.5rem, 5vw, 4rem);
+                font-weight: 800;
+                line-height: 1.1;
+                letter-spacing: -0.03em;
+            }
+            h1 span {
+                background: -webkit-linear-gradient(
+                    0deg,
+                    var(--accent-cyan),
+                    var(--accent-purple)
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+            main {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 4rem 2rem;
+                display: grid;
+                gap: 6rem;
+            }
+
+            section {
+                display: grid;
+                gap: 2rem;
+            }
+            .sec-header {
+                border-bottom: 1px solid var(--border);
+                padding-bottom: 1rem;
+            }
+            .sec-num {
+                font-family: "Fira Code", monospace;
+                color: var(--accent-purple);
+                font-size: 0.85rem;
+            }
+            h2 {
+                font-size: 2rem;
+                font-weight: 600;
+                margin-top: 0.5rem;
+            }
+            p {
+                color: var(--text-muted);
+                max-width: 75ch;
+                font-size: 1.05rem;
+            }
+
+            /* ── CODE BLOCKS ── */
+            code {
+                font-family: "Fira Code", monospace;
+                background: var(--surface);
+                padding: 0.15em 0.4em;
+                border-radius: 4px;
+                font-size: 0.85em;
+                color: var(--accent-pink);
+            }
+            pre {
+                background: #000;
+                border: 1px solid var(--border);
+                padding: 1.5rem;
+                border-radius: 8px;
+                overflow-x: auto;
+                font-family: "Fira Code", monospace;
+                font-size: 0.85rem;
+                line-height: 1.8;
+                box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+            }
+            .c-prop {
+                color: var(--accent-cyan);
+            }
+            .c-val {
+                color: var(--accent-yellow);
+            }
+            .c-cmt {
+                color: #52525b;
+                font-style: italic;
+            }
+            .c-sel {
+                color: var(--accent-pink);
+            }
+
+            /* ── INTERACTIVE GRID BOARDS ── */
+            .demo-panel {
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                padding: 2rem;
+                display: grid;
+                gap: 2rem;
+            }
+
+            /* The "Blueprint" Grid Canvas */
+            .blueprint {
+                background: var(--grid-gap);
+                gap: 2px; /* This creates the perfect grid lines */
+                border: 2px solid var(--grid-gap);
+                border-radius: 8px;
+                display: grid;
+                position: relative;
+                overflow: hidden;
+            }
+            .bp-cell {
+                background: var(--cell-bg);
+                padding: 1rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: "Fira Code", monospace;
+                font-size: 0.8rem;
+                color: var(--border);
+                transition: 0.3s ease;
+            }
+            .bp-item {
+                background: rgba(34, 211, 238, 0.1);
+                border: 1px solid var(--accent-cyan);
+                color: var(--accent-cyan);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: "Fira Code", monospace;
+                font-size: 0.9rem;
+                font-weight: 500;
+                border-radius: 4px;
+                padding: 1rem;
+                text-align: center;
+                position: relative;
+                z-index: 2;
+                box-shadow: 0 0 15px rgba(34, 211, 238, 0.05);
+            }
+            .bp-item.purple {
+                background: rgba(192, 132, 252, 0.1);
+                border-color: var(--accent-purple);
+                color: var(--accent-purple);
+            }
+            .bp-item.pink {
+                background: rgba(244, 114, 182, 0.1);
+                border-color: var(--accent-pink);
+                color: var(--accent-pink);
+            }
+
+            /* ── SPECIFIC DEMOS ── */
+            .demo-columns {
+                display: grid;
+                grid-template-columns: 1fr 1.5fr;
+                gap: 3rem;
+                align-items: start;
+            }
+            @media (max-width: 900px) {
+                .demo-columns {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            .dense-toggle {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1rem;
+            }
+            .toggle-btn {
+                background: transparent;
+                border: 1px solid var(--border);
+                color: var(--text-muted);
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                cursor: pointer;
+                font-family: "Fira Code", monospace;
+                font-size: 0.8rem;
+                transition: all 0.2s;
+            }
+            .toggle-btn.active {
+                background: var(--text-main);
+                color: var(--bg-dark);
+                border-color: var(--text-main);
+            }
+
+            /* Overlap Demo */
+            .overlap-card {
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                grid-template-rows: repeat(4, 80px);
+                background: #000;
+                border-radius: 16px;
+                overflow: hidden;
+                border: 1px solid var(--border);
+            }
+            .oc-img {
+                grid-column: 1 / -1;
+                grid-row: 1 / -1;
+                background: url("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop")
+                    center/cover;
+                opacity: 0.5;
+            }
+            .oc-content {
+                grid-column: 2 / 6;
+                grid-row: 2 / 4;
+                background: rgba(24, 24, 27, 0.8);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                padding: 2rem;
+                z-index: 10;
+                align-self: center;
+            }
+            .oc-badge {
+                grid-column: 5 / -1;
+                grid-row: 1;
+                background: var(--accent-pink);
+                color: #000;
+                font-weight: 800;
+                font-size: 0.8rem;
+                padding: 0.5rem 1rem;
+                align-self: start;
+                justify-self: end;
+                border-bottom-left-radius: 12px;
+                z-index: 20;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="tagline">Day 11 // Layout Architecture</div>
+            <h1>Grid <span>Placement & Areas</span></h1>
+            <p style="text-align: center; max-width: 600px; margin-top: 1rem">
+                Mastering the two-dimensional canvas. Moving beyond
+                auto-placement to explicitly control where elements live, how
+                they span, and how they overlap.
+            </p>
+        </header>
+
+        <main>
+            <section>
+                <div class="sec-header">
+                    <div class="sec-num">01 / Explicit Placement</div>
+                    <h2>Line-Based Placement & Spanning</h2>
+                </div>
+                <p>
+                    Grid creates numbered lines between your tracks. In a
+                    3-column grid, there are 4 vertical lines (1, 2, 3, 4). You
+                    can tell any item exactly which lines to start and end on.
+                </p>
+
+                <div class="demo-panel">
+                    <div class="demo-columns">
+                        <div
+                            class="blueprint"
+                            style="
+                                grid-template-columns: repeat(4, 1fr);
+                                grid-template-rows: repeat(3, 80px);
+                            "
+                        >
+                            <div
+                                class="bp-cell"
+                                style="grid-column: 1; grid-row: 1"
+                            >
+                                cell
+                            </div>
+                            <div
+                                class="bp-cell"
+                                style="grid-column: 2; grid-row: 1"
+                            >
+                                cell
+                            </div>
+                            <div
+                                class="bp-cell"
+                                style="grid-column: 3; grid-row: 1"
+                            >
+                                cell
+                            </div>
+                            <div
+                                class="bp-cell"
+                                style="grid-column: 4; grid-row: 1"
+                            >
+                                cell
+                            </div>
+                            <div
+                                class="bp-cell"
+                                style="grid-column: 1; grid-row: 2"
+                            >
+                                cell
+                            </div>
+                            <div
+                                class="bp-cell"
+                                style="grid-column: 2; grid-row: 2"
+                            >
+                                cell
+                            </div>
+                            <div
+                                class="bp-cell"
+                                style="grid-column: 3; grid-row: 2"
+                            >
+                                cell
+                            </div>
+                            <div
+                                class="bp-cell"
+                                style="grid-column: 4; grid-row: 2"
+                            >
+                                cell
+                            </div>
+                            <div
+                                class="bp-cell"
+                                style="grid-column: 1; grid-row: 3"
+                            >
+                                cell
+                            </div>
+                            <div
+                                class="bp-cell"
+                                style="grid-column: 2; grid-row: 3"
+                            >
+                                cell
+                            </div>
+                            <div
+                                class="bp-cell"
+                                style="grid-column: 3; grid-row: 3"
+                            >
+                                cell
+                            </div>
+                            <div
+                                class="bp-cell"
+                                style="grid-column: 4; grid-row: 3"
+                            >
+                                cell
+                            </div>
+
+                            <div
+                                class="bp-item"
+                                style="grid-column: 1 / 3; grid-row: 1"
+                            >
+                                grid-column: 1 / 3<br />(Spans 2)
+                            </div>
+                            <div
+                                class="bp-item purple"
+                                style="grid-column: 2 / 5; grid-row: 2"
+                            >
+                                grid-column: 2 / span 3
+                            </div>
+                            <div
+                                class="bp-item pink"
+                                style="grid-column: 1 / -1; grid-row: 3"
+                            >
+                                grid-column: 1 / -1<br />(Full Width Magic)
+                            </div>
+                        </div>
+
+                        <div>
+                            <pre><code><span class="c-cmt">/* Start at line 1, end at line 3 */</span>
+<span class="c-sel">.box-1</span> { <span class="c-prop">grid-column</span>: <span class="c-val">1 / 3</span>; }
+
+<span class="c-cmt">/* Start at line 2, span across 3 tracks */</span>
+<span class="c-sel">.box-2</span> { <span class="c-prop">grid-column</span>: <span class="c-val">2 / span 3</span>; }
+
+<span class="c-cmt">/* 💥 THE MAGIC TRICK */</span>
+<span class="c-cmt">/* -1 always targets the very last line */</span>
+<span class="c-sel">.full-width</span> {
+  <span class="c-prop">grid-column</span>: <span class="c-val">1 / -1</span>;
+}</code></pre>
+                            <p style="font-size: 0.9rem; margin-top: 1.5rem">
+                                <strong>Pro-tip:</strong> Using
+                                <code>1 / -1</code> is the safest way to break
+                                an item out of a column structure to span the
+                                full width, regardless of how many columns the
+                                grid currently has.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="sec-header">
+                    <div class="sec-num">02 / ASCII Art CSS</div>
+                    <h2>grid-template-areas</h2>
+                </div>
+                <p>
+                    Line numbers get confusing in complex layouts.
+                    <code>grid-template-areas</code> lets you visually "draw"
+                    your layout using named strings. It is the most readable way
+                    to build app dashboards and article layouts.
+                </p>
+
+                <div class="demo-panel">
+                    <div class="demo-columns">
+                        <div
+                            class="blueprint"
+                            style="
+                                grid-template-columns: 200px 1fr 150px;
+                                grid-template-rows: 60px 200px 60px;
+                                grid-template-areas: &quot;header header header&quot; &quot;nav main aside&quot; &quot;nav footer footer&quot;;
+                            "
+                        >
+                            <div
+                                class="bp-item purple"
+                                style="grid-area: header"
+                            >
+                                header
+                            </div>
+                            <div class="bp-item pink" style="grid-area: nav">
+                                nav
+                            </div>
+                            <div class="bp-item" style="grid-area: main">
+                                main
+                            </div>
+                            <div
+                                class="bp-item"
+                                style="grid-area: aside; border-style: dashed"
+                            >
+                                aside
+                            </div>
+                            <div
+                                class="bp-item purple"
+                                style="grid-area: footer"
+                            >
+                                footer
+                            </div>
+                        </div>
+
+                        <div>
+                            <pre><code><span class="c-sel">.dashboard</span> {
+  <span class="c-prop">display</span>: <span class="c-val">grid</span>;
+  <span class="c-prop">grid-template-areas</span>:
+    <span class="c-val">"header header header"
+    "nav    main   aside"
+    "nav    footer footer"</span>;
+}
+
+<span class="c-sel">.sidebar</span> { <span class="c-prop">grid-area</span>: <span class="c-val">nav</span>; }
+<span class="c-sel">.content</span> { <span class="c-prop">grid-area</span>: <span class="c-val">main</span>; }
+<span class="c-cmt">/* Assign grid-area to elements to slot them in! */</span></code></pre>
+                            <p style="font-size: 0.9rem; margin-top: 1.5rem">
+                                To leave an empty space in the layout, use a dot
+                                <code>"."</code> in your string.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="sec-header">
+                    <div class="sec-num">03 / The Masonry Fix</div>
+                    <h2>grid-auto-flow: dense</h2>
+                </div>
+                <p>
+                    By default, if an item is too wide to fit the remaining
+                    space in a row, Grid pushes it to the next row, leaving a
+                    hole. The <code>dense</code> packing algorithm tells Grid to
+                    go back and fill those holes with smaller items that come
+                    later in the DOM.
+                </p>
+
+                <div class="demo-panel">
+                    <div class="dense-toggle">
+                        <button
+                            class="toggle-btn active"
+                            onclick="
+                                document.getElementById(
+                                    'denseGrid',
+                                ).style.gridAutoFlow = 'row';
+                                this.classList.add('active');
+                                this.nextElementSibling.classList.remove(
+                                    'active',
+                                );
+                            "
+                        >
+                            Default (row)
+                        </button>
+                        <button
+                            class="toggle-btn"
+                            onclick="
+                                document.getElementById(
+                                    'denseGrid',
+                                ).style.gridAutoFlow = 'row dense';
+                                this.classList.add('active');
+                                this.previousElementSibling.classList.remove(
+                                    'active',
+                                );
+                            "
+                        >
+                            Dense (row dense)
+                        </button>
+                    </div>
+
+                    <div
+                        class="blueprint"
+                        id="denseGrid"
+                        style="
+                            grid-template-columns: repeat(4, 1fr);
+                            grid-auto-rows: 80px;
+                            gap: 8px;
+                            border: none;
+                            background: transparent;
+                        "
+                    >
+                        <div class="bp-item" style="grid-column: span 1">1</div>
+                        <div class="bp-item" style="grid-column: span 1">2</div>
+                        <div class="bp-item purple" style="grid-column: span 3">
+                            3 (Too wide, moves down)
+                        </div>
+                        <div class="bp-item pink" style="grid-column: span 1">
+                            4 (Small enough to backfill!)
+                        </div>
+                        <div class="bp-item pink" style="grid-column: span 1">
+                            5
+                        </div>
+                        <div class="bp-item" style="grid-column: span 2">6</div>
+                    </div>
+
+                    <pre><code><span class="c-sel">.photo-gallery</span> {
+  <span class="c-prop">display</span>: <span class="c-val">grid</span>;
+  <span class="c-prop">grid-template-columns</span>: <span class="c-val">repeat(auto-fill, minmax(150px, 1fr))</span>;
+  <span class="c-prop">grid-auto-flow</span>: <span class="c-val">row dense</span>; <span class="c-cmt">/* Backfills the holes! */</span>
+}</code></pre>
+                </div>
+            </section>
+
+            <section>
+                <div class="sec-header">
+                    <div class="sec-num">04 / Breaking the Box</div>
+                    <h2>Overlapping without Absolute Positioning</h2>
+                </div>
+                <p>
+                    Before CSS Grid, layering elements required
+                    <code>position: absolute</code>, which removes elements from
+                    the document flow (making parent containers collapse). With
+                    Grid, you can assign multiple items to the exact same grid
+                    cells. They remain in the flow, and you can control layering
+                    with <code>z-index</code>.
+                </p>
+
+                <div class="demo-panel">
+                    <div class="demo-columns" style="align-items: center">
+                        <div class="overlap-card">
+                            <div class="oc-img"></div>
+                            <div class="oc-content">
+                                <h3
+                                    style="
+                                        color: white;
+                                        font-size: 1.5rem;
+                                        margin-bottom: 0.5rem;
+                                        line-height: 1.2;
+                                    "
+                                >
+                                    Grid Layering
+                                </h3>
+                                <p
+                                    style="
+                                        font-size: 0.85rem;
+                                        color: #d4d4d8;
+                                        margin: 0;
+                                    "
+                                >
+                                    This text box is sitting inside the same
+                                    grid as the background image. No absolute
+                                    positioning required. The parent perfectly
+                                    contains both.
+                                </p>
+                            </div>
+                            <div class="oc-badge">NEW</div>
+                        </div>
+
+                        <div>
+                            <pre><code><span class="c-sel">.card</span> {
+  <span class="c-prop">display</span>: <span class="c-val">grid</span>;
+  <span class="c-prop">grid-template-columns</span>: <span class="c-val">repeat(6, 1fr)</span>;
+}
+
+<span class="c-sel">.background-img</span> {
+  <span class="c-prop">grid-column</span>: <span class="c-val">1 / -1</span>;
+  <span class="c-prop">grid-row</span>: <span class="c-val">1 / -1</span>; <span class="c-cmt">/* Covers the whole grid */</span>
+}
+
+<span class="c-sel">.text-box</span> {
+  <span class="c-prop">grid-column</span>: <span class="c-val">2 / 6</span>; <span class="c-cmt">/* Sits precisely in the middle */</span>
+  <span class="c-prop">grid-row</span>: <span class="c-val">2 / 4</span>;
+  <span class="c-prop">z-index</span>: <span class="c-val">10</span>;    <span class="c-cmt">/* Sits on top */</span>
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </body>
+</html>
